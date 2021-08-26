@@ -1,6 +1,9 @@
+overwrite: true
+schema: "../API/Schema.graphql"
+documents: 'src/**/[!(gql.tsx)]*.{ts,tsx,graphql}'
 generates:
-  gql.tsx:
+  src/gql.tsx:
     plugins:
-      - typescript
-      - typescript-operations
-      - typescript-react-apollo
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
