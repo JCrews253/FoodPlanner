@@ -1,0 +1,6 @@
+generates:
+  gql.tsx:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
