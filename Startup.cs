@@ -1,3 +1,4 @@
+using FoodPlanner.API;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using FoodPlanner.API.Models;
 
 namespace FoodPlanner
 {
@@ -28,7 +30,12 @@ namespace FoodPlanner
       {
         configuration.RootPath = "ClientApp/build";
       });
-    }
+
+      services
+        .AddGraphQLServer()
+        .AddQueryType<Query>()
+        .AddType<RecipeType>();
+    } 
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -52,10 +59,10 @@ namespace FoodPlanner
 
       app.UseEndpoints(endpoints =>
       {
-        endpoints.MapControllerRoute(
-                  name: "default",
-                  pattern: "{controller}/{action=Index}/{id?}");
+        endpoints.MapGraphQL();
       });
+
+      app.UseGraphQLPlayground("/API");
 
       app.UseSpa(spa =>
       {
