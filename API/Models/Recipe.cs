@@ -1,4 +1,6 @@
 ﻿using HotChocolate.Types;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,8 @@ namespace FoodPlanner.API.Models
 {
   public class Recipe
   {
-    public Guid Id { get; set; }
+    [BsonId]
+    public ObjectId Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
   }
@@ -21,6 +24,8 @@ namespace FoodPlanner.API.Models
 
       descriptor
           .Field(p => p.Id)
+          .Type<IdType>()
+          .Resolver(c => c.Parent<Recipe>().Id)
           .Description("Represents the unique ID for the recipe.");
 
       descriptor

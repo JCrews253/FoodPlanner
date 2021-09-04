@@ -1,4 +1,6 @@
 ﻿using FoodPlanner.API.Models;
+using FoodPlanner.Database;
+using HotChocolate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +10,11 @@ namespace FoodPlanner.API
 {
   public class Query
   {
-    public IQueryable<Recipe> GetRecipes()
+    public Recipe[] GetRecipes([Service] DbContext db)
     {
-      var r = new Recipe()
-      {
-        Name = "Recipe Name",
-        Description = "Recipe Decription",
-        Id = new Guid()
-      };
+      var x = db.GetRecipes().ToArray();
 
-      return new[] { r}.AsQueryable();
+      return x;
     }
   }
 }

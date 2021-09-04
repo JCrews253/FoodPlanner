@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using FoodPlanner.API.Models;
+using FoodPlanner.Database;
+using MongoDB.Driver;
 
 namespace FoodPlanner
 {
@@ -30,6 +32,12 @@ namespace FoodPlanner
       {
         configuration.RootPath = "ClientApp/build";
       });
+      services.AddSingleton<IMongoClient, MongoClient>(s =>
+      {
+        var uri = s.GetRequiredService<IConfiguration>()["MongoUri"];
+        return new MongoClient(uri);
+      });
+      services.AddSingleton<DbContext>();
 
       services
         .AddGraphQLServer()
