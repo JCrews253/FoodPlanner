@@ -25,7 +25,7 @@ namespace FoodPlanner.API.Models
       descriptor
           .Field(p => p.Id)
           .Type<IdType>()
-          .Resolver(c => c.Parent<Recipe>().Id)
+          .Resolver(r => r.Parent<Recipe>().Id.ToString())
           .Description("Represents the unique ID for the recipe.");
 
       descriptor

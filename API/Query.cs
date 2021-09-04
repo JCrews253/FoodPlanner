@@ -10,11 +10,9 @@ namespace FoodPlanner.API
 {
   public class Query
   {
-    public Recipe[] GetRecipes([Service] DbContext db)
+    public List<Recipe> GetRecipes([Service] DbContext db)
     {
-      var x = db.GetRecipes().ToArray();
-
-      return x;
+      return db.GetRecipes();
     }
   }
 }
