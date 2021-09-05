@@ -11,9 +11,12 @@ namespace FoodPlanner.API.Models
   public class Recipe
   {
     [BsonId]
-    public ObjectId Id { get; set; }
+    public string Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
+    public List<RecipeIngredient> Ingredients { set; get; }
+    public List<string> Steps { get; set; }
+    public List<string> Tags { get; set; } 
   }
 
   public class RecipeType : ObjectType<Recipe>
@@ -23,18 +26,30 @@ namespace FoodPlanner.API.Models
       descriptor.Description("Represents any software or service that has a command line interface.");
 
       descriptor
-          .Field(p => p.Id)
-          .Type<IdType>()
-          .Resolver(r => r.Parent<Recipe>().Id.ToString())
-          .Description("Represents the unique ID for the recipe.");
+        .Field(r => r.Id)
+        .Type<IdType>()
+        .Resolver(r => r.Parent<Recipe>().Id.ToString())
+        .Description("Represents the unique ID for the recipe.");
 
       descriptor
-          .Field(p => p.Name)
-          .Description("Represents the name for the recipe.");
+        .Field(r => r.Name)
+        .Description("Represents the name for the recipe.");
 
       descriptor
-          .Field(p => p.Description)
-          .Description("This is the description of the recipe.");
+        .Field(r => r.Description)
+        .Description("This is the description of the recipe.");
+
+      descriptor
+        .Field(r => r.Ingredients)
+        .Description("");
+
+      descriptor
+        .Field(r => r.Steps)
+        .Description("");
+
+      descriptor
+        .Field(r => r.Tags)
+        .Description("");
     }
   }
 }

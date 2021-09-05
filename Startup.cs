@@ -9,6 +9,9 @@ using Microsoft.Extensions.Hosting;
 using FoodPlanner.API.Models;
 using FoodPlanner.Database;
 using MongoDB.Driver;
+using HotChocolate;
+using HotChocolate.AspNetCore;
+using GraphQL.Server.Ui.Voyager;
 
 namespace FoodPlanner
 {
@@ -42,7 +45,10 @@ namespace FoodPlanner
       services
         .AddGraphQLServer()
         .AddQueryType<Query>()
-        .AddType<RecipeType>();
+        .AddMutationType<Mutation>()
+        .AddType<RecipeType>()
+        .AddType<RecipeIngredientType>()
+        .AddType<RecipeAddedPayloadType>();
     } 
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,7 +76,14 @@ namespace FoodPlanner
         endpoints.MapGraphQL();
       });
 
-      app.UseGraphQLPlayground("/API");
+      app.UseGraphQLVoyager(new GraphQLVoyagerOptions()
+      {
+        GraphQLEndPoint = "/graphql",
+        Path = "/graphql-voyager"
+      });
+
+
+      app.UseGraphQLPlayground("/api");
 
       app.UseSpa(spa =>
       {

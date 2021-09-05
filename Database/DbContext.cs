@@ -18,9 +18,15 @@ namespace FoodPlanner.Database
       _recipesCollection = _db.GetCollection<Recipe>("Recipes");
     }
 
-    public List<Recipe> GetRecipes()
+    public async Task<List<Recipe>> GetRecipes()
     {
-      return _recipesCollection.Find(_ => true).ToList();
+      var recipes = await _recipesCollection.FindAsync(_ => true);
+      return recipes.ToList();
+    }
+
+    public async Task AddRecipe(Recipe recipe)
+    {
+      await _recipesCollection.InsertOneAsync(recipe);
     }
   }
 }
