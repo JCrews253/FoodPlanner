@@ -1,9 +1,23 @@
 overwrite: true
 schema: "../API/Schema.graphql"
-documents: 'src/**/[!(gql.tsx)]*.{ts,tsx,graphql}'
+documents: "src/**/[!(gql.tsx)]*.{ts,tsx,graphql}"
 generates:
   src/gql.tsx:
     plugins:
       - "typescript"
       - "typescript-operations"
       - "typescript-react-apollo"
+  ../API/Models/GraphqlTypes.cs:
+    plugins:
+      - c-sharp
+      - add:
+          content:
+            [
+              "//[BsonRepresentation(BsonType.ObjectId)]",
+              "using MongoDB.Bson;",
+              "using MongoDB.Bson.Serialization.Attributes;",
+            ]
+    config:
+      className: GraqhqlTypes
+      emitRecords: true
+      emitJsonAttributes: false

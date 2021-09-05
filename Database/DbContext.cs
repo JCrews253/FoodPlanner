@@ -1,9 +1,10 @@
-﻿using FoodPlanner.API.Models;
+﻿using GraphQLCodeGen;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static GraphQLCodeGen.GraqhqlTypes;
 
 namespace FoodPlanner.Database
 {

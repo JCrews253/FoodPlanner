@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using FoodPlanner.API.Models;
 using FoodPlanner.Database;
 using MongoDB.Driver;
 using HotChocolate;
@@ -45,10 +44,7 @@ namespace FoodPlanner
       services
         .AddGraphQLServer()
         .AddQueryType<Query>()
-        .AddMutationType<Mutation>()
-        .AddType<RecipeType>()
-        .AddType<RecipeIngredientType>()
-        .AddType<RecipeAddedPayloadType>();
+        .AddMutationType<Mutation>();
     } 
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

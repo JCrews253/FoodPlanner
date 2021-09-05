@@ -16,61 +16,65 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  user?: Maybe<User>;
+  GetRecipes: Array<Maybe<Recipe>>;
 };
 
-
-export type QueryUserArgs = {
-  id: Scalars['ID'];
+export type Recipe = {
+  __typename?: 'Recipe';
+  id?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  ingredients?: Maybe<Array<RecipeIngredient>>;
+  steps?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
-export type User = {
-  __typename?: 'User';
-  id: Scalars['ID'];
+export type RecipeIngredient = {
+  __typename?: 'RecipeIngredient';
+  ingredient: Scalars['String'];
+  amount: Scalars['Float'];
+  unit?: Maybe<Scalars['String']>;
 };
 
-export type UsersQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
+export type GetRecipesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', id: string }> };
+export type GetRecipesQuery = { __typename?: 'Query', GetRecipes: Array<Maybe<{ __typename?: 'Recipe', id?: Maybe<string>, name?: Maybe<string>, description?: Maybe<string> }>> };
 
 
-export const UsersDocument = gql`
-    query Users($id: ID!) {
-  user(id: $id) {
-    ... on User {
-      id
-    }
+export const GetRecipesDocument = gql`
+    query GetRecipes {
+  GetRecipes {
+    id
+    name
+    description
   }
 }
     `;
 
 /**
- * __useUsersQuery__
+ * __useGetRecipesQuery__
  *
- * To run a query within a React component, call `useUsersQuery` and pass it any options that fit your needs.
- * When your component renders, `useUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetRecipesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRecipesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUsersQuery({
+ * const { data, loading, error } = useGetRecipesQuery({
  *   variables: {
- *      id: // value for 'id'
  *   },
  * });
  */
-export function useUsersQuery(baseOptions: Apollo.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
+export function useGetRecipesQuery(baseOptions?: Apollo.QueryHookOptions<GetRecipesQuery, GetRecipesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+        return Apollo.useQuery<GetRecipesQuery, GetRecipesQueryVariables>(GetRecipesDocument, options);
       }
-export function useUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
+export function useGetRecipesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRecipesQuery, GetRecipesQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+          return Apollo.useLazyQuery<GetRecipesQuery, GetRecipesQueryVariables>(GetRecipesDocument, options);
         }
-export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
-export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
-export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
+export type GetRecipesQueryHookResult = ReturnType<typeof useGetRecipesQuery>;
+export type GetRecipesLazyQueryHookResult = ReturnType<typeof useGetRecipesLazyQuery>;
+export type GetRecipesQueryResult = Apollo.QueryResult<GetRecipesQuery, GetRecipesQueryVariables>;

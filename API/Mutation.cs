@@ -1,11 +1,11 @@
-﻿using FoodPlanner.API.Models;
-using FoodPlanner.Database;
+﻿using FoodPlanner.Database;
 using HotChocolate;
 using HotChocolate.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static GraphQLCodeGen.GraqhqlTypes;
 
 namespace FoodPlanner.API
 {
@@ -18,11 +18,10 @@ namespace FoodPlanner.API
     //  return new Recipe();
     //}
 
-    public async Task<RecipeAddedPayload> AddRecipe(Recipe recipe)
+    public async Task<bool> AddRecipe([Service] DbContext db, Recipe recipe)
     {
-      // Omitted code for brevity
-      await Task.Delay(1);
-      return new RecipeAddedPayload() { Id="aaa"};
+      await db.AddRecipe(recipe);
+      return true;
     }
   }
 }

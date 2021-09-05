@@ -1,23 +1,19 @@
 import gql from "graphql-tag";
-import { useUsersQuery } from "../gql";
+import { useGetRecipesQuery } from "../gql";
 import React from "react";
 
 gql`
-  query Users($id: ID!) {
-    user(id: $id) {
-      ... on User {
-        id
-      }
+  query GetRecipes {
+    GetRecipes {
+      id
+      name
+      description
     }
   }
 `;
 
 const Test = () => {
-  const users = useUsersQuery({
-    variables: {
-      id: "",
-    },
-  });
+  const recipes = useGetRecipesQuery();
   return <h1>test component</h1>;
 };
 

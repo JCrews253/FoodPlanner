@@ -1,0 +1,22 @@
+schema {
+  query: Query
+}
+
+type Query {
+  GetRecipes: [Recipe]!
+}
+
+type Recipe {
+  id: ID
+  name: String
+  description: String
+  ingredients: [RecipeIngredient!]
+  steps: [String]
+  tags: [String]
+}
+
+type RecipeIngredient {
+  ingredient: String!
+  amount: Float!
+  unit: String
+}
