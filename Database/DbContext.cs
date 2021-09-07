@@ -1,4 +1,5 @@
 ﻿using GraphQLCodeGen;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace FoodPlanner.Database
 
     public async Task AddRecipe(Recipe recipe)
     {
-      await _recipesCollection.InsertOneAsync(recipe);
+      await _recipesCollection.InsertOneAsync(recipe with { Id = ObjectId.GenerateNewId().ToString() });
     }
   }
 }
