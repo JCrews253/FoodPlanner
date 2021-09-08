@@ -13,7 +13,7 @@ namespace FoodPlanner.API
   {
     public async Task<bool> AddRecipe([Service] DbContext db, Recipe recipe)
     {
-      await db.AddRecipe(recipe);
+      await db.AddRecipeAsync(recipe);
       return true;
     }
   }

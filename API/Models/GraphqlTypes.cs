@@ -8,6 +8,31 @@ using System.ComponentModel.DataAnnotations;
 namespace GraphQLCodeGen {
   public class GraqhqlTypes {
     
+    #region Pantry
+    public record Pantry(string Id, List<PantryItem> Items) {
+      #region members
+      [BsonRepresentation(BsonType.ObjectId)]
+      public string Id { get; init; } = Id;
+    
+      public List<PantryItem> Items { get; init; } = Items;
+      #endregion
+    }
+    #endregion
+    
+    #region PantryItem
+    public record PantryItem(string Ingredient, double Amount, string Unit, DateTime? ExpirationDate) {
+      #region members
+      public string Ingredient { get; init; } = Ingredient;
+    
+      public double Amount { get; init; } = Amount;
+    
+      public string Unit { get; init; } = Unit;
+    
+      public DateTime? ExpirationDate { get; init; } = ExpirationDate;
+      #endregion
+    }
+    #endregion
+    
     #region Query
     public record Query(List<Recipe> GetRecipes) {
       #region members

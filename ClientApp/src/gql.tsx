@@ -12,6 +12,21 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: any;
+};
+
+export type Pantry = {
+  __typename?: 'Pantry';
+  id?: Maybe<Scalars['ID']>;
+  items: Array<Maybe<PantryItem>>;
+};
+
+export type PantryItem = {
+  __typename?: 'PantryItem';
+  ingredient: Scalars['String'];
+  amount: Scalars['Float'];
+  unit?: Maybe<Scalars['String']>;
+  expirationDate?: Maybe<Scalars['Date']>;
 };
 
 export type Query = {
@@ -24,7 +39,7 @@ export type Recipe = {
   id?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  ingredients?: Maybe<Array<RecipeIngredient>>;
+  ingredients: Array<Maybe<RecipeIngredient>>;
   steps?: Maybe<Array<Maybe<Scalars['String']>>>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
 };

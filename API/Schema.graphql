@@ -1,3 +1,5 @@
+scalar Date
+
 schema {
   query: Query
 }
@@ -10,7 +12,7 @@ type Recipe {
   id: ID
   name: String
   description: String
-  ingredients: [RecipeIngredient!]
+  ingredients: [RecipeIngredient]!
   steps: [String]
   tags: [String]
 }
@@ -19,4 +21,16 @@ type RecipeIngredient {
   ingredient: String!
   amount: Float!
   unit: String
+}
+
+type Pantry {
+  id: ID
+  items: [PantryItem]!
+}
+
+type PantryItem {
+  ingredient: String!
+  amount: Float!
+  unit: String
+  expirationDate: Date
 }
