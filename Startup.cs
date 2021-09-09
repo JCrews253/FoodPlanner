@@ -1,7 +1,6 @@
 using FoodPlanner.API;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,8 +8,10 @@ using Microsoft.Extensions.Hosting;
 using FoodPlanner.Database;
 using MongoDB.Driver;
 using HotChocolate;
-using HotChocolate.AspNetCore;
-using GraphQL.Server.Ui.Voyager;
+using FoodPlanner.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace FoodPlanner
 {
@@ -28,7 +29,8 @@ namespace FoodPlanner
     {
 
       services.AddControllersWithViews();
-
+      services.AddScoped<IIdentityService, IdentityService>();
+      services.AddHttpContextAccessor();
       // In production, the React files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
       {
@@ -41,8 +43,33 @@ namespace FoodPlanner
       });
       services.AddSingleton<DbContext>();
 
+      services.AddAuthentication(options =>
+      {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+      }).AddJwtBearer(options =>
+      {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+          ValidateAudience = true,
+          ValidateIssuer = true,
+          ValidateIssuerSigningKey = true,
+          ValidateLifetime = true,
+          ValidAudience = "audience",
+          ValidIssuer = "issuer",
+          RequireSignedTokens = false,
+          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SymmetricSecurityKey"])),
+          ClockSkew = System.TimeSpan.Zero
+        };
+      
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+      });
+
       services
         .AddGraphQLServer()
+        .AddAuthorization()
         .AddQueryType<Query>()
         .AddMutationType<Mutation>()
         .AddFiltering()
@@ -66,20 +93,13 @@ namespace FoodPlanner
       app.UseHttpsRedirection();
       app.UseStaticFiles();
       app.UseSpaStaticFiles();
-
+      app.UseAuthentication();
       app.UseRouting();
 
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapGraphQL();
       });
-
-      app.UseGraphQLVoyager(new GraphQLVoyagerOptions()
-      {
-        GraphQLEndPoint = "/graphql",
-        Path = "/graphql-voyager"
-      });
-
 
       app.UseGraphQLPlayground("/api");
 

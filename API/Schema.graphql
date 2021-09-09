@@ -9,7 +9,7 @@ type Query {
 }
 
 type Recipe {
-  id: ID
+  id: ID!
   name: String
   description: String
   ingredients: [RecipeIngredient]!
@@ -24,7 +24,7 @@ type RecipeIngredient {
 }
 
 type Pantry {
-  id: ID
+  id: ID!
   items: [PantryItem]!
 }
 
@@ -33,4 +33,16 @@ type PantryItem {
   amount: Float!
   unit: String
   expirationDate: Date
+}
+
+type User {
+  id: ID!
+  email: String!
+  password: String!
+  claims: [String]
+}
+
+type Token {
+  access: String!
+  refresh: String!
 }

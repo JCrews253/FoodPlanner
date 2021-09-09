@@ -18,6 +18,7 @@ namespace FoodPlanner.Database
       _db = client.GetDatabase("FoodPlanner");
       RecipePartialCtor();
       PantryPartialCtor();
+      UsersPartialCtor();
     }
   }
 }

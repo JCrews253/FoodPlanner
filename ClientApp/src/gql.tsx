@@ -15,9 +15,10 @@ export type Scalars = {
   Date: any;
 };
 
+
 export type Pantry = {
   __typename?: 'Pantry';
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
   items: Array<Maybe<PantryItem>>;
 };
 
@@ -36,7 +37,7 @@ export type Query = {
 
 export type Recipe = {
   __typename?: 'Recipe';
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   ingredients: Array<Maybe<RecipeIngredient>>;
@@ -51,10 +52,24 @@ export type RecipeIngredient = {
   unit?: Maybe<Scalars['String']>;
 };
 
+export type Token = {
+  __typename?: 'Token';
+  access: Scalars['String'];
+  refresh: Scalars['String'];
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['ID'];
+  email: Scalars['String'];
+  password: Scalars['String'];
+  claims?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
 export type GetRecipesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetRecipesQuery = { __typename?: 'Query', GetRecipes: Array<Maybe<{ __typename?: 'Recipe', id?: Maybe<string>, name?: Maybe<string>, description?: Maybe<string> }>> };
+export type GetRecipesQuery = { __typename?: 'Query', GetRecipes: Array<Maybe<{ __typename?: 'Recipe', id: string, name?: Maybe<string>, description?: Maybe<string> }>> };
 
 
 export const GetRecipesDocument = gql`

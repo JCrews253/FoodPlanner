@@ -71,6 +71,31 @@ namespace GraphQLCodeGen {
       #endregion
     }
     #endregion
+    
+    #region Token
+    public record Token(string Access, string Refresh) {
+      #region members
+      public string Access { get; init; } = Access;
+    
+      public string Refresh { get; init; } = Refresh;
+      #endregion
+    }
+    #endregion
+    
+    #region User
+    public record User(string Id, string Email, string Password, List<string> Claims) {
+      #region members
+      [BsonRepresentation(BsonType.ObjectId)]
+      public string Id { get; init; } = Id;
+    
+      public string Email { get; init; } = Email;
+    
+      public string Password { get; init; } = Password;
+    
+      public List<string> Claims { get; init; } = Claims;
+      #endregion
+    }
+    #endregion
   }
   
 }
