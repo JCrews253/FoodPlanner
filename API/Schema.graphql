@@ -11,6 +11,7 @@ type Query {
 type Recipe {
   id: ID!
   name: String
+  photos: [String]!
   description: String
   ingredients: [RecipeIngredient]!
   steps: [String]

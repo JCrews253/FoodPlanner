@@ -39,6 +39,7 @@ export type Recipe = {
   __typename?: 'Recipe';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
+  photos: Array<Maybe<Scalars['String']>>;
   description?: Maybe<Scalars['String']>;
   ingredients: Array<Maybe<RecipeIngredient>>;
   steps?: Maybe<Array<Maybe<Scalars['String']>>>;

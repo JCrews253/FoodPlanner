@@ -21,25 +21,7 @@ namespace FoodPlanner.API
     [Authorize]
     public async Task<List<Recipe>> GetRecipes([Service] DbContext db)
     {
-      var recipe = new Recipe(
-        Id: ObjectId.GenerateNewId().ToString(),
-        Name: "Recipe 5",
-        Description: "Description 3",
-        Ingredients: new List<RecipeIngredient>()
-        {
-          new RecipeIngredient("Chicken", 1, "pound"),
-          new RecipeIngredient("rice", 2.5, "Cups")
-        },
-        Steps: new List<string>()
-        {
-          "Step 1",
-          "step 2",
-          "step 3"
-        },
-        Tags: new List<string>() { "Italian" });
-
       //await db.AddRecipeAsync(recipe);
-
       return await db.GetRecipesAsync();
     }
 
