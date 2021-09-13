@@ -38,6 +38,10 @@ namespace FoodPlanner.Services
 
     public async Task<Token> Authenticate(User user)
     {
+      if(user == null)
+      {
+        return null;
+      }
       var dbUser = await _db.GetUser(user.Email);
       if(dbUser == null)
       {
@@ -85,7 +89,7 @@ namespace FoodPlanner.Services
       var isAvailable = await _db.IsEmailAvailable(user.Email);
       if (isAvailable)
       {
-        await _db.InsertUser(user with {Password = _hasher.HashPassword(user, user.Password) });
+        //await _db.InsertUser(user with {Password = _hasher.HashPassword(user, user.Password) });
         return string.Empty;
       }
       else

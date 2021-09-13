@@ -8,10 +8,17 @@ using System.ComponentModel.DataAnnotations;
 namespace GraphQLCodeGen {
   public class GraqhqlTypes {
     
+    #region Mutation
+    public record Mutation(Token Login) {
+      #region members
+      public Token Login { get; init; } = Login;
+      #endregion
+    }
+    #endregion
+    
     #region Pantry
     public record Pantry(string Id, List<PantryItem> Items) {
       #region members
-      [BsonRepresentation(BsonType.ObjectId)]
       public string Id { get; init; } = Id;
     
       public List<PantryItem> Items { get; init; } = Items;
@@ -34,9 +41,9 @@ namespace GraphQLCodeGen {
     #endregion
     
     #region Query
-    public record Query(List<Recipe> GetRecipes) {
+    public record Query(List<Recipe> Recipes) {
       #region members
-      public List<Recipe> GetRecipes { get; init; } = GetRecipes;
+      public List<Recipe> Recipes { get; init; } = Recipes;
       #endregion
     }
     #endregion
@@ -44,7 +51,6 @@ namespace GraphQLCodeGen {
     #region Recipe
     public record Recipe(string Id, string Name, List<string> Photos, string Description, List<RecipeIngredient> Ingredients, List<string> Steps, List<string> Tags) {
       #region members
-      [BsonRepresentation(BsonType.ObjectId)]
       public string Id { get; init; } = Id;
     
       public string Name { get; init; } = Name;
@@ -87,7 +93,6 @@ namespace GraphQLCodeGen {
     #region User
     public record User(string Id, string Email, string Password, List<string> Claims) {
       #region members
-      [BsonRepresentation(BsonType.ObjectId)]
       public string Id { get; init; } = Id;
     
       public string Email { get; init; } = Email;
@@ -95,6 +100,40 @@ namespace GraphQLCodeGen {
       public string Password { get; init; } = Password;
     
       public List<string> Claims { get; init; } = Claims;
+      #endregion
+    }
+    #endregion
+    
+    #region UserLogin
+    public class UserLogin {
+      #region members
+      [Required]
+      public string email { get; set; }
+    
+      [Required]
+      public string password { get; set; }
+      #endregion
+    
+      #region methods
+      public dynamic GetInputObject()
+      {
+        IDictionary<string, object> d = new System.Dynamic.ExpandoObject();
+    
+        var properties = GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+        foreach (var propertyInfo in properties)
+        {
+          var value = propertyInfo.GetValue(this);
+          var defaultValue = propertyInfo.PropertyType.IsValueType ? Activator.CreateInstance(propertyInfo.PropertyType) : null;
+    
+          var requiredProp = propertyInfo.GetCustomAttributes(typeof(RequiredAttribute), false).Length > 0;
+    
+          if (requiredProp || value != defaultValue)
+          {
+            d[propertyInfo.Name] = value;
+          }
+        }
+        return d;
+      }
       #endregion
     }
     #endregion

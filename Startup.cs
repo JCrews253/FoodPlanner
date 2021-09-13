@@ -73,7 +73,9 @@ namespace FoodPlanner
         .AddQueryType<Query>()
         .AddMutationType<Mutation>()
         .AddFiltering()
-        .AddSorting();
+        .AddSorting()
+        .PublishSchemaDefinition(s => 
+        s.SetName("foodSchema"));
     } 
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

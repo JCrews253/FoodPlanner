@@ -2,18 +2,17 @@ import React from "react";
 import {
   AppBar as MuiAppBar,
   createStyles,
-  IconButton as MuiIconButton,
   Toolbar,
   WithStyles,
   withStyles,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
-import CalendarIcon from "@material-ui/icons/CalendarToday";
-import AddIcon from "@material-ui/icons/AddCircle";
+import CalendarIcon from "@material-ui/icons/Event";
+import AddIcon from "@material-ui/icons/AddCircleOutline";
 import ShoppingListIcon from "@material-ui/icons/FormatListBulleted";
 import SearchIcon from "@material-ui/icons/Search";
 import IconButton from "./IconButton";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const styles = createStyles({
   appBar: {
@@ -23,27 +22,56 @@ const styles = createStyles({
   },
   toolBar: {
     padding: "0px",
+    display: "flex",
+    justifyContent: "center",
+  },
+  navLink: {
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "none",
+    },
   },
 });
 
 const AppBar = ({ classes }: WithStyles<typeof styles>) => {
+  const link = useLocation();
   return (
     <MuiAppBar position="fixed" className={classes.appBar}>
       <Toolbar className={classes.toolBar}>
-        <Link to="/">
-          <IconButton icon={<HomeIcon />} label={"Home"} />
+        <Link to="/" className={classes.navLink}>
+          <IconButton
+            icon={<HomeIcon fontSize={"large"} />}
+            label={"Home"}
+            selected={link.pathname === "/"}
+          />
         </Link>
-        <Link to="/calendar">
-          <IconButton icon={<CalendarIcon />} label={"Calendar"} />
+        <Link to="/calendar" className={classes.navLink}>
+          <IconButton
+            icon={<CalendarIcon fontSize={"large"} />}
+            label={"Calendar"}
+            selected={link.pathname === "/calendar"}
+          />
         </Link>
-        <Link to="/newrecipe">
-          <IconButton icon={<AddIcon />} label={"Recipe"} />
+        <Link to="/newrecipe" className={classes.navLink}>
+          <IconButton
+            icon={<AddIcon fontSize={"large"} />}
+            label={"Recipe"}
+            selected={link.pathname === "/newrecipe"}
+          />
         </Link>
-        <Link to="/shoppinglist">
-          <IconButton icon={<ShoppingListIcon />} label={"Groceries"} />
+        <Link to="/shoppinglist" className={classes.navLink}>
+          <IconButton
+            icon={<ShoppingListIcon fontSize={"large"} />}
+            label={"Groceries"}
+            selected={link.pathname === "/shoppinglist"}
+          />
         </Link>
-        <Link to="/search">
-          <IconButton icon={<SearchIcon />} label={"Search"} />
+        <Link to="/search" className={classes.navLink}>
+          <IconButton
+            icon={<SearchIcon fontSize={"large"} />}
+            label={"Search"}
+            selected={link.pathname === "/search"}
+          />
         </Link>
       </Toolbar>
     </MuiAppBar>

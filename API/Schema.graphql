@@ -2,10 +2,15 @@ scalar Date
 
 schema {
   query: Query
+  mutation: Mutation
 }
 
 type Query {
-  GetRecipes: [Recipe]!
+  recipes: [Recipe]!
+}
+
+type Mutation {
+  login(inputs: UserLogin!): Token
 }
 
 type Recipe {
@@ -46,4 +51,9 @@ type User {
 type Token {
   access: String!
   refresh: String!
+}
+
+input UserLogin {
+  email: String!
+  password: String!
 }

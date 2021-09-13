@@ -1,18 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Route } from "react-router";
-import AppBar from "./components/AppBar";
 import { Counter } from "./components/Counter";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
-import { Layout } from "./components/Layout";
+import Layout from "./components/Layout";
+import SignIn from "./pages/SignIn";
 
 const App = () => {
+  const [loggedIn, setLoggedIn] = useState(false);
+
   return (
     <Layout>
-      <Route exact path="/" component={Home} />
-      <Route path="/counter" component={Counter} />
-      <Route path="/fetch-data" component={FetchData} />
-      <AppBar />
+      <Route path="/" render={() => (loggedIn ? <Home /> : <SignIn />)} />
+      <Route path="/signin" component={SignIn} />
+      <Route path="/counter" render={() => <Counter />} />
+      <Route path="/fetch-data" render={() => <FetchData />} />
     </Layout>
   );
 };

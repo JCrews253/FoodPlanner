@@ -18,12 +18,16 @@ namespace FoodPlanner.API
   {
     [UseFiltering]
     [UseSorting]
-    [Authorize]
     public async Task<List<Recipe>> GetRecipes([Service] DbContext db)
     {
       //await db.AddRecipeAsync(recipe);
       return await db.GetRecipesAsync();
     }
+
+    //public List<Recipe> GetRecipes()
+    //{
+    //  return new List<Recipe>() { new Recipe("", "", new List<string>(),"", new List<RecipeIngredient>(), new List<string>(), new List<string>()) };
+    //}
 
     [Authorize]
     public string GetEmail([Service] IHttpContextAccessor contextAccessor)
