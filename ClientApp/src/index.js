@@ -6,6 +6,7 @@ import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import { ReactQueryDevtools } from "react-query/devtools";
 import "./styles.css";
+import { RecoilRoot } from "recoil";
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const rootElement = document.getElementById("root");
@@ -13,12 +14,14 @@ const rootElement = document.getElementById("root");
 const queryClient = new QueryClient();
 
 ReactDOM.render(
-  <QueryClientProvider client={queryClient}>
-    <ReactQueryDevtools initialIsOpen={false} />
-    <BrowserRouter basename={baseUrl}>
-      <App />
-    </BrowserRouter>
-  </QueryClientProvider>,
+  <RecoilRoot>
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
+      <BrowserRouter basename={baseUrl}>
+        <App />
+      </BrowserRouter>
+    </QueryClientProvider>
+  </RecoilRoot>,
   rootElement
 );
 
