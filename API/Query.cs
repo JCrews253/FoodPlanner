@@ -24,11 +24,6 @@ namespace FoodPlanner.API
       return await db.GetRecipesAsync();
     }
 
-    //public List<Recipe> GetRecipes()
-    //{
-    //  return new List<Recipe>() { new Recipe("", "", new List<string>(),"", new List<RecipeIngredient>(), new List<string>(), new List<string>()) };
-    //}
-
     [Authorize]
     public string GetEmail([Service] IHttpContextAccessor contextAccessor)
     {

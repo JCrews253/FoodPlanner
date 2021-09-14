@@ -2,11 +2,13 @@ overwrite: true
 schema: "../API/Schema.graphql"
 documents: "src/**/[!(gql.tsx)]*.{ts,tsx,graphql}"
 generates:
-  src/gql.tsx:
+  src/gql.ts:
     plugins:
-      - "typescript"
-      - "typescript-operations"
-      - "typescript-react-apollo"
+      - typescript
+      - typescript-operations
+      - typescript-react-query
+    config:
+      fetcher: graphql-request
   ../API/Models/GraphqlTypes.cs:
     plugins:
       - c-sharp

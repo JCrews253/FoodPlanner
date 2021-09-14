@@ -1,4 +1,6 @@
 ﻿using Azure.Storage.Blobs;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -43,10 +45,9 @@ namespace FoodPlanner.Database
 
     public async Task<string> AddPhoto(string photo)
     {
-      var connectionString = "";
-      var container = "";
+      var config = _provider.GetRequiredService<IConfiguration>();
 
-      var containerClient = new BlobContainerClient(connectionString,container);
+      var containerClient = new BlobContainerClient(config["ConnectionString"], config["Container"]);
       var blobClient = containerClient.GetBlobClient(Guid.NewGuid().ToString());
       var bytes = Convert.FromBase64String(photo);
       using(var ms = new MemoryStream(bytes))

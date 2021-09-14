@@ -10,7 +10,7 @@ type Query {
 }
 
 type Mutation {
-  login(inputs: UserLogin!): Token
+  login(user: UserInput!): Token
 }
 
 type Recipe {
@@ -53,7 +53,7 @@ type Token {
   refresh: String!
 }
 
-input UserLogin {
+input UserInput {
   email: String!
   password: String!
 }

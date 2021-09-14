@@ -11,11 +11,13 @@ namespace FoodPlanner.Database
 {
   public partial class DbContext
   {
+    IServiceProvider _provider;
     IMongoDatabase _db;
     
-    public DbContext(IMongoClient client)
+    public DbContext(IMongoClient client, IServiceProvider provider)
     {
       _db = client.GetDatabase("FoodPlanner");
+      _provider = provider;
       RecipePartialCtor();
       PantryPartialCtor();
       UsersPartialCtor();

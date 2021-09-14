@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,14 +21,14 @@ namespace FoodPlanner.Services
 {
   public interface IIdentityService
   {
-    Task<Token> Authenticate(User user);
-    Task<string> Register(User user);
+    Task<Token> Authenticate(UserInput user);
+    Task<string> Register(UserInput user);
   }
 
   public class IdentityService : IIdentityService
   {
     DbContext _db;
-    PasswordHasher<User> _hasher = new PasswordHasher<User>();
+    PasswordHasher<UserInput> _hasher = new PasswordHasher<UserInput>();
     IServiceProvider _provider;
 
     public IdentityService(DbContext db, IServiceProvider provider)
@@ -36,22 +37,18 @@ namespace FoodPlanner.Services
       _provider = provider;
     }
 
-    public async Task<Token> Authenticate(User user)
+    public async Task<Token> Authenticate(UserInput user)
     {
-      if(user == null)
-      {
-        return null;
-      }
-      var dbUser = await _db.GetUser(user.Email);
+      var dbUser = await _db.GetUser(user.email);
       if(dbUser == null)
       {
         return null;
       } 
 
-      var results = _hasher.VerifyHashedPassword(user, dbUser.Password, user.Password);
+      var results = _hasher.VerifyHashedPassword(user, dbUser.Password, user.password);
       if(results == PasswordVerificationResult.Success)
       {
-        var accessToken = GenerateAccessToken(user.Email, dbUser.Id);
+        var accessToken = GenerateAccessToken(user.email, dbUser.Id);
         var refreshToken = GenerateRefreshToken();
         return new Token(accessToken, refreshToken);
       }
@@ -59,7 +56,7 @@ namespace FoodPlanner.Services
       return null;
     }
 
-    public async Task<string> Register(User user)
+    public async Task<string> Register(UserInput user)
     {
       // atleast one lower case letter
       // atleast one upper case letter
@@ -69,32 +66,33 @@ namespace FoodPlanner.Services
       string passwordRules = @"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
       string emailRules = @"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
 
-      if (string.IsNullOrEmpty(user.Email))
+      if (string.IsNullOrEmpty(user.email))
       {
         return "Email can't be empty.";
       }
-      else if(!Regex.IsMatch(user.Email, emailRules))
+      else if(!Regex.IsMatch(user.email, emailRules))
       {
         return "Invalid email.";
       }
-      else if (string.IsNullOrEmpty(user.Password))
+      else if (string.IsNullOrEmpty(user.password))
       {
         return "Password can't be empty.";
       }
-      else if(!Regex.IsMatch(user.Password, passwordRules))
+      else if(!Regex.IsMatch(user.password, passwordRules))
       {
         return "Invalid password.";
       }
 
-      var isAvailable = await _db.IsEmailAvailable(user.Email);
+      var isAvailable = await _db.IsEmailAvailable(user.email);
       if (isAvailable)
       {
-        //await _db.InsertUser(user with {Password = _hasher.HashPassword(user, user.Password) });
+        var newUser = new User(null, user.email, _hasher.HashPassword(user, user.password), null);
+        await _db.InsertUser(newUser);
         return string.Empty;
       }
       else
       {
-        return $"{user.Email} is already in use.";
+        return $"{user.email} is already in use.";
       }
     }
 

@@ -1,24 +1,24 @@
-import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import React from "react";
 import ReactDOM from "react-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
+import { ReactQueryDevtools } from "react-query/devtools";
+import "./styles.css";
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const rootElement = document.getElementById("root");
 
-const apolloClient = new ApolloClient({
-  uri: "https://localhost:44360/graphql",
-  cache: new InMemoryCache(),
-});
+const queryClient = new QueryClient();
 
 ReactDOM.render(
-  <ApolloProvider client={apolloClient}>
+  <QueryClientProvider client={queryClient}>
+    <ReactQueryDevtools initialIsOpen={false} />
     <BrowserRouter basename={baseUrl}>
       <App />
     </BrowserRouter>
-  </ApolloProvider>,
+  </QueryClientProvider>,
   rootElement
 );
 

@@ -11,6 +11,7 @@ const App = () => {
 
   return (
     <Layout>
+      <button onClick={() => setLoggedIn(!loggedIn)}>toggle</button>
       <Route path="/" render={() => (loggedIn ? <Home /> : <SignIn />)} />
       <Route path="/signin" component={SignIn} />
       <Route path="/counter" render={() => <Counter />} />

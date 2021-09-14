@@ -12,14 +12,12 @@ namespace FoodPlanner.API
 {
   public class Mutation
   {
-    public Token Login([Service] IIdentityService identityService, UserLogin inputs)
+    public async Task<Token> Login([Service] IIdentityService identityService, UserInput user)
     {
-      //await Task.Delay(1);
-      return new Token("access", "refresh");
-      //return await identityService.Authenticate(user);
+      return await identityService.Authenticate(user);
     }
 
-    public async Task<string> Register(User user, [Service] IIdentityService identityService)
+    public async Task<string> Register([Service] IIdentityService identityService, UserInput user)
     {
       return await identityService.Register(user);
     }

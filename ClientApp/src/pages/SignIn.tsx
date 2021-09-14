@@ -1,4 +1,3 @@
-import { useMutation } from "@apollo/client";
 import {
   Button,
   createStyles,
@@ -8,13 +7,15 @@ import {
 } from "@material-ui/core";
 import gql from "graphql-tag";
 import React, { useState } from "react";
-import { useGetRecipesQuery, useLoginMutation } from "../gql";
+import graphqlRequestClient from "../clients/graphqlRequestClient";
+import {
+  GetRecipesQuery,
+  useGetRecipesQuery,
+  UserLoginMutation,
+  UserLoginMutationVariables,
+  useUserLoginMutation,
+} from "../gql";
 
-//mutation login($input: UserLogin!) {
-//  login(input: $input) {
-//    access
-//  }
-//}
 gql`
   query GetRecipes {
     recipes {
@@ -22,8 +23,8 @@ gql`
     }
   }
 
-  mutation login($inputs: UserLogin!) {
-    login(inputs: $inputs) {
+  mutation UserLogin($inputs: UserInput!) {
+    login(user: $inputs) {
       access
     }
   }
@@ -34,7 +35,7 @@ const styles = createStyles({
     display: "flex",
     flexDirection: "column",
     padding: "20px",
-    height: "100vh",
+    height: "-webkit-fill-available",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -65,10 +66,14 @@ const styles = createStyles({
 const SignIn = ({ classes }: WithStyles<typeof styles>) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [zzz, { data, loading, error }] = useLoginMutation();
-  console.log({ error });
-  //const { data } = useGetRecipesQuery();
-  //console.log({ data });
+  const [token, setToken] = useState("");
+
+  const { mutate } = useUserLoginMutation<Error>(graphqlRequestClient, {
+    onSuccess: ({ login }) => {
+      setToken(login?.access ?? "");
+    },
+  });
+
   return (
     <div className={classes.signInContainer}>
       <div className={classes.content}>
@@ -93,20 +98,12 @@ const SignIn = ({ classes }: WithStyles<typeof styles>) => {
           className={classes.button}
           disableRipple
           onClick={() => {
-            var loginFunc = async () => {
-              var x = await zzz({
-                variables: {
-                  inputs: {
-                    email: "email",
-                    password: "password",
-                  },
-                },
-              });
-
-              console.log({ x });
-            };
-
-            loginFunc();
+            mutate({
+              inputs: {
+                email: email,
+                password: password,
+              },
+            });
           }}
         >
           Log In
