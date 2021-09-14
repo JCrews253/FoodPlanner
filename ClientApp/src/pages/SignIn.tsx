@@ -7,25 +7,16 @@ import {
 } from "@material-ui/core";
 import gql from "graphql-tag";
 import React, { useState } from "react";
+import { useSetRecoilState } from "recoil";
 import graphqlRequestClient from "../clients/graphqlRequestClient";
-import {
-  GetRecipesQuery,
-  useGetRecipesQuery,
-  UserLoginMutation,
-  UserLoginMutationVariables,
-  useUserLoginMutation,
-} from "../gql";
+import { useUserLoginMutation } from "../gql";
+import { AuthTokens } from "../state/state";
 
 gql`
-  query GetRecipes {
-    recipes {
-      name
-    }
-  }
-
   mutation UserLogin($inputs: UserInput!) {
     login(user: $inputs) {
       access
+      refresh
     }
   }
 `;
@@ -71,11 +62,13 @@ const styles = createStyles({
 const SignIn = ({ classes }: WithStyles<typeof styles>) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [token, setToken] = useState("");
+  const setAccessToken = useSetRecoilState(AuthTokens.access);
+  const setRefreshToken = useSetRecoilState(AuthTokens.refresh);
 
   const { mutate } = useUserLoginMutation<Error>(graphqlRequestClient, {
     onSuccess: ({ login }) => {
-      setToken(login?.access ?? "");
+      setAccessToken(login?.access ?? "");
+      setRefreshToken(login?.refresh ?? "");
     },
   });
 

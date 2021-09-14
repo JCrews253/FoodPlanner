@@ -1,6 +1,5 @@
 import { GraphQLClient } from 'graphql-request';
-import { RequestInit } from 'graphql-request/dist/types.dom';
-import { useQuery, UseQueryOptions, useMutation, UseMutationOptions } from 'react-query';
+import { useMutation, UseMutationOptions } from 'react-query';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -86,44 +85,19 @@ export type UserInput = {
   password: Scalars['String'];
 };
 
-export type GetRecipesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetRecipesQuery = { __typename?: 'Query', recipes: Array<Maybe<{ __typename?: 'Recipe', name?: Maybe<string> }>> };
-
 export type UserLoginMutationVariables = Exact<{
   inputs: UserInput;
 }>;
 
 
-export type UserLoginMutation = { __typename?: 'Mutation', login?: Maybe<{ __typename?: 'Token', access: string }> };
+export type UserLoginMutation = { __typename?: 'Mutation', login?: Maybe<{ __typename?: 'Token', access: string, refresh: string }> };
 
 
-export const GetRecipesDocument = `
-    query GetRecipes {
-  recipes {
-    name
-  }
-}
-    `;
-export const useGetRecipesQuery = <
-      TData = GetRecipesQuery,
-      TError = unknown
-    >(
-      client: GraphQLClient, 
-      variables?: GetRecipesQueryVariables, 
-      options?: UseQueryOptions<GetRecipesQuery, TError, TData>,
-      headers?: RequestInit['headers']
-    ) => 
-    useQuery<GetRecipesQuery, TError, TData>(
-      variables === undefined ? ['GetRecipes'] : ['GetRecipes', variables],
-      fetcher<GetRecipesQuery, GetRecipesQueryVariables>(client, GetRecipesDocument, variables, headers),
-      options
-    );
 export const UserLoginDocument = `
     mutation UserLogin($inputs: UserInput!) {
   login(user: $inputs) {
     access
+    refresh
   }
 }
     `;
