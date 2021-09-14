@@ -49,6 +49,10 @@ const styles = createStyles({
     boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.5)",
     minWidth: "300px",
   },
+  textField: {
+    margin: "10px",
+    width: "100%",
+  },
   button: {
     margin: "10px",
     width: "100%",
@@ -60,6 +64,7 @@ const styles = createStyles({
     height: "1px",
     opacity: 0.5,
     borderRadius: "5px",
+    marginTop: "11px",
   },
 });
 
@@ -81,7 +86,9 @@ const SignIn = ({ classes }: WithStyles<typeof styles>) => {
         <TextField
           label="Email"
           variant="outlined"
-          className={classes.button}
+          className={classes.textField}
+          error={email.length > 0}
+          helperText={email.length > 0 ? "invalid email" : null}
           onChange={(e) => setEmail(e.currentTarget.value)}
           value={email}
         />
@@ -89,7 +96,7 @@ const SignIn = ({ classes }: WithStyles<typeof styles>) => {
           label="Password"
           variant="outlined"
           type="password"
-          className={classes.button}
+          className={classes.textField}
           onChange={(e) => setPassword(e.currentTarget.value)}
           value={password}
         />
