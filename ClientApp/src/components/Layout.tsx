@@ -18,11 +18,13 @@ const styles = (theme: Theme) => {
       gridRowStart: 1,
       gridRowEnd: 2,
       display: "flex",
+      overflow: "scroll",
     },
     loggedOutContent: {
       gridRowStart: 1,
       gridRowEnd: 3,
       display: "flex",
+      overflow: "scroll",
     },
   });
 };

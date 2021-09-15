@@ -22,10 +22,16 @@ export type Scalars = {
 export type Mutation = {
   __typename?: 'Mutation';
   login?: Maybe<Token>;
+  register?: Maybe<Scalars['String']>;
 };
 
 
 export type MutationLoginArgs = {
+  user: UserInput;
+};
+
+
+export type MutationRegisterArgs = {
   user: UserInput;
 };
 
@@ -85,6 +91,13 @@ export type UserInput = {
   password: Scalars['String'];
 };
 
+export type RegisterMutationVariables = Exact<{
+  inputs: UserInput;
+}>;
+
+
+export type RegisterMutation = { __typename?: 'Mutation', register?: Maybe<string> };
+
 export type UserLoginMutationVariables = Exact<{
   inputs: UserInput;
 }>;
@@ -93,6 +106,23 @@ export type UserLoginMutationVariables = Exact<{
 export type UserLoginMutation = { __typename?: 'Mutation', login?: Maybe<{ __typename?: 'Token', access: string, refresh: string }> };
 
 
+export const RegisterDocument = `
+    mutation Register($inputs: UserInput!) {
+  register(user: $inputs)
+}
+    `;
+export const useRegisterMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient, 
+      options?: UseMutationOptions<RegisterMutation, TError, RegisterMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) => 
+    useMutation<RegisterMutation, TError, RegisterMutationVariables, TContext>(
+      (variables?: RegisterMutationVariables) => fetcher<RegisterMutation, RegisterMutationVariables>(client, RegisterDocument, variables, headers)(),
+      options
+    );
 export const UserLoginDocument = `
     mutation UserLogin($inputs: UserInput!) {
   login(user: $inputs) {

@@ -9,9 +9,11 @@ namespace GraphQLCodeGen {
   public class GraqhqlTypes {
     
     #region Mutation
-    public record Mutation(Token Login) {
+    public record Mutation(Token Login, string Register) {
       #region members
       public Token Login { get; init; } = Login;
+    
+      public string Register { get; init; } = Register;
       #endregion
     }
     #endregion

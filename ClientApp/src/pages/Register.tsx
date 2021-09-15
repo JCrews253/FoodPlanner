@@ -16,17 +16,12 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import gql from "graphql-tag";
 import React, { useState } from "react";
 import { useHistory } from "react-router";
-import { useSetRecoilState } from "recoil";
 import graphqlRequestClient from "../clients/graphqlRequestClient";
-import { useUserLoginMutation } from "../gql";
-import { AuthStatus, AuthTokens } from "../state/state";
+import { useRegisterMutation } from "../gql";
 
 gql`
-  mutation UserLogin($inputs: UserInput!) {
-    login(user: $inputs) {
-      access
-      refresh
-    }
+  mutation Register($inputs: UserInput!) {
+    register(user: $inputs)
   }
 `;
 
@@ -86,24 +81,17 @@ const styles = (theme: Theme) =>
     },
   });
 
-const SignIn = ({ classes }: WithStyles<typeof styles>) => {
+const Register = ({ classes }: WithStyles<typeof styles>) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const setAccessToken = useSetRecoilState(AuthTokens.access);
-  const setRefreshToken = useSetRecoilState(AuthTokens.refresh);
-  const setLoggedIn = useSetRecoilState(AuthStatus.loggedIn);
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(false);
   const [showPassword, setShowPassord] = useState(false);
   const history = useHistory();
 
-  const { mutate } = useUserLoginMutation<Error>(graphqlRequestClient, {
-    onSuccess: ({ login }) => {
-      console.log({ login });
-      if (login !== null) {
-        setAccessToken(login?.access ?? "");
-        setRefreshToken(login?.refresh ?? "");
-        setLoggedIn(true);
-        history.push("/");
+  const { mutate } = useRegisterMutation<Error>(graphqlRequestClient, {
+    onSuccess: ({ register }) => {
+      if (register !== null) {
       } else {
         setError(true);
         setPassword("");
@@ -114,7 +102,7 @@ const SignIn = ({ classes }: WithStyles<typeof styles>) => {
     },
   });
 
-  const LogIn = () => {
+  const Register = () => {
     mutate({
       inputs: {
         email: email,
@@ -151,11 +139,28 @@ const SignIn = ({ classes }: WithStyles<typeof styles>) => {
           value={password}
           error={error}
           onChange={(e) => setPassword(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              LogIn();
-            }
-          }}
+          onBlur={() => setShowPassord(false)}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                onClick={() => setShowPassord(!showPassword)}
+                onMouseDown={(e) => e.preventDefault()}
+                edge="end"
+              >
+                {showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          }
+          labelWidth={70}
+        />
+      </FormControl>
+      <FormControl variant="outlined" className={classes.textField}>
+        <InputLabel>Confirm Password</InputLabel>
+        <OutlinedInput
+          type={showPassword ? "text" : "password"}
+          value={confirmPassword}
+          error={error}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           onBlur={() => setShowPassord(false)}
           endAdornment={
             <InputAdornment position="end">
@@ -173,7 +178,7 @@ const SignIn = ({ classes }: WithStyles<typeof styles>) => {
       </FormControl>
       {error ? (
         <Typography variant="body2" className={classes.errorText}>
-          Invalid Login
+          Passwords don't match.
         </Typography>
       ) : null}
       <Button
@@ -181,9 +186,15 @@ const SignIn = ({ classes }: WithStyles<typeof styles>) => {
         color="primary"
         className={classes.button}
         disableRipple
-        onClick={() => LogIn()}
+        onClick={() => {
+          if (password.length > 2 && password === confirmPassword) {
+            Register();
+          } else {
+            setError(true);
+          }
+        }}
       >
-        Log In
+        Register
       </Button>
       <hr className={classes.divider} />
       <Button
@@ -191,12 +202,12 @@ const SignIn = ({ classes }: WithStyles<typeof styles>) => {
         color="secondary"
         className={classes.button}
         disableRipple
-        onClick={() => history.push("/register")}
+        onClick={() => history.push("/signin")}
       >
-        Create Account
+        Go to Log In
       </Button>
     </div>
   );
 };
 
-export default withStyles(styles)(SignIn);
+export default withStyles(styles)(Register);

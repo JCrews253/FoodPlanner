@@ -11,6 +11,7 @@ type Query {
 
 type Mutation {
   login(user: UserInput!): Token
+  register(user: UserInput!): String
 }
 
 type Recipe {
