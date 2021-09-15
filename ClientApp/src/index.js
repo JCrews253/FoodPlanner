@@ -6,21 +6,35 @@ import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import { ReactQueryDevtools } from "react-query/devtools";
 import "./styles.css";
-import { RecoilRoot } from "recoil";
+import { RecoilRoot, useRecoilValue } from "recoil";
+import { ThemeProvider as MuiThemeProvider } from "@material-ui/core";
+import { themeAtom } from "./state/state";
+import { darkTheme, lightTheme } from "./Theme";
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const rootElement = document.getElementById("root");
 
 const queryClient = new QueryClient();
 
+const ThemeProvider = ({ children }) => {
+  const theme = useRecoilValue(themeAtom);
+  return (
+    <MuiThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
+      {children}
+    </MuiThemeProvider>
+  );
+};
+
 ReactDOM.render(
   <RecoilRoot>
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
-      <BrowserRouter basename={baseUrl}>
-        <App />
-      </BrowserRouter>
-    </QueryClientProvider>
+    <ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <BrowserRouter basename={baseUrl}>
+          <App />
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ThemeProvider>
   </RecoilRoot>,
   rootElement
 );

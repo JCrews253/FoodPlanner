@@ -1,11 +1,8 @@
 import { GraphQLClient } from "graphql-request";
-import { useRecoilState } from "recoil";
-import { AuthTokens } from "../state/state";
-
-const token = useRecoilState(AuthTokens.access);
+import { AuthTokenAccess } from "../state/state";
 
 const requestHeaders = {
-  authorization: `Bearer ${token}`,
+  authorization: `Bearer ${AuthTokenAccess}`,
 };
 
 const graphqlRequestClient = new GraphQLClient(
