@@ -1,18 +1,15 @@
 import {
+  Avatar,
+  Box,
   Button,
-  createStyles,
-  FormControl,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
+  Checkbox,
+  Container,
+  FormControlLabel,
+  Grid,
+  Link,
   TextField,
-  Theme,
   Typography,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+} from "@mui/material";
 import gql from "graphql-tag";
 import React, { useState } from "react";
 import { useHistory } from "react-router";
@@ -20,6 +17,7 @@ import { useSetRecoilState } from "recoil";
 import graphqlRequestClient from "../clients/graphqlRequestClient";
 import { useUserLoginMutation } from "../gql";
 import { AuthStatus, AuthTokens } from "../state/state";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 gql`
   mutation UserLogin($inputs: UserInput!) {
@@ -30,63 +28,7 @@ gql`
   }
 `;
 
-const styles = (theme: Theme) =>
-  createStyles({
-    content: {
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      padding: "10px",
-      margin: "20px",
-      borderRadius: "5px",
-      boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.5)",
-      width: "300px",
-      alignSelf: "center",
-      justifySelf: "center",
-      backgroundColor: theme.palette.background.paper,
-    },
-    textField: {
-      margin: "10px",
-      width: "100%",
-      backgroundColor: theme.palette.background.default,
-      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-        borderColor: theme.palette.text.primary,
-      },
-      "& .MuiInputLabel-outlined.Mui-focused": {
-        color: theme.palette.text.primary,
-      },
-      "& .MuiInputLabel-root": {
-        color: theme.palette.text.primary,
-      },
-    },
-    button: {
-      margin: "10px",
-      width: "100%",
-      height: "50px",
-      color: theme.palette.text.primary,
-    },
-    divider: {
-      backgroundColor: theme.palette.text.primary,
-      width: "100%",
-      height: "1px",
-      opacity: 0.5,
-      borderRadius: "5px",
-      marginTop: "11px",
-    },
-    errorText: {
-      color: theme.palette.error.main,
-    },
-    header: {
-      margin: "10px",
-      color: theme.palette.text.primary,
-    },
-    input: {
-      color: theme.palette.text.primary,
-    },
-  });
-
-const SignIn = ({ classes }: WithStyles<typeof styles>) => {
+const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const setAccessToken = useSetRecoilState(AuthTokens.access);
@@ -124,79 +66,85 @@ const SignIn = ({ classes }: WithStyles<typeof styles>) => {
   };
 
   return (
-    <div className={classes.content}>
-      <Typography variant="h4" className={classes.header}>
-        Food Planner
-      </Typography>
-      <TextField
-        label="Email"
-        variant="outlined"
-        className={classes.textField}
-        color="secondary"
-        inputProps={{
-          className: classes.input,
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: (theme) => theme.spacing(8),
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
-        InputLabelProps={{
-          className: classes.input,
-        }}
-        error={error}
-        onChange={(e) => setEmail(e.currentTarget.value)}
-        value={email}
-      />
-      <FormControl variant="outlined" className={classes.textField}>
-        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-        <OutlinedInput
-          id="outlined-adornment-password"
-          type={showPassword ? "text" : "password"}
-          value={password}
-          error={error}
-          onChange={(e) => setPassword(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              LogIn();
-            }
+      >
+        <Avatar
+          sx={{
+            m: (theme) => theme.spacing(1),
+            bgcolor: (theme) => theme.palette.secondary.main,
           }}
-          onBlur={() => setShowPassord(false)}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                onClick={() => setShowPassord(!showPassword)}
-                onMouseDown={(e) => e.preventDefault()}
-                edge="end"
-              >
-                {showPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            </InputAdornment>
-          }
-          labelWidth={70}
-        />
-      </FormControl>
-      {error ? (
-        <Typography variant="body2" className={classes.errorText}>
-          Invalid Login
+        >
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
         </Typography>
-      ) : null}
-      <Button
-        variant="contained"
-        color="primary"
-        className={classes.button}
-        disableRipple
-        onClick={() => LogIn()}
-      >
-        Log In
-      </Button>
-      <hr className={classes.divider} />
-      <Button
-        variant="contained"
-        color="secondary"
-        className={classes.button}
-        disableRipple
-        onClick={() => history.push("/register")}
-      >
-        Create Account
-      </Button>
-    </div>
+        <Box
+          component="form"
+          onSubmit={(e: any) => {
+            e.preventDefault();
+            LogIn();
+          }}
+          sx={{ mt: (theme) => theme.spacing(1) }}
+        >
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Email Address"
+            autoComplete="email"
+            autoFocus
+            value={email}
+            onChange={(e) => setEmail(e.currentTarget.value)}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Password"
+            type="password"
+            autoComplete="password"
+            value={password}
+            onChange={(e) => setPassword(e.currentTarget.value)}
+          />
+          <FormControlLabel
+            control={<Checkbox color="primary" />}
+            label="Remember me"
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{
+              mt: (theme) => theme.spacing(3),
+              mb: (theme) => theme.spacing(2),
+            }}
+          >
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href="#" variant="body2">
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link href="/register" variant="body2">
+                Don't have an account? Sign Up
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 
-export default withStyles(styles)(SignIn);
+export default SignIn;

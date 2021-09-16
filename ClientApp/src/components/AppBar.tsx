@@ -1,74 +1,81 @@
 import React from "react";
-import {
-  AppBar as MuiAppBar,
-  createStyles,
-  Toolbar,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
-import HomeIcon from "@material-ui/icons/Home";
-import CalendarIcon from "@material-ui/icons/Event";
-import AddIcon from "@material-ui/icons/AddCircleOutline";
-import ShoppingListIcon from "@material-ui/icons/FormatListBulleted";
-import SearchIcon from "@material-ui/icons/Search";
 import IconButton from "./IconButton";
 import { Link, useLocation } from "react-router-dom";
+import { AppBar as MuiAppBar, Icon, Toolbar } from "@mui/material";
 
-const styles = createStyles({
-  appBar: {
-    top: "auto",
-    bottom: 0,
-    backgroundColor: "white",
-  },
-  toolBar: {
-    padding: "0px",
-    display: "flex",
-    justifyContent: "center",
-  },
-  navLink: {
-    textDecoration: "none",
-    "&:hover": {
-      textDecoration: "none",
-    },
-  },
-});
-
-const AppBar = ({ classes }: WithStyles<typeof styles>) => {
+const AppBar = () => {
   const link = useLocation();
   return (
-    <MuiAppBar position="fixed" className={classes.appBar}>
-      <Toolbar className={classes.toolBar}>
-        <Link to="/" className={classes.navLink}>
+    <MuiAppBar
+      position="fixed"
+      sx={{
+        top: "auto",
+        bottom: 0,
+      }}
+    >
+      <Toolbar
+        sx={{
+          p: 0,
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Link
+          to="/"
+          style={{
+            textDecoration: "none",
+          }}
+        >
           <IconButton
-            icon={<HomeIcon fontSize={"large"} />}
+            icon={<Icon />}
             label={"Home"}
             selected={link.pathname === "/"}
           />
         </Link>
-        <Link to="/calendar" className={classes.navLink}>
+        <Link
+          to="/calendar"
+          style={{
+            textDecoration: "none",
+          }}
+        >
           <IconButton
-            icon={<CalendarIcon fontSize={"large"} />}
+            icon={<Icon />}
             label={"Calendar"}
             selected={link.pathname === "/calendar"}
           />
         </Link>
-        <Link to="/newrecipe" className={classes.navLink}>
+        <Link
+          to="/newrecipe"
+          style={{
+            textDecoration: "none",
+          }}
+        >
           <IconButton
-            icon={<AddIcon fontSize={"large"} />}
+            icon={<Icon />}
             label={"Recipe"}
             selected={link.pathname === "/newrecipe"}
           />
         </Link>
-        <Link to="/shoppinglist" className={classes.navLink}>
+        <Link
+          to="/shoppinglist"
+          style={{
+            textDecoration: "none",
+          }}
+        >
           <IconButton
-            icon={<ShoppingListIcon fontSize={"large"} />}
+            icon={<Icon />}
             label={"Groceries"}
             selected={link.pathname === "/shoppinglist"}
           />
         </Link>
-        <Link to="/search" className={classes.navLink}>
+        <Link
+          to="/search"
+          style={{
+            textDecoration: "none",
+          }}
+        >
           <IconButton
-            icon={<SearchIcon fontSize={"large"} />}
+            icon={<Icon />}
             label={"Search"}
             selected={link.pathname === "/search"}
           />
@@ -78,4 +85,4 @@ const AppBar = ({ classes }: WithStyles<typeof styles>) => {
   );
 };
 
-export default withStyles(styles)(AppBar);
+export default AppBar;

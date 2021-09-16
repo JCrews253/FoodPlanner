@@ -5,9 +5,11 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import { ReactQueryDevtools } from "react-query/devtools";
-import "./styles.css";
 import { RecoilRoot, useRecoilValue } from "recoil";
-import { ThemeProvider as MuiThemeProvider } from "@material-ui/core";
+import {
+  CssBaseline,
+  ThemeProvider as MuiThemeProvider,
+} from "@material-ui/core";
 import { themeAtom } from "./state/state";
 import { darkTheme, lightTheme } from "./Theme";
 
@@ -28,6 +30,7 @@ const ThemeProvider = ({ children }) => {
 ReactDOM.render(
   <RecoilRoot>
     <ThemeProvider>
+      <CssBaseline />
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
         <BrowserRouter basename={baseUrl}>

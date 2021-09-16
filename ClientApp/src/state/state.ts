@@ -37,7 +37,7 @@ export const AuthStatus = {
   }),
 };
 
-const defaultTheme = GetCookie("theme") === "dark" ? "dark" : "dark";
+const defaultTheme = GetCookie("theme") === "dark" ? "dark" : "light";
 export const themeAtom = atom<"light" | "dark">({
   key: "theme",
   default: defaultTheme,

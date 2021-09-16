@@ -1,23 +1,23 @@
+import { Copyright } from "@mui/icons-material";
 import {
+  Avatar,
+  Box,
   Button,
-  createStyles,
-  FormControl,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
+  Checkbox,
+  Container,
+  FormControlLabel,
+  Grid,
+  Link,
   TextField,
-  Theme,
   Typography,
-  WithStyles,
   withStyles,
-} from "@material-ui/core";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+} from "@mui/material";
 import gql from "graphql-tag";
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import graphqlRequestClient from "../clients/graphqlRequestClient";
 import { useRegisterMutation } from "../gql";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 gql`
   mutation Register($inputs: UserInput!) {
@@ -25,63 +25,7 @@ gql`
   }
 `;
 
-const styles = (theme: Theme) =>
-  createStyles({
-    content: {
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      padding: "10px",
-      margin: "20px",
-      borderRadius: "5px",
-      boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.5)",
-      width: "300px",
-      alignSelf: "center",
-      justifySelf: "center",
-      backgroundColor: theme.palette.background.paper,
-    },
-    textField: {
-      margin: "10px",
-      width: "100%",
-      backgroundColor: theme.palette.background.default,
-      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-        borderColor: theme.palette.text.primary,
-      },
-      "& .MuiInputLabel-outlined.Mui-focused": {
-        color: theme.palette.text.primary,
-      },
-      "& .MuiInputLabel-root": {
-        color: theme.palette.text.primary,
-      },
-    },
-    button: {
-      margin: "10px",
-      width: "100%",
-      height: "50px",
-      color: theme.palette.text.primary,
-    },
-    divider: {
-      backgroundColor: theme.palette.text.primary,
-      width: "100%",
-      height: "1px",
-      opacity: 0.5,
-      borderRadius: "5px",
-      marginTop: "11px",
-    },
-    errorText: {
-      color: theme.palette.error.main,
-    },
-    header: {
-      margin: "10px",
-      color: theme.palette.text.primary,
-    },
-    input: {
-      color: theme.palette.text.primary,
-    },
-  });
-
-const Register = ({ classes }: WithStyles<typeof styles>) => {
+const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -112,102 +56,86 @@ const Register = ({ classes }: WithStyles<typeof styles>) => {
   };
 
   return (
-    <div className={classes.content}>
-      <Typography variant="h4" className={classes.header}>
-        Food Planner
-      </Typography>
-      <TextField
-        label="Email"
-        variant="outlined"
-        className={classes.textField}
-        color="secondary"
-        inputProps={{
-          className: classes.input,
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
-        InputLabelProps={{
-          className: classes.input,
-        }}
-        error={error}
-        onChange={(e) => setEmail(e.currentTarget.value)}
-        value={email}
-      />
-      <FormControl variant="outlined" className={classes.textField}>
-        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-        <OutlinedInput
-          id="outlined-adornment-password"
-          type={showPassword ? "text" : "password"}
-          value={password}
-          error={error}
-          onChange={(e) => setPassword(e.target.value)}
-          onBlur={() => setShowPassord(false)}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                onClick={() => setShowPassord(!showPassword)}
-                onMouseDown={(e) => e.preventDefault()}
-                edge="end"
-              >
-                {showPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            </InputAdornment>
-          }
-          labelWidth={70}
-        />
-      </FormControl>
-      <FormControl variant="outlined" className={classes.textField}>
-        <InputLabel>Confirm Password</InputLabel>
-        <OutlinedInput
-          type={showPassword ? "text" : "password"}
-          value={confirmPassword}
-          error={error}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          onBlur={() => setShowPassord(false)}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                onClick={() => setShowPassord(!showPassword)}
-                onMouseDown={(e) => e.preventDefault()}
-                edge="end"
-              >
-                {showPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            </InputAdornment>
-          }
-          labelWidth={70}
-        />
-      </FormControl>
-      {error ? (
-        <Typography variant="body2" className={classes.errorText}>
-          Passwords don't match.
+      >
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign up
         </Typography>
-      ) : null}
-      <Button
-        variant="contained"
-        color="primary"
-        className={classes.button}
-        disableRipple
-        onClick={() => {
-          if (password.length > 2 && password === confirmPassword) {
-            Register();
-          } else {
-            setError(true);
-          }
-        }}
-      >
-        Register
-      </Button>
-      <hr className={classes.divider} />
-      <Button
-        variant="contained"
-        color="secondary"
-        className={classes.button}
-        disableRipple
-        onClick={() => history.push("/signin")}
-      >
-        Go to Log In
-      </Button>
-    </div>
+        <Box component="form" onSubmit={() => Register()} sx={{ mt: 3 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="fname"
+                name="firstName"
+                required
+                fullWidth
+                id="firstName"
+                label="First Name"
+                autoFocus
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                name="lastName"
+                autoComplete="lname"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="new-password"
+              />
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Sign Up
+          </Button>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link href="/signin" variant="body2">
+                Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+      <Copyright sx={{ mt: 5 }} />
+    </Container>
   );
 };
 
-export default withStyles(styles)(Register);
+export default Register;
