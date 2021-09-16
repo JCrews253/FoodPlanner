@@ -6,12 +6,9 @@ import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { RecoilRoot, useRecoilValue } from "recoil";
-import {
-  CssBaseline,
-  ThemeProvider as MuiThemeProvider,
-} from "@material-ui/core";
 import { themeAtom } from "./state/state";
 import { darkTheme, lightTheme } from "./Theme";
+import { CssBaseline, ThemeProvider as MuiThemeProvider } from "@mui/material";
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const rootElement = document.getElementById("root");

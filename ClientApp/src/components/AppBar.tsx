@@ -1,7 +1,6 @@
 import React from "react";
-import IconButton from "./IconButton";
 import { Link, useLocation } from "react-router-dom";
-import { AppBar as MuiAppBar, Icon, Toolbar } from "@mui/material";
+import { AppBar as MuiAppBar, Icon, Toolbar, IconButton } from "@mui/material";
 
 const AppBar = () => {
   const link = useLocation();
@@ -26,11 +25,10 @@ const AppBar = () => {
             textDecoration: "none",
           }}
         >
-          <IconButton
-            icon={<Icon />}
-            label={"Home"}
-            selected={link.pathname === "/"}
-          />
+          <IconButton>
+            <Icon />
+            <h1>Home</h1>
+          </IconButton>
         </Link>
         <Link
           to="/calendar"
@@ -38,11 +36,10 @@ const AppBar = () => {
             textDecoration: "none",
           }}
         >
-          <IconButton
-            icon={<Icon />}
-            label={"Calendar"}
-            selected={link.pathname === "/calendar"}
-          />
+          <IconButton>
+            <Icon />
+            <h1>Calendar</h1>
+          </IconButton>
         </Link>
         <Link
           to="/newrecipe"
@@ -50,11 +47,10 @@ const AppBar = () => {
             textDecoration: "none",
           }}
         >
-          <IconButton
-            icon={<Icon />}
-            label={"Recipe"}
-            selected={link.pathname === "/newrecipe"}
-          />
+          <IconButton>
+            <Icon />
+            <h1>Recipe</h1>
+          </IconButton>
         </Link>
         <Link
           to="/shoppinglist"
@@ -62,11 +58,10 @@ const AppBar = () => {
             textDecoration: "none",
           }}
         >
-          <IconButton
-            icon={<Icon />}
-            label={"Groceries"}
-            selected={link.pathname === "/shoppinglist"}
-          />
+          <IconButton>
+            <Icon />
+            <h1>Groceries</h1>
+          </IconButton>
         </Link>
         <Link
           to="/search"
@@ -74,11 +69,10 @@ const AppBar = () => {
             textDecoration: "none",
           }}
         >
-          <IconButton
-            icon={<Icon />}
-            label={"Search"}
-            selected={link.pathname === "/search"}
-          />
+          <IconButton>
+            <Icon />
+            <h1>Search</h1>
+          </IconButton>
         </Link>
       </Toolbar>
     </MuiAppBar>
