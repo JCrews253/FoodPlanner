@@ -6,7 +6,6 @@ import {
   Container,
   FormControlLabel,
   Grid,
-  Link,
   TextField,
   Typography,
 } from "@mui/material";
@@ -18,6 +17,7 @@ import graphqlRequestClient from "../clients/graphqlRequestClient";
 import { useUserLoginMutation } from "../gql";
 import { AuthStatus, AuthTokens } from "../state/state";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { Link } from "react-router-dom";
 
 gql`
   mutation UserLogin($inputs: UserInput!) {
@@ -28,7 +28,7 @@ gql`
   }
 `;
 
-const SignIn = () => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const setAccessToken = useSetRecoilState(AuthTokens.access);
@@ -84,7 +84,7 @@ const SignIn = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Log in
         </Typography>
         <Box
           component="form"
@@ -127,18 +127,18 @@ const SignIn = () => {
               mb: (theme) => theme.spacing(2),
             }}
           >
-            Sign In
+            Log In
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Typography component={Link} to="/forgotpassword" variant="body2">
                 Forgot password?
-              </Link>
+              </Typography>
             </Grid>
             <Grid item>
-              <Link href="/register" variant="body2">
+              <Typography component={Link} to="/signup" variant="body2">
                 Don't have an account? Sign Up
-              </Link>
+              </Typography>
             </Grid>
           </Grid>
         </Box>
@@ -147,4 +147,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default Login;

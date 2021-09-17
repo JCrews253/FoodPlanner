@@ -1,3 +1,5 @@
+import { Container } from "@mui/material";
+import { Box } from "@mui/system";
 import React from "react";
 import { useRecoilValue } from "recoil";
 import { AuthStatus } from "../state/state";
@@ -11,10 +13,16 @@ const Layout = ({ children }: LayoutProps) => {
   const loggedIn = useRecoilValue(AuthStatus.loggedIn);
 
   return (
-    <div id="appWrapper">
-      <div id="mainContent">{children}</div>
-      {loggedIn ? <AppBar /> : null}
-    </div>
+    <Box>
+      <Container
+        sx={{
+          pb: 7,
+        }}
+      >
+        {children}
+      </Container>
+      <Container>{loggedIn ? <AppBar /> : null}</Container>
+    </Box>
   );
 };
 

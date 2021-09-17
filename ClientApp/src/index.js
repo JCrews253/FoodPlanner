@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import registerServiceWorker from "./registerServiceWorker";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { RecoilRoot, useRecoilValue } from "recoil";
 import { themeAtom } from "./state/state";
@@ -38,5 +37,3 @@ ReactDOM.render(
   </RecoilRoot>,
   rootElement
 );
-
-registerServiceWorker();

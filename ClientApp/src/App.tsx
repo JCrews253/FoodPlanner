@@ -1,12 +1,11 @@
 import React from "react";
 import { Route } from "react-router";
 import { useRecoilValue } from "recoil";
-import { Counter } from "./components/Counter";
-import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 import Layout from "./components/Layout";
-import Register from "./pages/Register";
-import SignIn from "./pages/SignIn";
+import Login from "./pages/Login";
+import NewRecipe from "./pages/NewRecipe";
+import SignUp from "./pages/SignUp";
 import { AuthStatus } from "./state/state";
 
 const App = () => {
@@ -14,11 +13,10 @@ const App = () => {
 
   return (
     <Layout>
-      <Route path="/signin" component={SignIn} />
-      <Route path="/register" component={Register} />
-      <Route path="/counter" render={() => <Counter />} />
-      <Route path="/fetch-data" render={() => <FetchData />} />
-      <Route exact path="/" render={() => (loggedIn ? <Home /> : <SignIn />)} />
+      <Route path="/login" component={Login} />
+      <Route path="/signup" component={SignUp} />
+      <Route path="/newrecipe" component={NewRecipe} />
+      <Route exact path="/" component={loggedIn ? Home : Login} />
     </Layout>
   );
 };

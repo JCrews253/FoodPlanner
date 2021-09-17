@@ -1,81 +1,83 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import { AppBar as MuiAppBar, Icon, Toolbar, IconButton } from "@mui/material";
+import React, { useState } from "react";
+import { useLocation, Link } from "react-router-dom";
+import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
+import { Home } from "@mui/icons-material";
 
 const AppBar = () => {
   const link = useLocation();
+
+  const PathNameToTab = () => {
+    switch (link.pathname) {
+      case "/":
+        return 0;
+      case "/home":
+        return 0;
+      case "/calendar":
+        return 1;
+      case "newrecipe":
+        return 2;
+      case "/shoppinglist":
+        return 3;
+      case "/search":
+        return 5;
+      default:
+        return 0;
+    }
+  };
+
+  const [selectedTab, setSelectedTab] = useState(PathNameToTab());
   return (
-    <MuiAppBar
-      position="fixed"
+    <Paper
       sx={{
-        top: "auto",
+        position: "fixed",
         bottom: 0,
+        left: 0,
+        right: 0,
       }}
+      elevation={3}
     >
-      <Toolbar
-        sx={{
-          p: 0,
-          display: "flex",
-          justifyContent: "center",
-        }}
+      <BottomNavigation
+        showLabels
+        value={selectedTab}
+        onChange={(_, newTab) => setSelectedTab(newTab)}
       >
-        <Link
-          to="/"
-          style={{
-            textDecoration: "none",
-          }}
-        >
-          <IconButton>
-            <Icon />
-            <h1>Home</h1>
-          </IconButton>
-        </Link>
-        <Link
+        <BottomNavigationAction
+          disableTouchRipple
+          label="Home"
+          icon={<Home />}
+          component={Link}
+          to="/home"
+        />
+        <BottomNavigationAction
+          disableTouchRipple
+          label="Calendar"
+          icon={<Home />}
+          component={Link}
           to="/calendar"
-          style={{
-            textDecoration: "none",
-          }}
-        >
-          <IconButton>
-            <Icon />
-            <h1>Calendar</h1>
-          </IconButton>
-        </Link>
-        <Link
+        />
+        <BottomNavigationAction
+          disableTouchRipple
+          label="New"
+          icon={<Home />}
+          component={Link}
           to="/newrecipe"
-          style={{
-            textDecoration: "none",
-          }}
-        >
-          <IconButton>
-            <Icon />
-            <h1>Recipe</h1>
-          </IconButton>
-        </Link>
-        <Link
+        />
+        <BottomNavigationAction
+          disableTouchRipple
+          label="Groceries"
+          icon={<Home />}
+          component={Link}
           to="/shoppinglist"
-          style={{
-            textDecoration: "none",
-          }}
-        >
-          <IconButton>
-            <Icon />
-            <h1>Groceries</h1>
-          </IconButton>
-        </Link>
-        <Link
+        />
+        <BottomNavigationAction
+          disableTouchRipple
+          label="Seach"
+          icon={<Home />}
+          component={Link}
           to="/search"
-          style={{
-            textDecoration: "none",
-          }}
-        >
-          <IconButton>
-            <Icon />
-            <h1>Search</h1>
-          </IconButton>
-        </Link>
-      </Toolbar>
-    </MuiAppBar>
+        />
+      </BottomNavigation>
+    </Paper>
   );
 };
 

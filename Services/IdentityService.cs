@@ -21,14 +21,14 @@ namespace FoodPlanner.Services
 {
   public interface IIdentityService
   {
-    Task<Token> Authenticate(UserInput user);
-    Task<string> Register(UserInput user);
+    Task<Token> Authenticate(User user);
+    Task<string> Register(User user);
   }
 
   public class IdentityService : IIdentityService
   {
     DbContext _db;
-    PasswordHasher<UserInput> _hasher = new PasswordHasher<UserInput>();
+    PasswordHasher<User> _hasher = new PasswordHasher<User>();
     IServiceProvider _provider;
 
     public IdentityService(DbContext db, IServiceProvider provider)
@@ -37,18 +37,18 @@ namespace FoodPlanner.Services
       _provider = provider;
     }
 
-    public async Task<Token> Authenticate(UserInput user)
+    public async Task<Token> Authenticate(User user)
     {
-      var dbUser = await _db.GetUser(user.email);
+      var dbUser = await _db.GetUser(user.Email);
       if(dbUser == null)
       {
         return null;
       } 
 
-      var results = _hasher.VerifyHashedPassword(user, dbUser.Password, user.password);
+      var results = _hasher.VerifyHashedPassword(user, dbUser.Password, user.Password);
       if(results == PasswordVerificationResult.Success)
       {
-        var accessToken = GenerateAccessToken(user.email, dbUser.Id);
+        var accessToken = GenerateAccessToken(user.Email, dbUser.Id);
         var refreshToken = GenerateRefreshToken();
         return new Token(accessToken, refreshToken);
       }
@@ -56,7 +56,7 @@ namespace FoodPlanner.Services
       return null;
     }
 
-    public async Task<string> Register(UserInput user)
+    public async Task<string> Register(User user)
     {
       // atleast one lower case letter
       // atleast one upper case letter
@@ -66,33 +66,33 @@ namespace FoodPlanner.Services
       string passwordRules = @"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
       string emailRules = @"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
 
-      if (string.IsNullOrEmpty(user.email))
+      if (string.IsNullOrEmpty(user.Email))
       {
         return "Email can't be empty.";
       }
-      else if(!Regex.IsMatch(user.email, emailRules))
+      else if(!Regex.IsMatch(user.Email, emailRules))
       {
         return "Invalid email.";
       }
-      else if (string.IsNullOrEmpty(user.password))
+      else if (string.IsNullOrEmpty(user.Password))
       {
         return "Password can't be empty.";
       }
-      else if(!Regex.IsMatch(user.password, passwordRules))
+      else if(!Regex.IsMatch(user.Password, passwordRules))
       {
         return "Invalid password.";
       }
 
-      var isAvailable = await _db.IsEmailAvailable(user.email);
+      var isAvailable = await _db.IsEmailAvailable(user.Email);
       if (isAvailable)
       {
-        var newUser = new User(null, user.email, _hasher.HashPassword(user, user.password), null);
+        var newUser = new User(null, user.Email,user.FirstName, _hasher.HashPassword(user, user.Password),user.LastName, null);
         await _db.InsertUser(newUser);
         return string.Empty;
       }
       else
       {
-        return $"{user.email} is already in use.";
+        return $"{user.Email} is already in use.";
       }
     }
 

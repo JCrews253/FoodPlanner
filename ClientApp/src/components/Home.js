@@ -73,8 +73,7 @@ export class Home extends Component {
           ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum lorem ipsumlorem
           ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem
           ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem
-          ipsumlorem ipsum end
-          endendendendendendendendendendendendendendendendendendendendendend
+          ipsumlorem ipsum end.
         </p>
       </div>
     );

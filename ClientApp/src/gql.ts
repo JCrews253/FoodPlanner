@@ -22,12 +22,18 @@ export type Scalars = {
 export type Mutation = {
   __typename?: 'Mutation';
   login?: Maybe<Token>;
+  newRecipe: Scalars['Boolean'];
   register?: Maybe<Scalars['String']>;
 };
 
 
 export type MutationLoginArgs = {
   user: UserInput;
+};
+
+
+export type MutationNewRecipeArgs = {
+  recipe?: Maybe<RecipeInput>;
 };
 
 
@@ -43,10 +49,10 @@ export type Pantry = {
 
 export type PantryItem = {
   __typename?: 'PantryItem';
-  ingredient: Scalars['String'];
   amount: Scalars['Float'];
-  unit?: Maybe<Scalars['String']>;
   expirationDate?: Maybe<Scalars['Date']>;
+  ingredient: Scalars['String'];
+  unit?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -56,20 +62,39 @@ export type Query = {
 
 export type Recipe = {
   __typename?: 'Recipe';
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-  photos: Array<Maybe<Scalars['String']>>;
+  cookTime: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
   ingredients: Array<Maybe<RecipeIngredient>>;
-  steps?: Maybe<Array<Maybe<Scalars['String']>>>;
+  name: Scalars['String'];
+  photos: Array<Maybe<Scalars['String']>>;
+  prepTime: Scalars['String'];
+  steps: Array<Maybe<Scalars['String']>>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type RecipeIngredient = {
   __typename?: 'RecipeIngredient';
-  ingredient: Scalars['String'];
   amount: Scalars['Float'];
+  ingredient: Scalars['String'];
   unit?: Maybe<Scalars['String']>;
+};
+
+export type RecipeIngredientInput = {
+  Amount: Scalars['Float'];
+  Ingredient: Scalars['String'];
+  Unit?: Maybe<Scalars['String']>;
+};
+
+export type RecipeInput = {
+  cookTime: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  ingredients: Array<Maybe<RecipeIngredientInput>>;
+  name: Scalars['String'];
+  photos: Array<Maybe<Scalars['String']>>;
+  prepTime: Scalars['String'];
+  steps: Array<Maybe<Scalars['String']>>;
+  tags?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type Token = {
@@ -80,16 +105,27 @@ export type Token = {
 
 export type User = {
   __typename?: 'User';
-  id: Scalars['ID'];
-  email: Scalars['String'];
-  password: Scalars['String'];
   claims?: Maybe<Array<Maybe<Scalars['String']>>>;
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  id: Scalars['ID'];
+  lastName: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type UserInput = {
   email: Scalars['String'];
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
   password: Scalars['String'];
 };
+
+export type NewRecipeMutationVariables = Exact<{
+  inputs: RecipeInput;
+}>;
+
+
+export type NewRecipeMutation = { __typename?: 'Mutation', newRecipe: boolean };
 
 export type RegisterMutationVariables = Exact<{
   inputs: UserInput;
@@ -106,6 +142,23 @@ export type UserLoginMutationVariables = Exact<{
 export type UserLoginMutation = { __typename?: 'Mutation', login?: Maybe<{ __typename?: 'Token', access: string, refresh: string }> };
 
 
+export const NewRecipeDocument = `
+    mutation NewRecipe($inputs: RecipeInput!) {
+  newRecipe(recipe: $inputs)
+}
+    `;
+export const useNewRecipeMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient, 
+      options?: UseMutationOptions<NewRecipeMutation, TError, NewRecipeMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) => 
+    useMutation<NewRecipeMutation, TError, NewRecipeMutationVariables, TContext>(
+      (variables?: NewRecipeMutationVariables) => fetcher<NewRecipeMutation, NewRecipeMutationVariables>(client, NewRecipeDocument, variables, headers)(),
+      options
+    );
 export const RegisterDocument = `
     mutation Register($inputs: UserInput!) {
   register(user: $inputs)

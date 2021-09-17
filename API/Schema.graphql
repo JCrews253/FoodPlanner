@@ -12,16 +12,19 @@ type Query {
 type Mutation {
   login(user: UserInput!): Token
   register(user: UserInput!): String
+  newRecipe(recipe: RecipeInput): Boolean!
 }
 
 type Recipe {
   id: ID!
-  name: String
+  name: String!
   photos: [String]!
   description: String
   ingredients: [RecipeIngredient]!
-  steps: [String]
+  steps: [String]!
   tags: [String]
+  prepTime: String!
+  cookTime: String!
 }
 
 type RecipeIngredient {
@@ -46,6 +49,8 @@ type User {
   id: ID!
   email: String!
   password: String!
+  firstName: String!
+  lastName: String!
   claims: [String]
 }
 
@@ -57,4 +62,23 @@ type Token {
 input UserInput {
   email: String!
   password: String!
+  firstName: String
+  lastName: String
+}
+
+input RecipeInput {
+  name: String!
+  photos: [String]!
+  description: String
+  ingredients: [RecipeIngredientInput]!
+  steps: [String]!
+  tags: [String]
+  prepTime: String!
+  cookTime: String!
+}
+
+input RecipeIngredientInput {
+  Ingredient: String!
+  Amount: Float!
+  Unit: String
 }

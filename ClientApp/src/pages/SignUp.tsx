@@ -1,16 +1,11 @@
-import { Copyright } from "@mui/icons-material";
 import {
   Avatar,
   Box,
   Button,
-  Checkbox,
   Container,
-  FormControlLabel,
   Grid,
-  Link,
   TextField,
   Typography,
-  withStyles,
 } from "@mui/material";
 import gql from "graphql-tag";
 import React, { useState } from "react";
@@ -18,6 +13,7 @@ import { useHistory } from "react-router";
 import graphqlRequestClient from "../clients/graphqlRequestClient";
 import { useRegisterMutation } from "../gql";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { Link } from "react-router-dom";
 
 gql`
   mutation Register($inputs: UserInput!) {
@@ -25,34 +21,45 @@ gql`
   }
 `;
 
-const Register = () => {
+const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [error, setError] = useState(false);
   const [showPassword, setShowPassord] = useState(false);
   const history = useHistory();
 
-  const { mutate } = useRegisterMutation<Error>(graphqlRequestClient, {
-    onSuccess: ({ register }) => {
-      if (register !== null) {
-      } else {
-        setError(true);
-        setPassword("");
-      }
-    },
-    onError: (error) => {
-      console.log({ error });
-    },
-  });
+  const { mutate, isLoading } = useRegisterMutation<Error>(
+    graphqlRequestClient,
+    {
+      onSuccess: ({ register }) => {
+        if (register !== null) {
+        } else {
+          console.log({ register });
+          setError(true);
+          setPassword("");
+          setConfirmPassword("");
+        }
+      },
+      onError: (error) => {
+        console.log({ error });
+      },
+    }
+  );
 
   const Register = () => {
-    mutate({
-      inputs: {
-        email: email,
-        password: password,
-      },
-    });
+    if (password === confirmPassword) {
+      mutate({
+        inputs: {
+          email: email,
+          password: password,
+          firstName: firstName,
+          lastName: lastName,
+        },
+      });
+    }
   };
 
   return (
@@ -71,71 +78,71 @@ const Register = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" onSubmit={() => Register()} sx={{ mt: 3 }}>
+        <Box component="div" sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete="fname"
-                name="firstName"
                 required
-                fullWidth
-                id="firstName"
-                label="First Name"
                 autoFocus
+                fullWidth
+                label="First Name"
+                onChange={(e) => setFirstName(e.currentTarget.value)}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 required
                 fullWidth
-                id="lastName"
                 label="Last Name"
-                name="lastName"
-                autoComplete="lname"
+                onChange={(e) => setLastName(e.currentTarget.value)}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
-                id="email"
                 label="Email Address"
-                name="email"
-                autoComplete="email"
+                onChange={(e) => setEmail(e.currentTarget.value)}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
-                name="password"
                 label="Password"
                 type="password"
-                id="password"
-                autoComplete="new-password"
+                onChange={(e) => setPassword(e.currentTarget.value)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                label="Confirm Password"
+                type="password"
+                onChange={(e) => setConfirmPassword(e.currentTarget.value)}
               />
             </Grid>
           </Grid>
           <Button
-            type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            onClick={() => Register()}
           >
             Sign Up
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="/signin" variant="body2">
+              <Typography variant="body2" component={Link} to="/login">
                 Already have an account? Sign in
-              </Link>
+              </Typography>
             </Grid>
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 5 }} />
     </Container>
   );
 };
 
-export default Register;
+export default SignUp;
