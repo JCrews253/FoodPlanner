@@ -18,6 +18,7 @@ import { useUserLoginMutation } from "../gql";
 import { AuthStatus, AuthTokens } from "../state/state";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 gql`
   mutation UserLogin($inputs: UserInput!) {
@@ -38,23 +39,26 @@ const Login = () => {
   const [showPassword, setShowPassord] = useState(false);
   const history = useHistory();
 
-  const { mutate } = useUserLoginMutation<Error>(graphqlRequestClient, {
-    onSuccess: ({ login }) => {
-      console.log({ login });
-      if (login !== null) {
-        setAccessToken(login?.access ?? "");
-        setRefreshToken(login?.refresh ?? "");
-        setLoggedIn(true);
-        history.push("/");
-      } else {
-        setError(true);
-        setPassword("");
-      }
-    },
-    onError: (error) => {
-      console.log({ error });
-    },
-  });
+  const { isLoading, mutate } = useUserLoginMutation<Error>(
+    graphqlRequestClient,
+    {
+      onSuccess: ({ login }) => {
+        console.log({ login });
+        if (login !== null) {
+          setAccessToken(login?.access ?? "");
+          setRefreshToken(login?.refresh ?? "");
+          setLoggedIn(true);
+          history.push("/");
+        } else {
+          setError(true);
+          setPassword("");
+        }
+      },
+      onError: (error) => {
+        console.log({ error });
+      },
+    }
+  );
 
   const LogIn = () => {
     mutate({
@@ -118,17 +122,32 @@ const Login = () => {
             control={<Checkbox color="primary" />}
             label="Remember me"
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{
-              mt: (theme) => theme.spacing(3),
-              mb: (theme) => theme.spacing(2),
-            }}
-          >
-            Log In
-          </Button>
+          <Box sx={{ m: 1, position: "relative" }}>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                mt: (theme) => theme.spacing(3),
+                mb: (theme) => theme.spacing(2),
+              }}
+            >
+              {isLoading ? " " : "Log In"}
+            </Button>
+            {isLoading && (
+              <CircularProgress
+                size={24}
+                color="success"
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  marginTop: "-12px",
+                  marginLeft: "-12px",
+                }}
+              />
+            )}
+          </Box>
           <Grid container>
             <Grid item xs>
               <Typography component={Link} to="/forgotpassword" variant="body2">

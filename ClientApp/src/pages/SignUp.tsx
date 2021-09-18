@@ -78,7 +78,14 @@ const SignUp = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="div" sx={{ mt: 3 }}>
+        <Box
+          component="form"
+          sx={{ mt: 3 }}
+          onSubmit={(e: any) => {
+            e.preventDefault();
+            Register();
+          }}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -125,10 +132,10 @@ const SignUp = () => {
             </Grid>
           </Grid>
           <Button
+            type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
-            onClick={() => Register()}
           >
             Sign Up
           </Button>
