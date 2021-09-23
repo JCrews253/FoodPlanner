@@ -29,7 +29,11 @@ namespace FoodPlanner.Database
 
     public async Task<Recipe> GetRecipeAsync(string id)
     {
-      return await _recipesCollection.Find(r => r.Id == id).FirstAsync();
+      if(!ObjectId.TryParse(id, out _))
+      {
+        return null;
+      }
+      return await _recipesCollection.Find(r => r.Id == id).FirstOrDefaultAsync();
     }
 
     public async Task AddRecipeAsync(Recipe recipe)

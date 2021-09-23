@@ -13,10 +13,16 @@ const Layout = ({ children }: LayoutProps) => {
   const loggedIn = useRecoilValue(AuthStatus.loggedIn);
 
   return (
-    <Box>
+    <Box
+      id="app-frame"
+      sx={{
+        height: "100vh",
+      }}
+    >
       <Container
         sx={{
           pb: 7,
+          height: "100%",
         }}
       >
         {children}

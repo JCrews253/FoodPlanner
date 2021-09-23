@@ -5,6 +5,7 @@ import { Home } from "./components/Home";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
 import NewRecipe from "./pages/NewRecipe";
+import Recipe from "./pages/Recipe";
 import SignUp from "./pages/SignUp";
 import { AuthStatus } from "./state/state";
 
@@ -16,6 +17,7 @@ const App = () => {
       <Route path="/login" component={Login} />
       <Route path="/signup" component={SignUp} />
       <Route path="/newrecipe" component={NewRecipe} />
+      <Route path="/recipe/:recipeId" component={Recipe} />
       <Route exact path="/" component={loggedIn ? Home : Login} />
     </Layout>
   );

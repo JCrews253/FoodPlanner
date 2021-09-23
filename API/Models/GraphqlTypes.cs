@@ -46,18 +46,19 @@ namespace GraphQLCodeGen {
     #endregion
     
     #region Query
-    public record Query(List<Recipe> Recipes) {
+    public record Query(Recipe Recipe, List<Recipe> Recipes) {
       #region members
+      public Recipe Recipe { get; init; } = Recipe;
+    
       public List<Recipe> Recipes { get; init; } = Recipes;
       #endregion
     }
     #endregion
-    
+
     #region Recipe
-    public record Recipe(string CookTime, string Description, string Id, List<RecipeIngredient> Ingredients, string Name, List<string> Photos, string PrepTime, List<string> Steps, List<string> Tags) {
+    [BsonIgnoreExtraElements]
+    public record Recipe(string Description, string Id, List<RecipeIngredient> Ingredients, string Name, List<string> Photos, List<string> Steps, List<string> Tags, List<RecipeTime> Times) {
       #region members
-      public string CookTime { get; init; } = CookTime;
-    
       public string Description { get; init; } = Description;
       [BsonRepresentation(BsonType.ObjectId)]
       public string Id { get; init; } = Id;
@@ -68,11 +69,11 @@ namespace GraphQLCodeGen {
     
       public List<string> Photos { get; init; } = Photos;
     
-      public string PrepTime { get; init; } = PrepTime;
-    
       public List<string> Steps { get; init; } = Steps;
     
       public List<string> Tags { get; init; } = Tags;
+    
+      public List<RecipeTime> Times { get; init; } = Times;
       #endregion
     }
     #endregion
@@ -128,9 +129,6 @@ namespace GraphQLCodeGen {
     #region RecipeInput
     public class RecipeInput {
       #region members
-      [Required]
-      public string cookTime { get; set; }
-    
       public string description { get; set; }
     
       [Required]
@@ -143,12 +141,56 @@ namespace GraphQLCodeGen {
       public List<string> photos { get; set; }
     
       [Required]
-      public string prepTime { get; set; }
-    
-      [Required]
       public List<string> steps { get; set; }
     
       public List<string> tags { get; set; }
+    
+      [Required]
+      public List<RecipeTimeInput> times { get; set; }
+      #endregion
+    
+      #region methods
+      public dynamic GetInputObject()
+      {
+        IDictionary<string, object> d = new System.Dynamic.ExpandoObject();
+    
+        var properties = GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+        foreach (var propertyInfo in properties)
+        {
+          var value = propertyInfo.GetValue(this);
+          var defaultValue = propertyInfo.PropertyType.IsValueType ? Activator.CreateInstance(propertyInfo.PropertyType) : null;
+    
+          var requiredProp = propertyInfo.GetCustomAttributes(typeof(RequiredAttribute), false).Length > 0;
+    
+          if (requiredProp || value != defaultValue)
+          {
+            d[propertyInfo.Name] = value;
+          }
+        }
+        return d;
+      }
+      #endregion
+    }
+    #endregion
+    
+    #region RecipeTime
+    public record RecipeTime(string Name, string Time) {
+      #region members
+      public string Name { get; init; } = Name;
+    
+      public string Time { get; init; } = Time;
+      #endregion
+    }
+    #endregion
+    
+    #region RecipeTimeInput
+    public class RecipeTimeInput {
+      #region members
+      [Required]
+      public string name { get; set; }
+    
+      [Required]
+      public string time { get; set; }
       #endregion
     
       #region methods

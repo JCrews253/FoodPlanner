@@ -7,6 +7,7 @@ schema {
 
 type Query {
   recipes: [Recipe]!
+  recipe(recipeId: String!): Recipe
 }
 
 type Mutation {
@@ -20,11 +21,15 @@ type Recipe {
   name: String!
   photos: [String]!
   description: String
-  ingredients: [RecipeIngredient]!
+  ingredients: [RecipeIngredient!]!
   steps: [String]!
-  tags: [String]
-  prepTime: String!
-  cookTime: String!
+  tags: [String]!
+  times: [RecipeTime!]!
+}
+
+type RecipeTime {
+  name: String!
+  time: String!
 }
 
 type RecipeIngredient {
@@ -70,15 +75,19 @@ input RecipeInput {
   name: String!
   photos: [String]!
   description: String
-  ingredients: [RecipeIngredientInput]!
+  ingredients: [RecipeIngredientInput!]!
   steps: [String]!
   tags: [String]
-  prepTime: String!
-  cookTime: String!
+  times: [RecipeTimeInput!]!
 }
 
 input RecipeIngredientInput {
   Ingredient: String!
   Amount: Float!
   Unit: String
+}
+
+input RecipeTimeInput {
+  name: String!
+  time: String!
 }

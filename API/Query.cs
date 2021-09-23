@@ -29,5 +29,10 @@ namespace FoodPlanner.API
     {
       return contextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
     }
+
+    public async Task<Recipe> GetRecipe([Service] DbContext db, string recipeId)
+    {
+      return await db.GetRecipeAsync(recipeId);
+    }
   }
 }
