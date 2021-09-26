@@ -17,13 +17,18 @@ const Layout = ({ children }: LayoutProps) => {
       id="app-frame"
       sx={{
         height: "100vh",
+        overflow: "hidden",
       }}
     >
       <Container
+        id="app-container"
         sx={{
           pb: 7,
           height: "100%",
+          overflowY: "scroll",
+          overflowX: "hidden",
         }}
+        maxWidth={false}
       >
         {children}
       </Container>
