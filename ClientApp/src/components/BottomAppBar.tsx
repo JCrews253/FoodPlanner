@@ -3,7 +3,7 @@ import { useLocation, Link } from "react-router-dom";
 import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
 import { Home } from "@mui/icons-material";
 
-const AppBar = () => {
+const BottomAppBar = () => {
   const link = useLocation();
 
   const PathNameToTab = () => {
@@ -81,4 +81,4 @@ const AppBar = () => {
   );
 };
 
-export default AppBar;
+export default BottomAppBar;

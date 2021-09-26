@@ -1,33 +1,32 @@
 import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
-import { useRecoilValue } from "recoil";
-import { AuthStatus } from "../state/state";
-import AppBar from "./AppBar";
+import TopAppBar from "./TopAppBar";
 
 interface LayoutProps {
   children: any;
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const loggedIn = useRecoilValue(AuthStatus.loggedIn);
-
   return (
     <Box
       id="app-frame"
       sx={{
         height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
       }}
     >
-      <Container
+      <TopAppBar />
+      <Box
         sx={{
-          pb: 7,
           height: "100%",
+          overflowX: "hidden",
         }}
       >
         {children}
-      </Container>
-      <Container>{loggedIn ? <AppBar /> : null}</Container>
+      </Box>
     </Box>
   );
 };

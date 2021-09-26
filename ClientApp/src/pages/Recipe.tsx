@@ -5,12 +5,13 @@ import graphqlRequestClient from "../clients/graphqlRequestClient";
 import { useGetRecipeQuery } from "../gql";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import LoadingIndicator from "../components/LoadingIndicator";
+import InvalidUrl from "../components/InvalidUrl";
 
 gql`
   query GetRecipe($recipeId: String!) {
     recipe(recipeId: $recipeId) {
       name
-      photos
+      photo
       description
       times {
         name
@@ -36,11 +37,13 @@ const Recipe = () => {
   const { data, isLoading } = useGetRecipeQuery(graphqlRequestClient, {
     recipeId: recipeId,
   });
-
+  console.log({ data });
   return (
     <>
       {isLoading ? (
         <LoadingIndicator />
+      ) : data?.recipe === null ? (
+        <InvalidUrl />
       ) : (
         <Box id="my-box" sx={{ width: "100%" }}>
           <Container
@@ -65,7 +68,10 @@ const Recipe = () => {
             <Box>
               <img
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
-                src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg"
+                src={
+                  data?.recipe?.photo ??
+                  "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
+                }
               />
             </Box>
             <Typography
@@ -83,6 +89,9 @@ const Recipe = () => {
               container
               sx={{
                 justifyContent: "center",
+                "&:last-child": {
+                  border: "solid 3px red",
+                },
               }}
               rowSpacing={0}
               columnSpacing={0}
@@ -95,7 +104,8 @@ const Recipe = () => {
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                        border: "solid 1px black",
+                        borderLeft: idx === 0 ? "solid 1px grey" : "none",
+                        borderRight: "solid 1px grey",
                         padding: 1,
                       }}
                     >
@@ -159,7 +169,8 @@ const Recipe = () => {
                 display: "flex",
                 width: "100%",
                 alignItems: "center",
-                pt: 2,
+                pt: 4,
+                pb: 4,
               }}
             >
               <Typography variant="h6">Tags:</Typography>

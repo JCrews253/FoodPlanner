@@ -4,6 +4,7 @@ import React from "react";
 const LoadingIndicator = () => {
   return (
     <Box
+      id="loading indicator"
       sx={{
         width: "100%",
         height: "100%",

@@ -16,7 +16,7 @@ gql`
   }
 `;
 
-const NewRecipe = () => {
+const AddRecipe = () => {
   const history = useHistory();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -163,4 +163,4 @@ const NewRecipe = () => {
   );
 };
 
-export default NewRecipe;
+export default AddRecipe;

@@ -35,9 +35,10 @@ const SignUp = () => {
     graphqlRequestClient,
     {
       onSuccess: ({ register }) => {
+        console.log({ register });
         if (register !== null) {
+          history.push("/");
         } else {
-          console.log({ register });
           setError(true);
           setPassword("");
           setConfirmPassword("");

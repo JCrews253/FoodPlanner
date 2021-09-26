@@ -4,10 +4,11 @@ import { useRecoilValue } from "recoil";
 import { Home } from "./components/Home";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
-import NewRecipe from "./pages/NewRecipe";
+import AddRecipe from "./pages/AddRecipe";
 import Recipe from "./pages/Recipe";
 import SignUp from "./pages/SignUp";
 import { AuthStatus } from "./state/state";
+import MyRecipes from "./pages/MyRecipes";
 
 const App = () => {
   const loggedIn = useRecoilValue(AuthStatus.loggedIn);
@@ -16,7 +17,8 @@ const App = () => {
     <Layout>
       <Route path="/login" component={Login} />
       <Route path="/signup" component={SignUp} />
-      <Route path="/newrecipe" component={NewRecipe} />
+      <Route path="/addrecipe" component={AddRecipe} />
+      <Route path="/myrecipes" component={MyRecipes} />
       <Route path="/recipe/:recipeId" component={Recipe} />
       <Route exact path="/" component={loggedIn ? Home : Login} />
     </Layout>

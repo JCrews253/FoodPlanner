@@ -1,8 +1,8 @@
 import { GraphQLClient } from "graphql-request";
-import { AuthTokenAccess } from "../state/state";
+import { GetCookie } from "../state/CookieJar";
 
 const requestHeaders = {
-  authorization: `Bearer ${AuthTokenAccess}`,
+  authorization: `Bearer ${GetCookie("authenticationAccessToken")}`,
 };
 
 const graphqlRequestClient = new GraphQLClient(

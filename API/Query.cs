@@ -34,5 +34,12 @@ namespace FoodPlanner.API
     {
       return await db.GetRecipeAsync(recipeId);
     }
+
+    [Authorize]
+    public async Task<List<Recipe>> GetMyRecipes([Service] DbContext db, [Service] IHttpContextAccessor contextAccessor)
+    {
+      var id = contextAccessor.HttpContext.User.Claims;
+      return await db.GetMyRecipesAsync("");
+    }
   }
 }

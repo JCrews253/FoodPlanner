@@ -28,7 +28,7 @@ ReactDOM.render(
     <ThemeProvider>
       <CssBaseline />
       <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={false} />
+        <ReactQueryDevtools />
         <BrowserRouter basename={baseUrl}>
           <App />
         </BrowserRouter>
