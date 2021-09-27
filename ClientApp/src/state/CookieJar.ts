@@ -1,6 +1,6 @@
 export const GetCookie = (name: string) => {
   const cookies = document.cookie.split("; ");
-  return cookies.find((c) => c.startsWith(`${name}=`));
+  return cookies.find((c) => c.startsWith(`${name}=`))?.split("=")[1];
 };
 
 export const CreateCookie = (name: string, value: string) => {

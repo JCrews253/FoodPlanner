@@ -8,6 +8,7 @@ schema {
 type Query {
   recipes: [Recipe]!
   recipe(recipeId: String!): Recipe
+  myRecipes: [Recipe]!
 }
 
 type Mutation {
@@ -19,7 +20,7 @@ type Mutation {
 type Recipe {
   id: ID!
   name: String!
-  photos: [String]!
+  photo: String
   description: String
   ingredients: [RecipeIngredient!]!
   steps: [String]!
@@ -73,7 +74,7 @@ input UserInput {
 
 input RecipeInput {
   name: String!
-  photos: [String]!
+  photo: String
   description: String
   ingredients: [RecipeIngredientInput!]!
   steps: [String]!

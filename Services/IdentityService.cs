@@ -86,7 +86,7 @@ namespace FoodPlanner.Services
       var isAvailable = await _db.IsEmailAvailable(user.Email);
       if (isAvailable)
       {
-        var newUser = new User(null, user.Email,user.FirstName, _hasher.HashPassword(user, user.Password),user.LastName, null);
+        var newUser = new User(null, user.Email, user.FirstName, null, user.LastName, _hasher.HashPassword(user, user.Password));
         await _db.InsertUser(newUser);
         return string.Empty;
       }

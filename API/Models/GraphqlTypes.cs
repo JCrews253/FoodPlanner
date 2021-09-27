@@ -46,18 +46,20 @@ namespace GraphQLCodeGen {
     #endregion
     
     #region Query
-    public record Query(Recipe Recipe, List<Recipe> Recipes) {
+    public record Query(List<Recipe> MyRecipes, Recipe Recipe, List<Recipe> Recipes) {
       #region members
+      public List<Recipe> MyRecipes { get; init; } = MyRecipes;
+    
       public Recipe Recipe { get; init; } = Recipe;
     
       public List<Recipe> Recipes { get; init; } = Recipes;
       #endregion
     }
     #endregion
-
+    
     #region Recipe
     [BsonIgnoreExtraElements]
-    public record Recipe(string Description, string Id, List<RecipeIngredient> Ingredients, string Name, List<string> Photos, List<string> Steps, List<string> Tags, List<RecipeTime> Times) {
+    public record Recipe(string Description, string Id, List<RecipeIngredient> Ingredients, string Name, string Photo, List<string> Steps, List<string> Tags, List<RecipeTime> Times) {
       #region members
       public string Description { get; init; } = Description;
       [BsonRepresentation(BsonType.ObjectId)]
@@ -67,7 +69,7 @@ namespace GraphQLCodeGen {
     
       public string Name { get; init; } = Name;
     
-      public List<string> Photos { get; init; } = Photos;
+      public string Photo { get; init; } = Photo;
     
       public List<string> Steps { get; init; } = Steps;
     
@@ -137,8 +139,7 @@ namespace GraphQLCodeGen {
       [Required]
       public string name { get; set; }
     
-      [Required]
-      public List<string> photos { get; set; }
+      public string photo { get; set; }
     
       [Required]
       public List<string> steps { get; set; }

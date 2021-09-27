@@ -4,12 +4,21 @@ import React from "react";
 const LoadingIndicator = () => {
   return (
     <Box
+      id="loading indicator"
+      // sx={{
+      //   width: "100%",
+      //   height: "100%",
+      //   display: "flex",
+      //   justifyContent: "center",
+      //   alignItems: "center",
+      // }}
       sx={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        margin: "auto",
+        position: "absolute",
+        top: "50%",
+        bottom: "auto",
+        left: "50%",
+        right: "auto",
       }}
     >
       <CircularProgress color="primary" />

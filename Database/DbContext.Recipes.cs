@@ -36,14 +36,15 @@ namespace FoodPlanner.Database
       return await _recipesCollection.Find(r => r.Id == id).FirstOrDefaultAsync();
     }
 
+    public async Task<List<Recipe>> GetMyRecipesAsync(string id)
+    {
+      return await GetRecipesAsync();
+    }
+
     public async Task AddRecipeAsync(Recipe recipe)
     {
-      var photos = recipe.Photos;
-      var uploadTasks = photos.Select(async photo =>
-      {
-        return await AddPhoto(photo);
-      });
-      var photoUrls = await Task.WhenAll(uploadTasks);
+      var photoUrl = await AddPhoto(recipe.Photo);
+
       //var newRecipe = new Recipe(recipe.cookTime, recipe.description, ObjectId.GenerateNewId().ToString(), (List<RecipeIngredientInput>)recipe.ingredients, recipe.name, photoUrls, recipe.prepTime, recipe.steps, recipe.tags);
       //await _recipesCollection.InsertOneAsync(recipe with { Id = ObjectId.GenerateNewId().ToString(), photos = photoUrls.ToList() });
     }

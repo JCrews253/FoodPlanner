@@ -1,6 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
-import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from 'react-query';
+import { useQuery, UseQueryOptions, useMutation, UseMutationOptions } from 'react-query';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -58,6 +58,7 @@ export type PantryItem = {
 
 export type Query = {
   __typename?: 'Query';
+  myRecipes: Array<Maybe<Recipe>>;
   recipe?: Maybe<Recipe>;
   recipes: Array<Maybe<Recipe>>;
 };
@@ -73,7 +74,7 @@ export type Recipe = {
   id: Scalars['ID'];
   ingredients: Array<RecipeIngredient>;
   name: Scalars['String'];
-  photos: Array<Maybe<Scalars['String']>>;
+  photo?: Maybe<Scalars['String']>;
   steps: Array<Maybe<Scalars['String']>>;
   tags: Array<Maybe<Scalars['String']>>;
   times: Array<RecipeTime>;
@@ -96,7 +97,7 @@ export type RecipeInput = {
   description?: Maybe<Scalars['String']>;
   ingredients: Array<RecipeIngredientInput>;
   name: Scalars['String'];
-  photos: Array<Maybe<Scalars['String']>>;
+  photo?: Maybe<Scalars['String']>;
   steps: Array<Maybe<Scalars['String']>>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   times: Array<RecipeTimeInput>;
@@ -136,12 +137,12 @@ export type UserInput = {
   password: Scalars['String'];
 };
 
-export type UserLoginMutationVariables = Exact<{
-  inputs: UserInput;
+export type GetRecipeCardInfoQueryVariables = Exact<{
+  recipeId: Scalars['String'];
 }>;
 
 
-export type UserLoginMutation = { __typename?: 'Mutation', login?: Maybe<{ __typename?: 'Token', access: string, refresh: string }> };
+export type GetRecipeCardInfoQuery = { __typename?: 'Query', recipe?: Maybe<{ __typename?: 'Recipe', name: string, photo?: Maybe<string>, description?: Maybe<string> }> };
 
 export type NewRecipeMutationVariables = Exact<{
   inputs: RecipeInput;
@@ -150,12 +151,24 @@ export type NewRecipeMutationVariables = Exact<{
 
 export type NewRecipeMutation = { __typename?: 'Mutation', newRecipe: boolean };
 
+export type UserLoginMutationVariables = Exact<{
+  inputs: UserInput;
+}>;
+
+
+export type UserLoginMutation = { __typename?: 'Mutation', login?: Maybe<{ __typename?: 'Token', access: string, refresh: string }> };
+
+export type MyRecipesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyRecipesQuery = { __typename?: 'Query', myRecipes: Array<Maybe<{ __typename?: 'Recipe', name: string, photo?: Maybe<string>, description?: Maybe<string> }>> };
+
 export type GetRecipeQueryVariables = Exact<{
   recipeId: Scalars['String'];
 }>;
 
 
-export type GetRecipeQuery = { __typename?: 'Query', recipe?: Maybe<{ __typename?: 'Recipe', name: string, photos: Array<Maybe<string>>, description?: Maybe<string>, steps: Array<Maybe<string>>, tags: Array<Maybe<string>>, times: Array<{ __typename?: 'RecipeTime', name: string, time: string }>, ingredients: Array<{ __typename?: 'RecipeIngredient', amount: number, ingredient: string, unit?: Maybe<string> }> }> };
+export type GetRecipeQuery = { __typename?: 'Query', recipe?: Maybe<{ __typename?: 'Recipe', name: string, photo?: Maybe<string>, description?: Maybe<string>, steps: Array<Maybe<string>>, tags: Array<Maybe<string>>, times: Array<{ __typename?: 'RecipeTime', name: string, time: string }>, ingredients: Array<{ __typename?: 'RecipeIngredient', amount: number, ingredient: string, unit?: Maybe<string> }> }> };
 
 export type RegisterMutationVariables = Exact<{
   inputs: UserInput;
@@ -165,6 +178,46 @@ export type RegisterMutationVariables = Exact<{
 export type RegisterMutation = { __typename?: 'Mutation', register?: Maybe<string> };
 
 
+export const GetRecipeCardInfoDocument = `
+    query GetRecipeCardInfo($recipeId: String!) {
+  recipe(recipeId: $recipeId) {
+    name
+    photo
+    description
+  }
+}
+    `;
+export const useGetRecipeCardInfoQuery = <
+      TData = GetRecipeCardInfoQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient, 
+      variables: GetRecipeCardInfoQueryVariables, 
+      options?: UseQueryOptions<GetRecipeCardInfoQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) => 
+    useQuery<GetRecipeCardInfoQuery, TError, TData>(
+      ['GetRecipeCardInfo', variables],
+      fetcher<GetRecipeCardInfoQuery, GetRecipeCardInfoQueryVariables>(client, GetRecipeCardInfoDocument, variables, headers),
+      options
+    );
+export const NewRecipeDocument = `
+    mutation NewRecipe($inputs: RecipeInput!) {
+  newRecipe(recipe: $inputs)
+}
+    `;
+export const useNewRecipeMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient, 
+      options?: UseMutationOptions<NewRecipeMutation, TError, NewRecipeMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) => 
+    useMutation<NewRecipeMutation, TError, NewRecipeMutationVariables, TContext>(
+      (variables?: NewRecipeMutationVariables) => fetcher<NewRecipeMutation, NewRecipeMutationVariables>(client, NewRecipeDocument, variables, headers)(),
+      options
+    );
 export const UserLoginDocument = `
     mutation UserLogin($inputs: UserInput!) {
   login(user: $inputs) {
@@ -185,28 +238,34 @@ export const useUserLoginMutation = <
       (variables?: UserLoginMutationVariables) => fetcher<UserLoginMutation, UserLoginMutationVariables>(client, UserLoginDocument, variables, headers)(),
       options
     );
-export const NewRecipeDocument = `
-    mutation NewRecipe($inputs: RecipeInput!) {
-  newRecipe(recipe: $inputs)
+export const MyRecipesDocument = `
+    query MyRecipes {
+  myRecipes {
+    name
+    photo
+    description
+  }
 }
     `;
-export const useNewRecipeMutation = <
-      TError = unknown,
-      TContext = unknown
+export const useMyRecipesQuery = <
+      TData = MyRecipesQuery,
+      TError = unknown
     >(
       client: GraphQLClient, 
-      options?: UseMutationOptions<NewRecipeMutation, TError, NewRecipeMutationVariables, TContext>,
+      variables?: MyRecipesQueryVariables, 
+      options?: UseQueryOptions<MyRecipesQuery, TError, TData>,
       headers?: RequestInit['headers']
     ) => 
-    useMutation<NewRecipeMutation, TError, NewRecipeMutationVariables, TContext>(
-      (variables?: NewRecipeMutationVariables) => fetcher<NewRecipeMutation, NewRecipeMutationVariables>(client, NewRecipeDocument, variables, headers)(),
+    useQuery<MyRecipesQuery, TError, TData>(
+      variables === undefined ? ['MyRecipes'] : ['MyRecipes', variables],
+      fetcher<MyRecipesQuery, MyRecipesQueryVariables>(client, MyRecipesDocument, variables, headers),
       options
     );
 export const GetRecipeDocument = `
     query GetRecipe($recipeId: String!) {
   recipe(recipeId: $recipeId) {
     name
-    photos
+    photo
     description
     times {
       name

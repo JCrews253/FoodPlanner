@@ -1,9 +1,6 @@
 import { atom } from "recoil";
 import { CreateCookie, GetCookie } from "./CookieJar";
 
-export var AuthTokenAccess = "";
-export var AuthTokenRefresh = "";
-
 export const AuthTokens = {
   access: atom<string>({
     key: "authenticationAccessToken",
@@ -11,7 +8,7 @@ export const AuthTokens = {
     effects_UNSTABLE: [
       ({ onSet }) => {
         onSet((access) => {
-          AuthTokenAccess = access;
+          CreateCookie("authenticationAccessToken", access);
         });
       },
     ],
@@ -23,7 +20,7 @@ export const AuthTokens = {
     effects_UNSTABLE: [
       ({ onSet }) => {
         onSet((refresh) => {
-          AuthTokenRefresh = refresh;
+          CreateCookie("authenticationRefreshToken", refresh);
         });
       },
     ],
