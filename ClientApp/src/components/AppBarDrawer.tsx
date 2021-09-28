@@ -6,6 +6,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 import DinnerDiningIcon from "@mui/icons-material/DinnerDining";
 import DrawerMenuItem from "./DrawerMenuItem";
+import HomeIcon from "@mui/icons-material/Home";
 
 interface AppBarDrawerProps {
   open: boolean;
@@ -27,6 +28,12 @@ const AppBarDrawer = ({ open, onClose, onOpen }: AppBarDrawerProps) => {
         }}
       >
         <List>
+          <DrawerMenuItem
+            title="Home"
+            linkUrl="/"
+            Icon={<HomeIcon />}
+            onClick={onClose}
+          />
           <DrawerMenuItem
             title="Add Recipe"
             linkUrl="/addrecipe"

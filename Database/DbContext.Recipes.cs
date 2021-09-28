@@ -38,7 +38,13 @@ namespace FoodPlanner.Database
 
     public async Task<List<Recipe>> GetMyRecipesAsync(string id)
     {
-      return await GetRecipesAsync();
+      var user = await _usersCollection.Find(u => u.Id == id).SingleAsync();
+
+      var filter = Builders<Recipe>.Filter.In(r => r.Id, user.SavedRecipeIds);
+
+      var recipes = await _recipesCollection.FindAsync(filter);
+      var x = recipes.ToList();
+      return x;
     }
 
     public async Task AddRecipeAsync(Recipe recipe)

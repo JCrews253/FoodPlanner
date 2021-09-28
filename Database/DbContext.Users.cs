@@ -31,5 +31,19 @@ namespace FoodPlanner.Database
     {
       await _usersCollection.InsertOneAsync(user with { Id = ObjectId.GenerateNewId().ToString() });
     }
+
+    public async Task ModifySavedRecipes(string userId, string recipeId)
+    {
+      var user = await _usersCollection.Find(u => u.Id == userId).FirstOrDefaultAsync();
+      var recipeIds = user.SavedRecipeIds;
+      if (recipeIds.Contains(recipeId)) {
+        recipeIds.Remove(recipeId);
+      }
+      else {
+        recipeIds.Add(recipeId);
+      }
+      var update = Builders<User>.Update.Set(u => u.SavedRecipeIds, recipeIds);
+      await _usersCollection.UpdateOneAsync(u => u.Id == userId, update);
+    }
   }
 }

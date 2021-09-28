@@ -1,7 +1,7 @@
 import React from "react";
 import { Route } from "react-router";
 import { useRecoilValue } from "recoil";
-import { Home } from "./components/Home";
+import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
 import AddRecipe from "./pages/AddRecipe";

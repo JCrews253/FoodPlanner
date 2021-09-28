@@ -2,10 +2,12 @@
 using FoodPlanner.Services;
 using HotChocolate;
 using HotChocolate.Data;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using static GraphQLCodeGen.GraqhqlTypes;
 
@@ -35,6 +37,13 @@ namespace FoodPlanner.API
     {
       Recipe newRecipe = ConvertToType<Recipe>(recipe.GetInputObject());
       await db.AddRecipeAsync(newRecipe);
+      return true;
+    }
+
+    public async Task<bool> SaveRecipe([Service] DbContext db, [Service] IHttpContextAccessor contextAccessor, string recipeId)
+    {
+      var id = contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+      await db.ModifySavedRecipes(id, recipeId);
       return true;
     }
   }

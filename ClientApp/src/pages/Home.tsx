@@ -4,21 +4,28 @@ import React from "react";
 import graphqlRequestClient from "../clients/graphqlRequestClient";
 import LoadingIndicator from "../components/LoadingIndicator";
 import RecipeCard from "../components/RecipeCard";
-import { useMyRecipesQuery } from "../gql";
+import { useAllRecipesQuery, useMyRecipesQuery } from "../gql";
 
 gql`
-  query MyRecipes {
-    myRecipes {
+  query AllRecipes {
+    recipes {
       id
       name
       photo
       description
     }
   }
+
+  query savedRecipeIds{
+    myRecipes{
+      id
+    }
+  }
 `;
 
-const MyRecipes = () => {
-  const { data, isLoading } = useMyRecipesQuery(graphqlRequestClient);
+const Home = () => {
+  const { data, isLoading } = useAllRecipesQuery(graphqlRequestClient);
+  const { data: myRecipes } = useMyRecipesQuery(graphqlRequestClient);
   return (
     <Box
       id="box"
@@ -31,7 +38,7 @@ const MyRecipes = () => {
       {isLoading ? (
         <LoadingIndicator />
       ) : (
-        data?.myRecipes.map((r) => {
+        data?.recipes.map((r) => {
           return (
             <RecipeCard
               id={r?.id ?? ""}
@@ -41,7 +48,7 @@ const MyRecipes = () => {
                 r?.photo ??
                 "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
               }
-              saved
+              saved={myRecipes?.myRecipes.}
             />
           );
         })
@@ -50,4 +57,4 @@ const MyRecipes = () => {
   );
 };
 
-export default MyRecipes;
+export default Home;

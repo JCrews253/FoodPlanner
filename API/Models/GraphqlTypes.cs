@@ -9,13 +9,15 @@ namespace GraphQLCodeGen {
   public class GraqhqlTypes {
     
     #region Mutation
-    public record Mutation(Token Login, bool NewRecipe, string Register) {
+    public record Mutation(Token Login, bool NewRecipe, string Register, bool? SaveRecipe) {
       #region members
       public Token Login { get; init; } = Login;
     
       public bool NewRecipe { get; init; } = NewRecipe;
     
       public string Register { get; init; } = Register;
+    
+      public bool? SaveRecipe { get; init; } = SaveRecipe;
       #endregion
     }
     #endregion
@@ -229,7 +231,7 @@ namespace GraphQLCodeGen {
     #endregion
     
     #region User
-    public record User(List<string> Claims, string Email, string FirstName, string Id, string LastName, string Password) {
+    public record User(List<string> Claims, string Email, string FirstName, string Id, string LastName, string Password, List<string> SavedRecipeIds) {
       #region members
       public List<string> Claims { get; init; } = Claims;
     
@@ -242,6 +244,8 @@ namespace GraphQLCodeGen {
       public string LastName { get; init; } = LastName;
     
       public string Password { get; init; } = Password;
+    
+      public List<string> SavedRecipeIds { get; init; } = SavedRecipeIds;
       #endregion
     }
     #endregion
