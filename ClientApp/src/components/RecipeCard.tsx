@@ -9,9 +9,13 @@ import {
   Typography,
 } from "@mui/material";
 import gql from "graphql-tag";
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import graphqlRequestClient from "../clients/graphqlRequestClient";
 import { useSaveRecipeMutation } from "../gql";
+import { AuthTokens } from "../state/state";
+import LoadingIndicator from "./LoadingIndicator";
 
 gql`
   mutation SaveRecipe($recipeId: String!) {
@@ -22,9 +26,9 @@ gql`
 interface RecipeCardProps {
   id: string;
   name: string;
-  photo?: string;
+  photo: string;
   description: string;
-  saved?: boolean;
+  saved: boolean;
 }
 
 const RecipeCard = ({
@@ -34,8 +38,10 @@ const RecipeCard = ({
   description,
   saved,
 }: RecipeCardProps) => {
+  const accessToken = useRecoilValue(AuthTokens.access);
+  const [internalSaved, setInternalSaved] = useState(saved);
   const { isLoading, mutate } = useSaveRecipeMutation<Error>(
-    graphqlRequestClient,
+    graphqlRequestClient(accessToken),
     {
       onSuccess: () => {
         console.log("save success");
@@ -50,7 +56,7 @@ const RecipeCard = ({
       sx={{ maxWidth: 500, margin: 2, overflow: "unset", width: "100%" }}
       id="card"
     >
-      <CardActionArea>
+      <CardActionArea component={Link} to={`/recipe/${id}`}>
         <Box
           sx={{
             backgroundColor: "lightgrey",

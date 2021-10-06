@@ -112,7 +112,7 @@ namespace FoodPlanner.Services
         "issuer",
         "audience",
         claims,
-        expires: DateTime.Now.AddHours(2),
+        expires: DateTime.Now.AddMinutes(500),
         signingCredentials: signingCredentials);
 
       return new JwtSecurityTokenHandler().WriteToken(token);

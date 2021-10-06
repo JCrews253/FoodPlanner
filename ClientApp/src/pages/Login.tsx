@@ -12,7 +12,7 @@ import {
 import gql from "graphql-tag";
 import React, { useState } from "react";
 import { useHistory } from "react-router";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import graphqlRequestClient from "../clients/graphqlRequestClient";
 import { useUserLoginMutation } from "../gql";
 import { AuthStatus, AuthTokens } from "../state/state";
@@ -32,15 +32,15 @@ gql`
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const setAccessToken = useSetRecoilState(AuthTokens.access);
-  const setRefreshToken = useSetRecoilState(AuthTokens.refresh);
+  const [accessToken, setAccessToken] = useRecoilState(AuthTokens.access);
+  const [refreshToken, setRefreshToken] = useRecoilState(AuthTokens.refresh);
   const setLoggedIn = useSetRecoilState(AuthStatus.loggedIn);
   const [error, setError] = useState(false);
   const [showPassword, setShowPassord] = useState(false);
   const history = useHistory();
 
   const { isLoading, mutate } = useUserLoginMutation<Error>(
-    graphqlRequestClient,
+    graphqlRequestClient(accessToken),
     {
       onSuccess: ({ login }) => {
         console.log({ login });

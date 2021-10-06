@@ -64,9 +64,9 @@ export type PantryItem = {
 
 export type Query = {
   __typename?: 'Query';
-  myRecipes: Array<Maybe<Recipe>>;
+  myRecipes: Array<Recipe>;
   recipe?: Maybe<Recipe>;
-  recipes: Array<Maybe<Recipe>>;
+  recipes: Array<Recipe>;
 };
 
 
@@ -76,12 +76,12 @@ export type QueryRecipeArgs = {
 
 export type Recipe = {
   __typename?: 'Recipe';
-  description?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
   id: Scalars['ID'];
   ingredients: Array<RecipeIngredient>;
   name: Scalars['String'];
-  photo?: Maybe<Scalars['String']>;
-  steps: Array<Maybe<Scalars['String']>>;
+  photo: Scalars['String'];
+  steps: Array<Scalars['String']>;
   tags: Array<Maybe<Scalars['String']>>;
   times: Array<RecipeTime>;
 };
@@ -100,11 +100,11 @@ export type RecipeIngredientInput = {
 };
 
 export type RecipeInput = {
-  description?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
   ingredients: Array<RecipeIngredientInput>;
   name: Scalars['String'];
-  photo?: Maybe<Scalars['String']>;
-  steps: Array<Maybe<Scalars['String']>>;
+  photo: Scalars['String'];
+  steps: Array<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   times: Array<RecipeTimeInput>;
 };
@@ -158,6 +158,16 @@ export type NewRecipeMutationVariables = Exact<{
 
 export type NewRecipeMutation = { __typename?: 'Mutation', newRecipe: boolean };
 
+export type AllRecipesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllRecipesQuery = { __typename?: 'Query', recipes: Array<{ __typename?: 'Recipe', id: string, name: string, photo: string, description: string }> };
+
+export type SavedRecipeIdsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SavedRecipeIdsQuery = { __typename?: 'Query', myRecipes: Array<{ __typename?: 'Recipe', id: string }> };
+
 export type UserLoginMutationVariables = Exact<{
   inputs: UserInput;
 }>;
@@ -168,14 +178,14 @@ export type UserLoginMutation = { __typename?: 'Mutation', login?: Maybe<{ __typ
 export type MyRecipesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyRecipesQuery = { __typename?: 'Query', myRecipes: Array<Maybe<{ __typename?: 'Recipe', id: string, name: string, photo?: Maybe<string>, description?: Maybe<string> }>> };
+export type MyRecipesQuery = { __typename?: 'Query', myRecipes: Array<{ __typename?: 'Recipe', id: string, name: string, photo: string, description: string }> };
 
 export type GetRecipeQueryVariables = Exact<{
   recipeId: Scalars['String'];
 }>;
 
 
-export type GetRecipeQuery = { __typename?: 'Query', recipe?: Maybe<{ __typename?: 'Recipe', name: string, photo?: Maybe<string>, description?: Maybe<string>, steps: Array<Maybe<string>>, tags: Array<Maybe<string>>, times: Array<{ __typename?: 'RecipeTime', name: string, time: string }>, ingredients: Array<{ __typename?: 'RecipeIngredient', amount: number, ingredient: string, unit?: Maybe<string> }> }> };
+export type GetRecipeQuery = { __typename?: 'Query', recipe?: Maybe<{ __typename?: 'Recipe', name: string, photo: string, description: string, steps: Array<string>, tags: Array<Maybe<string>>, times: Array<{ __typename?: 'RecipeTime', name: string, time: string }>, ingredients: Array<{ __typename?: 'RecipeIngredient', amount: number, ingredient: string, unit?: Maybe<string> }> }> };
 
 export type RegisterMutationVariables = Exact<{
   inputs: UserInput;
@@ -217,6 +227,51 @@ export const useNewRecipeMutation = <
     ) => 
     useMutation<NewRecipeMutation, TError, NewRecipeMutationVariables, TContext>(
       (variables?: NewRecipeMutationVariables) => fetcher<NewRecipeMutation, NewRecipeMutationVariables>(client, NewRecipeDocument, variables, headers)(),
+      options
+    );
+export const AllRecipesDocument = `
+    query AllRecipes {
+  recipes {
+    id
+    name
+    photo
+    description
+  }
+}
+    `;
+export const useAllRecipesQuery = <
+      TData = AllRecipesQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient, 
+      variables?: AllRecipesQueryVariables, 
+      options?: UseQueryOptions<AllRecipesQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) => 
+    useQuery<AllRecipesQuery, TError, TData>(
+      variables === undefined ? ['AllRecipes'] : ['AllRecipes', variables],
+      fetcher<AllRecipesQuery, AllRecipesQueryVariables>(client, AllRecipesDocument, variables, headers),
+      options
+    );
+export const SavedRecipeIdsDocument = `
+    query savedRecipeIds {
+  myRecipes {
+    id
+  }
+}
+    `;
+export const useSavedRecipeIdsQuery = <
+      TData = SavedRecipeIdsQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient, 
+      variables?: SavedRecipeIdsQueryVariables, 
+      options?: UseQueryOptions<SavedRecipeIdsQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) => 
+    useQuery<SavedRecipeIdsQuery, TError, TData>(
+      variables === undefined ? ['savedRecipeIds'] : ['savedRecipeIds', variables],
+      fetcher<SavedRecipeIdsQuery, SavedRecipeIdsQueryVariables>(client, SavedRecipeIdsDocument, variables, headers),
       options
     );
 export const UserLoginDocument = `

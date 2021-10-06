@@ -4,7 +4,10 @@ import React from "react";
 import graphqlRequestClient from "../clients/graphqlRequestClient";
 import LoadingIndicator from "../components/LoadingIndicator";
 import RecipeCard from "../components/RecipeCard";
-import { useAllRecipesQuery, useMyRecipesQuery } from "../gql";
+import { useAllRecipesQuery, useSavedRecipeIdsQuery } from "../gql";
+import { GraphQLClient } from "graphql-request";
+import { useRecoilValue } from "recoil";
+import { AuthTokens } from "../state/state";
 
 gql`
   query AllRecipes {
@@ -16,16 +19,21 @@ gql`
     }
   }
 
-  query savedRecipeIds{
-    myRecipes{
+  query savedRecipeIds {
+    myRecipes {
       id
     }
   }
 `;
 
 const Home = () => {
-  const { data, isLoading } = useAllRecipesQuery(graphqlRequestClient);
-  const { data: myRecipes } = useMyRecipesQuery(graphqlRequestClient);
+  const accessToken = useRecoilValue(AuthTokens.access);
+  const { data, isLoading } = useAllRecipesQuery(
+    graphqlRequestClient(accessToken)
+  );
+  const { data: myRecipes } = useSavedRecipeIdsQuery(
+    graphqlRequestClient(accessToken)
+  );
   return (
     <Box
       id="box"
@@ -41,14 +49,14 @@ const Home = () => {
         data?.recipes.map((r) => {
           return (
             <RecipeCard
-              id={r?.id ?? ""}
-              name={r?.name ?? "name"}
-              description={r?.description ?? "description"}
+              id={r.id}
+              name={r.name}
+              description={r.description}
               photo={
-                r?.photo ??
+                r.photo ??
                 "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
               }
-              saved={myRecipes?.myRecipes.}
+              saved={myRecipes?.myRecipes.some((m) => m.id === r.id) ?? false}
             />
           );
         })

@@ -133,6 +133,7 @@ namespace GraphQLCodeGen {
     #region RecipeInput
     public class RecipeInput {
       #region members
+      [Required]
       public string description { get; set; }
     
       [Required]
@@ -141,6 +142,7 @@ namespace GraphQLCodeGen {
       [Required]
       public string name { get; set; }
     
+      [Required]
       public string photo { get; set; }
     
       [Required]

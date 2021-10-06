@@ -32,7 +32,7 @@ const SignUp = () => {
   const history = useHistory();
 
   const { mutate, isLoading } = useRegisterMutation<Error>(
-    graphqlRequestClient,
+    graphqlRequestClient("sgfdgdf"),
     {
       onSuccess: ({ register }) => {
         console.log({ register });

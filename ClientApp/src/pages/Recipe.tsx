@@ -6,6 +6,8 @@ import { useGetRecipeQuery } from "../gql";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import LoadingIndicator from "../components/LoadingIndicator";
 import InvalidUrl from "../components/InvalidUrl";
+import { useRecoilValue } from "recoil";
+import { AuthTokens } from "../state/state";
 
 gql`
   query GetRecipe($recipeId: String!) {
@@ -33,10 +35,14 @@ interface RecipeRouterParams {
 }
 
 const Recipe = () => {
+  const accessToken = useRecoilValue(AuthTokens.access);
   const { recipeId } = useParams<RecipeRouterParams>();
-  const { data, isLoading } = useGetRecipeQuery(graphqlRequestClient, {
-    recipeId: recipeId,
-  });
+  const { data, isLoading } = useGetRecipeQuery(
+    graphqlRequestClient(accessToken),
+    {
+      recipeId: recipeId,
+    }
+  );
   console.log({ data });
   return (
     <>
