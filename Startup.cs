@@ -10,8 +10,6 @@ using MongoDB.Driver;
 using HotChocolate;
 using FoodPlanner.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace FoodPlanner
 {
@@ -43,28 +41,15 @@ namespace FoodPlanner
       });
       services.AddSingleton<DbContext>();
 
+      // Auth0
       services.AddAuthentication(options =>
       {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
       }).AddJwtBearer(options =>
       {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-          ValidateAudience = true,
-          ValidateIssuer = true,
-          ValidateIssuerSigningKey = true,
-          ValidateLifetime = true,
-          ValidAudience = "audience",
-          ValidIssuer = "issuer",
-          RequireSignedTokens = false,
-          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SymmetricSecurityKey"])),
-          ClockSkew = System.TimeSpan.Zero
-        };
-      
-        options.RequireHttpsMetadata = false;
-        options.SaveToken = true;
+        options.Authority = Configuration["Auth0:Authority"];
+        options.Audience = Configuration["Auth0:Audience"];
       });
 
       services

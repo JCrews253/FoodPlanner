@@ -1,11 +1,8 @@
 ﻿using FoodPlanner.Database;
-using GraphQLCodeGen;
 using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Data;
 using Microsoft.AspNetCore.Http;
-using MongoDB.Bson;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;

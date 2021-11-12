@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import gql from "graphql-tag";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import graphqlRequestClient from "../clients/graphqlRequestClient";
@@ -19,6 +19,7 @@ import { AuthStatus, AuthTokens } from "../state/state";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useAuth0 } from "@auth0/auth0-react";
 
 gql`
   mutation UserLogin($inputs: UserInput!) {
@@ -38,6 +39,10 @@ const Login = () => {
   const [error, setError] = useState(false);
   const [showPassword, setShowPassord] = useState(false);
   const history = useHistory();
+  const { user, isAuthenticated, loginWithRedirect, getAccessTokenSilently } =
+    useAuth0();
+  const [userMetadata, setUserMetadata] = useState(null);
+  console.log({ isAuthenticated });
 
   const { isLoading, mutate } = useUserLoginMutation<Error>(
     graphqlRequestClient(accessToken),
@@ -69,8 +74,38 @@ const Login = () => {
     });
   };
 
+  useEffect(() => {
+    const getUserMetadata = async () => {
+      const domain = "dev-r1o3z-ez.us.auth0.com";
+
+      try {
+        const accessToken = await getAccessTokenSilently({
+          audience: `https://${domain}/api/v2/`,
+          scope: "read:current_user",
+        });
+        console.log({ accessToken });
+        const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user?.sub}`;
+
+        const metadataResponse = await fetch(userDetailsByIdUrl, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        const { user_metadata } = await metadataResponse.json();
+
+        setUserMetadata(user_metadata);
+      } catch {}
+    };
+
+    getUserMetadata();
+  }, [getAccessTokenSilently, user?.sub]);
+
   return (
     <Container component="main" maxWidth="xs">
+      <div>
+        <button onClick={() => loginWithRedirect()}>login</button>
+      </div>
       <Box
         sx={{
           marginTop: (theme) => theme.spacing(8),
