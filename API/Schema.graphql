@@ -12,8 +12,6 @@ type Query {
 }
 
 type Mutation {
-  login(user: UserInput!): Token
-  register(user: UserInput!): String
   newRecipe(recipe: RecipeInput): Boolean!
   saveRecipe(recipeId: String!): Boolean
 }
@@ -40,38 +38,10 @@ type RecipeIngredient {
   unit: String
 }
 
-type Pantry {
-  id: ID!
-  items: [PantryItem]!
-}
-
-type PantryItem {
-  ingredient: String!
-  amount: Float!
-  unit: String
-  expirationDate: Date
-}
-
 type User {
   id: ID!
-  email: String!
-  password: String!
-  firstName: String!
-  lastName: String!
-  claims: [String]
+  userId: ID!
   savedRecipeIds: [String]!
-}
-
-type Token {
-  access: String!
-  refresh: String!
-}
-
-input UserInput {
-  email: String!
-  password: String!
-  firstName: String
-  lastName: String
 }
 
 input RecipeInput {

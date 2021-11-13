@@ -22,15 +22,8 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  login?: Maybe<Token>;
   newRecipe: Scalars['Boolean'];
-  register?: Maybe<Scalars['String']>;
   saveRecipe?: Maybe<Scalars['Boolean']>;
-};
-
-
-export type MutationLoginArgs = {
-  user: UserInput;
 };
 
 
@@ -39,27 +32,8 @@ export type MutationNewRecipeArgs = {
 };
 
 
-export type MutationRegisterArgs = {
-  user: UserInput;
-};
-
-
 export type MutationSaveRecipeArgs = {
   recipeId: Scalars['String'];
-};
-
-export type Pantry = {
-  __typename?: 'Pantry';
-  id: Scalars['ID'];
-  items: Array<Maybe<PantryItem>>;
-};
-
-export type PantryItem = {
-  __typename?: 'PantryItem';
-  amount: Scalars['Float'];
-  expirationDate?: Maybe<Scalars['Date']>;
-  ingredient: Scalars['String'];
-  unit?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -120,28 +94,11 @@ export type RecipeTimeInput = {
   time: Scalars['String'];
 };
 
-export type Token = {
-  __typename?: 'Token';
-  access: Scalars['String'];
-  refresh: Scalars['String'];
-};
-
 export type User = {
   __typename?: 'User';
-  claims?: Maybe<Array<Maybe<Scalars['String']>>>;
-  email: Scalars['String'];
-  firstName: Scalars['String'];
   id: Scalars['ID'];
-  lastName: Scalars['String'];
-  password: Scalars['String'];
   savedRecipeIds: Array<Maybe<Scalars['String']>>;
-};
-
-export type UserInput = {
-  email: Scalars['String'];
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  password: Scalars['String'];
+  userId: Scalars['ID'];
 };
 
 export type SaveRecipeMutationVariables = Exact<{
@@ -168,13 +125,6 @@ export type SavedRecipeIdsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type SavedRecipeIdsQuery = { __typename?: 'Query', myRecipes: Array<{ __typename?: 'Recipe', id: string }> };
 
-export type UserLoginMutationVariables = Exact<{
-  inputs: UserInput;
-}>;
-
-
-export type UserLoginMutation = { __typename?: 'Mutation', login?: Maybe<{ __typename?: 'Token', access: string, refresh: string }> };
-
 export type MyRecipesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -186,13 +136,6 @@ export type GetRecipeQueryVariables = Exact<{
 
 
 export type GetRecipeQuery = { __typename?: 'Query', recipe?: Maybe<{ __typename?: 'Recipe', name: string, photo: string, description: string, steps: Array<string>, tags: Array<Maybe<string>>, times: Array<{ __typename?: 'RecipeTime', name: string, time: string }>, ingredients: Array<{ __typename?: 'RecipeIngredient', amount: number, ingredient: string, unit?: Maybe<string> }> }> };
-
-export type RegisterMutationVariables = Exact<{
-  inputs: UserInput;
-}>;
-
-
-export type RegisterMutation = { __typename?: 'Mutation', register?: Maybe<string> };
 
 
 export const SaveRecipeDocument = `
@@ -274,26 +217,6 @@ export const useSavedRecipeIdsQuery = <
       fetcher<SavedRecipeIdsQuery, SavedRecipeIdsQueryVariables>(client, SavedRecipeIdsDocument, variables, headers),
       options
     );
-export const UserLoginDocument = `
-    mutation UserLogin($inputs: UserInput!) {
-  login(user: $inputs) {
-    access
-    refresh
-  }
-}
-    `;
-export const useUserLoginMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(
-      client: GraphQLClient, 
-      options?: UseMutationOptions<UserLoginMutation, TError, UserLoginMutationVariables, TContext>,
-      headers?: RequestInit['headers']
-    ) => 
-    useMutation<UserLoginMutation, TError, UserLoginMutationVariables, TContext>(
-      (variables?: UserLoginMutationVariables) => fetcher<UserLoginMutation, UserLoginMutationVariables>(client, UserLoginDocument, variables, headers)(),
-      options
-    );
 export const MyRecipesDocument = `
     query MyRecipes {
   myRecipes {
@@ -350,22 +273,5 @@ export const useGetRecipeQuery = <
     useQuery<GetRecipeQuery, TError, TData>(
       ['GetRecipe', variables],
       fetcher<GetRecipeQuery, GetRecipeQueryVariables>(client, GetRecipeDocument, variables, headers),
-      options
-    );
-export const RegisterDocument = `
-    mutation Register($inputs: UserInput!) {
-  register(user: $inputs)
-}
-    `;
-export const useRegisterMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(
-      client: GraphQLClient, 
-      options?: UseMutationOptions<RegisterMutation, TError, RegisterMutationVariables, TContext>,
-      headers?: RequestInit['headers']
-    ) => 
-    useMutation<RegisterMutation, TError, RegisterMutationVariables, TContext>(
-      (variables?: RegisterMutationVariables) => fetcher<RegisterMutation, RegisterMutationVariables>(client, RegisterDocument, variables, headers)(),
       options
     );

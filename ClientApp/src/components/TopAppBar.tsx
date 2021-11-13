@@ -7,23 +7,44 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import React, { useState } from "react";
-import { useRecoilValue } from "recoil";
-import { AuthStatus } from "../state/state";
+import React, { useEffect, useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { AuthStatus, AuthTokens } from "../state/state";
 import { Link } from "react-router-dom";
 import AppBarDrawer from "./AppBarDrawer";
 import { AccountCircle } from "@mui/icons-material";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const TopAppBar = () => {
-  const loggedIn = useRecoilValue(AuthStatus.loggedIn);
   const [showMenu, setShowMenu] = useState<boolean>(false);
+  const setAccessToken = useSetRecoilState(AuthTokens.access);
+  const { isAuthenticated, loginWithRedirect, getAccessTokenSilently } =
+    useAuth0();
+
+  useEffect(() => {
+    const getUserMetadata = async () => {
+      const domain = "dev-r1o3z-ez.us.auth0.com";
+      console.log("getting token");
+      try {
+        const accessToken = await getAccessTokenSilently({
+          audience: `https://${domain}/api/v2/`,
+          scope: "read:current_user",
+        });
+        setAccessToken(accessToken);
+      } catch {
+        console.log("error");
+      }
+    };
+
+    getUserMetadata();
+  }, [getAccessTokenSilently]);
 
   return (
     <>
       <Box>
         <AppBar position="static" color="primary">
           <Toolbar>
-            {loggedIn ? (
+            {isAuthenticated ? (
               <IconButton
                 size="large"
                 edge="start"
@@ -38,12 +59,12 @@ const TopAppBar = () => {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Food Planner
             </Typography>
-            {loggedIn ? (
+            {isAuthenticated ? (
               <IconButton size="large" color="inherit">
                 <AccountCircle />
               </IconButton>
             ) : (
-              <Button color="inherit" component={Link} to="/login">
+              <Button color="inherit" onClick={() => loginWithRedirect()}>
                 Login
               </Button>
             )}

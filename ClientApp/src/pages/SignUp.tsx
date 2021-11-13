@@ -11,15 +11,8 @@ import gql from "graphql-tag";
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import graphqlRequestClient from "../clients/graphqlRequestClient";
-import { useRegisterMutation } from "../gql";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link } from "react-router-dom";
-
-gql`
-  mutation Register($inputs: UserInput!) {
-    register(user: $inputs)
-  }
-`;
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -30,38 +23,6 @@ const SignUp = () => {
   const [error, setError] = useState(false);
   const [showPassword, setShowPassord] = useState(false);
   const history = useHistory();
-
-  const { mutate, isLoading } = useRegisterMutation<Error>(
-    graphqlRequestClient("sgfdgdf"),
-    {
-      onSuccess: ({ register }) => {
-        console.log({ register });
-        if (register !== null) {
-          history.push("/");
-        } else {
-          setError(true);
-          setPassword("");
-          setConfirmPassword("");
-        }
-      },
-      onError: (error) => {
-        console.log({ error });
-      },
-    }
-  );
-
-  const Register = () => {
-    if (password === confirmPassword) {
-      mutate({
-        inputs: {
-          email: email,
-          password: password,
-          firstName: firstName,
-          lastName: lastName,
-        },
-      });
-    }
-  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -84,7 +45,6 @@ const SignUp = () => {
           sx={{ mt: 3 }}
           onSubmit={(e: any) => {
             e.preventDefault();
-            Register();
           }}
         >
           <Grid container spacing={2}>

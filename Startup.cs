@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using FoodPlanner.Database;
 using MongoDB.Driver;
 using HotChocolate;
 using FoodPlanner.Services;
@@ -27,7 +26,6 @@ namespace FoodPlanner
     {
 
       services.AddControllersWithViews();
-      services.AddScoped<IIdentityService, IdentityService>();
       services.AddHttpContextAccessor();
       // In production, the React files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
@@ -39,7 +37,8 @@ namespace FoodPlanner
         var uri = s.GetRequiredService<IConfiguration>()["MongoUri"];
         return new MongoClient(uri);
       });
-      services.AddSingleton<DbContext>();
+      services.AddSingleton<IRecipeService, RecipeService>(s => new RecipeService(s));
+      services.AddSingleton<IUserService, UserService>(s => new UserService(s));
 
       // Auth0
       services.AddAuthentication(options =>

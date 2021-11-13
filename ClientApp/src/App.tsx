@@ -27,8 +27,8 @@ const App = () => {
       <Route path="/myrecipes" component={MyRecipes} />
       <Route path="/profile" component={Profile} />
       <Route path="/recipe/:recipeId" component={Recipe} />
-
-      <Route exact path="/" component={isAuthenticated ? Profile : LoginNew} />
+      <Route path="/home" component={Home} />
+      <Route exact path="/" component={isAuthenticated ? Home : LoginNew} />
     </Layout>
   );
 };

@@ -1,4 +1,4 @@
-﻿using FoodPlanner.Database;
+﻿using FoodPlanner.Services;
 using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Data;
@@ -15,10 +15,9 @@ namespace FoodPlanner.API
   {
     [UseFiltering]
     [UseSorting]
-    public async Task<List<Recipe>> GetRecipes([Service] DbContext db)
+    public async Task<List<Recipe>> GetRecipes([Service] IRecipeService recipeService)
     {
-      //await db.AddRecipeAsync(recipe);
-      return await db.GetRecipesAsync();
+      return await recipeService.GetAllRecipesAsync();
     }
 
     [Authorize]
@@ -27,16 +26,16 @@ namespace FoodPlanner.API
       return contextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
     }
 
-    public async Task<Recipe> GetRecipe([Service] DbContext db, string recipeId)
+    public async Task<Recipe> GetRecipe([Service] IRecipeService recipeService, string recipeId)
     {
-      return await db.GetRecipeAsync(recipeId);
+      return await recipeService.GetRecipeByIdAsync(recipeId);
     }
 
     [Authorize]
-    public async Task<List<Recipe>> GetMyRecipes([Service] DbContext db, [Service] IHttpContextAccessor contextAccessor)
+    public async Task<List<Recipe>> GetMyRecipes([Service] IRecipeService recipeService, [Service] IHttpContextAccessor contextAccessor)
     {
       var id = contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-      return await db.GetMyRecipesAsync(id);
+      return await recipeService.GetUserSavedRecipesAsync(id);
     }
   }
 }

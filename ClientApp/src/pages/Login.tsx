@@ -14,21 +14,11 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import graphqlRequestClient from "../clients/graphqlRequestClient";
-import { useUserLoginMutation } from "../gql";
 import { AuthStatus, AuthTokens } from "../state/state";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAuth0 } from "@auth0/auth0-react";
-
-gql`
-  mutation UserLogin($inputs: UserInput!) {
-    login(user: $inputs) {
-      access
-      refresh
-    }
-  }
-`;
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -39,40 +29,15 @@ const Login = () => {
   const [error, setError] = useState(false);
   const [showPassword, setShowPassord] = useState(false);
   const history = useHistory();
-  const { user, isAuthenticated, loginWithRedirect, getAccessTokenSilently } =
-    useAuth0();
+  const {
+    user,
+    isAuthenticated,
+    loginWithRedirect,
+    getAccessTokenSilently,
+    isLoading,
+  } = useAuth0();
   const [userMetadata, setUserMetadata] = useState(null);
   console.log({ isAuthenticated });
-
-  const { isLoading, mutate } = useUserLoginMutation<Error>(
-    graphqlRequestClient(accessToken),
-    {
-      onSuccess: ({ login }) => {
-        console.log({ login });
-        if (login !== null) {
-          setAccessToken(login?.access ?? "");
-          setRefreshToken(login?.refresh ?? "");
-          setLoggedIn(true);
-          history.push("/");
-        } else {
-          setError(true);
-          setPassword("");
-        }
-      },
-      onError: (error) => {
-        console.log({ error });
-      },
-    }
-  );
-
-  const LogIn = () => {
-    mutate({
-      inputs: {
-        email: email,
-        password: password,
-      },
-    });
-  };
 
   useEffect(() => {
     const getUserMetadata = async () => {
@@ -129,7 +94,6 @@ const Login = () => {
           component="form"
           onSubmit={(e: any) => {
             e.preventDefault();
-            LogIn();
           }}
           sx={{ mt: (theme) => theme.spacing(1) }}
         >
