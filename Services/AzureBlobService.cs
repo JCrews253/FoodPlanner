@@ -29,10 +29,10 @@ namespace FoodPlanner.Services
     // <inheritdoc />
     public async Task<string> UploadPhoto(string photo)
     {
-      var config = _provider.GetRequiredService<IConfiguration>();
+      var config = _provider.GetRequiredService<IConfiguration>().GetSection("AzureStorage");
       var containerClient = new BlobContainerClient(config["ConnectionString"], config["Container"]);
       var blobClient = containerClient.GetBlobClient(Guid.NewGuid().ToString());
-      var bytes = Convert.FromBase64String(photo);
+      var bytes = Convert.FromBase64String(photo.Split(',')[1]);
       using (var ms = new MemoryStream(bytes))
       {
         await blobClient.UploadAsync(ms);

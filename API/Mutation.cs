@@ -18,7 +18,7 @@ namespace FoodPlanner.API
       return JsonConvert.DeserializeObject<T>(jsonData);
     }
 
-    public async Task<bool> AddRecipe([Service] IRecipeService recipeService, RecipeInput recipe)
+    public async Task<bool> NewRecipe([Service] IRecipeService recipeService, RecipeInput recipe)
     {
       Recipe newRecipe = ConvertToType<Recipe>(recipe.GetInputObject());
       await recipeService.AddRecipeAsync(newRecipe);

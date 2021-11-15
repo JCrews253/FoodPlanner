@@ -55,9 +55,9 @@ input RecipeInput {
 }
 
 input RecipeIngredientInput {
-  Ingredient: String!
-  Amount: Float!
-  Unit: String
+  ingredient: String!
+  amount: Float!
+  unit: String
 }
 
 input RecipeTimeInput {

@@ -34,7 +34,7 @@ namespace GraphQLCodeGen {
     public record Recipe(string Description, string Id, List<RecipeIngredient> Ingredients, string Name, string Photo, List<string> Steps, List<string> Tags, List<RecipeTime> Times) {
       #region members
       public string Description { get; init; } = Description;
-
+    
       [BsonRepresentation(BsonType.ObjectId)]
       public string Id { get; init; } = Id;
     
@@ -69,12 +69,12 @@ namespace GraphQLCodeGen {
     public class RecipeIngredientInput {
       #region members
       [Required]
-      public double Amount { get; set; }
+      public double amount { get; set; }
     
       [Required]
-      public string Ingredient { get; set; }
+      public string ingredient { get; set; }
     
-      public string Unit { get; set; }
+      public string unit { get; set; }
       #endregion
     
       #region methods

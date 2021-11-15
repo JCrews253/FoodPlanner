@@ -9,6 +9,14 @@ import {
 import gql from "graphql-tag";
 import React, { useState } from "react";
 import { useHistory } from "react-router";
+import { useRecoilValue } from "recoil";
+import graphqlRequestClient from "../clients/graphqlRequestClient";
+import {
+  RecipeIngredientInput,
+  RecipeTimeInput,
+  useNewRecipeMutation,
+} from "../gql";
+import { AuthTokens } from "../state/state";
 
 gql`
   mutation NewRecipe($inputs: RecipeInput!) {
@@ -20,8 +28,35 @@ const AddRecipe = () => {
   const history = useHistory();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [photoUrl, setPhotoUrl] = useState(
+    "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg"
+  );
   const [steps, setSteps] = useState([""]);
-  const [ingredients, setIngredients] = useState([""]);
+  const [ingredients, setIngredients] = useState<RecipeIngredientInput[]>([]);
+  const [cookTime, setCookTime] = useState<RecipeTimeInput>({
+    name: "Cook Time",
+    time: "",
+  });
+  const [prepTime, setPrepTime] = useState<RecipeTimeInput>({
+    name: "Prep Time",
+    time: "",
+  });
+  const [tags, setTags] = useState<string[] | undefined>();
+  const accessToken = useRecoilValue(AuthTokens.access);
+  const { mutate: newRecipeMutation } = useNewRecipeMutation(
+    graphqlRequestClient(accessToken)
+  );
+
+  const ConvertToBase64 = async (file: File) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      console.log("photo success");
+      setPhotoUrl(reader.result as string);
+    };
+    reader.onerror = () => console.log("photo upload error");
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -35,13 +70,34 @@ const AddRecipe = () => {
         <Typography component="h1" variant="h5">
           New Recipe
         </Typography>
-        <Box component="form" onSubmit={() => {}} sx={{ mt: 3 }}>
+        <Box sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField required fullWidth label="Recipe Name" />
+              <TextField
+                required
+                fullWidth
+                label="Recipe Name"
+                onChange={(e) => setName(e.currentTarget.value)}
+              />
             </Grid>
             <Grid item xs={12}>
-              <TextField fullWidth label="Description" />
+              <TextField
+                fullWidth
+                label="Description"
+                onChange={(e) => setDescription(e.currentTarget.value)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <input
+                type="file"
+                onChange={(e) => {
+                  var files = e.currentTarget.files;
+                  if (files && files.length > 0) {
+                    var file = files[0];
+                    ConvertToBase64(file);
+                  }
+                }}
+              />
             </Grid>
             <Grid item container xs={12}>
               <Grid item xs={12}>
@@ -98,36 +154,79 @@ const AddRecipe = () => {
                   Ingredients:
                 </Typography>
               </Grid>
-              {ingredients.map((ingredient, i) => {
-                return (
-                  <Grid
-                    item
-                    xs={12}
-                    sx={{
-                      mb: 2,
-                    }}
-                    key={`ingredient-${i}-grid`}
-                  >
-                    <TextField
-                      required={i === 0}
-                      fullWidth
-                      label={`Ingredient ${i + 1}`}
-                      value={ingredient}
-                      onChange={(e) => {
-                        let newIngredients = [...ingredients];
-                        newIngredients[i] = e.currentTarget.value;
-                        setIngredients(newIngredients);
+              {ingredients.length > 0 ? (
+                ingredients.map((ingredient, i) => {
+                  return (
+                    <Grid
+                      item
+                      xs={12}
+                      sx={{
+                        mb: 2,
                       }}
-                      key={`ingredient-${i}-input`}
-                    />
-                  </Grid>
-                );
-              })}
+                      key={`ingredient-${i}-grid`}
+                    >
+                      <TextField
+                        required={i === 0}
+                        fullWidth
+                        label={`Ingredient ${i + 1}`}
+                        value={ingredient.ingredient}
+                        onChange={(e) => {
+                          let newIngredients = [...ingredients];
+                          newIngredients[i] = {
+                            amount: 1.0,
+                            ingredient: e.currentTarget.value,
+                            unit: "test",
+                          };
+                          setIngredients(newIngredients);
+                        }}
+                        key={`ingredient-${i}-input`}
+                      />
+                    </Grid>
+                  );
+                })
+              ) : (
+                <Grid
+                  item
+                  xs={12}
+                  sx={{
+                    mb: 2,
+                  }}
+                  key={`ingredient-1-grid`}
+                >
+                  <TextField
+                    required
+                    fullWidth
+                    label={`Ingredient 1`}
+                    onChange={(e) => {
+                      let newIngredients = [
+                        ...ingredients,
+                        {
+                          amount: 1,
+                          ingredient: e.currentTarget.value,
+                          unit: "test",
+                        },
+                      ];
+                      // newIngredients[i] = e.currentTarget.value;
+                      setIngredients(newIngredients);
+                    }}
+                    key={`ingredient-1-input`}
+                  />
+                </Grid>
+              )}
               <Grid item xs={12}>
                 <Button
                   variant="contained"
                   sx={{ mb: 2 }}
-                  onClick={() => setIngredients((old) => [...old, ""])}
+                  onClick={() => {
+                    setIngredients((old) => [
+                      ...old,
+                      {
+                        amount: 1,
+                        ingredient: "",
+                        unit: "test",
+                      },
+                    ]);
+                  }}
                 >
                   Add Ingredient
                 </Button>
@@ -136,15 +235,29 @@ const AddRecipe = () => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
+                required
                 label="Prep Time"
                 placeholder="E.g. 1h 10m"
+                onChange={(e) =>
+                  setPrepTime({
+                    name: "Prep Time",
+                    time: e.currentTarget.value,
+                  })
+                }
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 fullWidth
+                required
                 label="Cook Time"
                 placeholder="E.g. 4h 30m"
+                onChange={(e) =>
+                  setCookTime({
+                    name: "Cook Time",
+                    time: e.currentTarget.value,
+                  })
+                }
               />
             </Grid>
           </Grid>
@@ -153,7 +266,19 @@ const AddRecipe = () => {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
-            onSubmit={(e) => e.preventDefault()}
+            onClick={() => {
+              newRecipeMutation({
+                inputs: {
+                  name: name,
+                  description: description,
+                  steps: steps,
+                  ingredients: ingredients,
+                  times: [prepTime, cookTime],
+                  photo: photoUrl,
+                  tags: tags,
+                },
+              });
+            }}
           >
             Save
           </Button>

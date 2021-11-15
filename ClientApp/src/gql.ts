@@ -68,9 +68,9 @@ export type RecipeIngredient = {
 };
 
 export type RecipeIngredientInput = {
-  Amount: Scalars['Float'];
-  Ingredient: Scalars['String'];
-  Unit?: Maybe<Scalars['String']>;
+  amount: Scalars['Float'];
+  ingredient: Scalars['String'];
+  unit?: Maybe<Scalars['String']>;
 };
 
 export type RecipeInput = {

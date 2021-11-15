@@ -21,7 +21,7 @@ gql`
 
 const MyRecipes = () => {
   const accessToken = useRecoilValue(AuthTokens.access);
-  const { data, isLoading } = useMyRecipesQuery(
+  const { data, isLoading, refetch } = useMyRecipesQuery(
     graphqlRequestClient(accessToken)
   );
   return (
@@ -47,6 +47,7 @@ const MyRecipes = () => {
                 "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
               }
               saved
+              onSave={refetch}
             />
           );
         })

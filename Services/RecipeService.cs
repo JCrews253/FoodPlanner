@@ -61,7 +61,17 @@ namespace FoodPlanner.Services
       var photoUrl = await azureBlobService.UploadPhoto(recipe.Photo);
 
       //var newRecipe = new Recipe(recipe.cookTime, recipe.description, ObjectId.GenerateNewId().ToString(), (List<RecipeIngredientInput>)recipe.ingredients, recipe.name, photoUrls, recipe.prepTime, recipe.steps, recipe.tags);
-      //await _recipesCollection.InsertOneAsync(recipe with { Id = ObjectId.GenerateNewId().ToString(), photos = photoUrls.ToList() });
+      var newRecipe = new Recipe( 
+        Description: recipe.Description,
+        Id: recipe.Id,
+        Ingredients: recipe.Ingredients,
+        Name: recipe.Name,
+        Steps: recipe.Steps,
+        Photo: photoUrl,
+        Tags: recipe.Tags,
+        Times: recipe.Times
+      );
+      await _recipes.InsertOneAsync(newRecipe with { Id = ObjectId.GenerateNewId().ToString() });
     }
   }
 }

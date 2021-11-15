@@ -29,6 +29,7 @@ interface RecipeCardProps {
   photo: string;
   description: string;
   saved: boolean;
+  onSave?: () => void;
 }
 
 const RecipeCard = ({
@@ -37,6 +38,7 @@ const RecipeCard = ({
   photo,
   description,
   saved,
+  onSave,
 }: RecipeCardProps) => {
   const accessToken = useRecoilValue(AuthTokens.access);
   const [internalSaved, setInternalSaved] = useState(saved);
@@ -45,6 +47,7 @@ const RecipeCard = ({
     {
       onSuccess: () => {
         console.log("save success");
+        onSave && onSave();
       },
       onError: (error) => {
         console.log({ error });

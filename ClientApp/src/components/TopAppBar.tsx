@@ -18,7 +18,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 const TopAppBar = () => {
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const setAccessToken = useSetRecoilState(AuthTokens.access);
-  const { isAuthenticated, loginWithRedirect, getAccessTokenSilently } =
+  const { user, isAuthenticated, loginWithRedirect, getAccessTokenSilently } =
     useAuth0();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const TopAppBar = () => {
         });
         setAccessToken(accessToken);
       } catch {
-        console.log("error");
+        console.log("failed to get token");
       }
     };
 
@@ -41,7 +41,7 @@ const TopAppBar = () => {
 
   return (
     <>
-      <Box>
+      <Box sx={{ zIndex: 10 }}>
         <AppBar position="static" color="primary">
           <Toolbar>
             {isAuthenticated ? (
@@ -61,7 +61,19 @@ const TopAppBar = () => {
             </Typography>
             {isAuthenticated ? (
               <IconButton size="large" color="inherit">
-                <AccountCircle />
+                {user?.picture ? (
+                  <img
+                    src={user.picture}
+                    alt={""}
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                ) : (
+                  <AccountCircle />
+                )}
               </IconButton>
             ) : (
               <Button color="inherit" onClick={() => loginWithRedirect()}>

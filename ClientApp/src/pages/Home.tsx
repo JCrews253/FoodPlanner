@@ -28,12 +28,13 @@ gql`
 
 const Home = () => {
   const accessToken = useRecoilValue(AuthTokens.access);
+  const { data: myRecipes, refetch } = useSavedRecipeIdsQuery(
+    graphqlRequestClient(accessToken)
+  );
   const { data, isLoading } = useAllRecipesQuery(
     graphqlRequestClient(accessToken)
   );
-  const { data: myRecipes } = useSavedRecipeIdsQuery(
-    graphqlRequestClient(accessToken)
-  );
+
   return (
     <Box
       id="box"
@@ -56,6 +57,7 @@ const Home = () => {
                 r.photo ??
                 "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
               }
+              onSave={refetch}
               saved={myRecipes?.myRecipes.some((m) => m.id === r.id) ?? false}
             />
           );

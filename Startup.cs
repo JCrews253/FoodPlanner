@@ -39,6 +39,7 @@ namespace FoodPlanner
       });
       services.AddSingleton<IRecipeService, RecipeService>(s => new RecipeService(s));
       services.AddSingleton<IUserService, UserService>(s => new UserService(s));
+      services.AddSingleton<IAzureBlobService, AzureBlobService>(s => new AzureBlobService(s));
 
       // Auth0
       services.AddAuthentication(options =>

@@ -16,9 +16,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 const App = () => {
   const loggedIn = useRecoilValue(AuthStatus.loggedIn);
   const { user, isAuthenticated, isLoading } = useAuth0();
-  console.log({ user });
-  console.log({ isAuthenticated });
-  console.log({ isLoading });
   return (
     <Layout>
       <Route path="/login" component={LoginNew} />
