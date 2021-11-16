@@ -1,15 +1,18 @@
 import { GraphQLClient } from "graphql-request";
+import { useRecoilValue } from "recoil";
+import { AuthTokens } from "../state/state";
 
-const graphqlRequestClient = (token: string) =>
-  new GraphQLClient(
+export const GraphqlRequestClient = () => {
+  const accessToken = useRecoilValue(AuthTokens.access);
+
+  return new GraphQLClient(
     process.env.NODE_ENV === "development"
       ? "https://localhost:44360/graphql"
       : "https://foodplanner20211113152303.azurewebsites.net/graphql",
     {
       headers: {
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${accessToken}`,
       },
     }
   );
-
-export default graphqlRequestClient;
+};

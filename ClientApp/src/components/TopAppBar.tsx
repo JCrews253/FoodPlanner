@@ -7,37 +7,14 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import React, { useEffect, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { AuthStatus, AuthTokens } from "../state/state";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import AppBarDrawer from "./AppBarDrawer";
 import { AccountCircle } from "@mui/icons-material";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const TopAppBar = () => {
   const [showMenu, setShowMenu] = useState<boolean>(false);
-  const setAccessToken = useSetRecoilState(AuthTokens.access);
-  const { user, isAuthenticated, loginWithRedirect, getAccessTokenSilently } =
-    useAuth0();
-
-  useEffect(() => {
-    const getUserMetadata = async () => {
-      const domain = "dev-r1o3z-ez.us.auth0.com";
-      console.log("getting token");
-      try {
-        const accessToken = await getAccessTokenSilently({
-          audience: `https://${domain}/api/v2/`,
-          scope: "read:current_user",
-        });
-        setAccessToken(accessToken);
-      } catch {
-        console.log("failed to get token");
-      }
-    };
-
-    getUserMetadata();
-  }, [getAccessTokenSilently]);
+  const { user, isAuthenticated, loginWithRedirect } = useAuth0();
 
   return (
     <>

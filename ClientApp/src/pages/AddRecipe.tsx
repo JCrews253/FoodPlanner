@@ -8,15 +8,13 @@ import {
 } from "@mui/material";
 import gql from "graphql-tag";
 import React, { useState } from "react";
-import { useHistory } from "react-router";
-import { useRecoilValue } from "recoil";
-import graphqlRequestClient from "../clients/graphqlRequestClient";
+import { useHistory } from "react-router-dom";
+import { GraphqlRequestClient } from "../clients/GraphqlRequestClient";
 import {
   RecipeIngredientInput,
   RecipeTimeInput,
   useNewRecipeMutation,
 } from "../gql";
-import { AuthTokens } from "../state/state";
 
 gql`
   mutation NewRecipe($inputs: RecipeInput!) {
@@ -42,16 +40,15 @@ const AddRecipe = () => {
     time: "",
   });
   const [tags, setTags] = useState<string[] | undefined>();
-  const accessToken = useRecoilValue(AuthTokens.access);
-  const { mutate: newRecipeMutation } = useNewRecipeMutation(
-    graphqlRequestClient(accessToken)
+  const { isLoading, mutate: newRecipeMutation } = useNewRecipeMutation(
+    GraphqlRequestClient(),
+    { onSuccess: () => history.push("/") }
   );
 
   const ConvertToBase64 = async (file: File) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      console.log("photo success");
       setPhotoUrl(reader.result as string);
     };
     reader.onerror = () => console.log("photo upload error");
@@ -260,12 +257,21 @@ const AddRecipe = () => {
                 }
               />
             </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Tags"
+                placeholder="Italian, Pizza"
+                onChange={(e) => setTags(e.currentTarget.value.split(","))}
+              />
+            </Grid>
           </Grid>
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={isLoading}
             onClick={() => {
               newRecipeMutation({
                 inputs: {

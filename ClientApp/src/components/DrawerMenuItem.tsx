@@ -3,10 +3,8 @@ import {
   ListItemIcon,
   ListItemText,
   SvgIconProps,
-  SvgIconTypeMap,
 } from "@mui/material";
-import { OverridableComponent } from "@mui/material/OverridableComponent";
-import React, { ReactElement } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 interface DrawerMenuItemProps {

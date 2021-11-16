@@ -1,25 +1,52 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route } from "react-router";
-import { useRecoilValue } from "recoil";
 import Home from "./pages/Home";
 import Layout from "./components/Layout";
-import Login from "./pages/Login";
 import AddRecipe from "./pages/AddRecipe";
 import Recipe from "./pages/Recipe";
-import SignUp from "./pages/SignUp";
-import { AuthStatus } from "./state/state";
 import MyRecipes from "./pages/MyRecipes";
 import LoginNew from "./pages/LoginNew";
 import Profile from "./pages/Profile";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useSetRecoilState } from "recoil";
+import { AuthTokens } from "./state/state";
 
 const App = () => {
-  const loggedIn = useRecoilValue(AuthStatus.loggedIn);
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const {
+    isLoading,
+    isAuthenticated,
+    getAccessTokenSilently,
+    loginWithRedirect,
+  } = useAuth0();
+  const setAccessToken = useSetRecoilState(AuthTokens.access);
+  useEffect(() => {
+    const getUserMetadata = async () => {
+      const domain = "dev-r1o3z-ez.us.auth0.com";
+      try {
+        const accessToken = await getAccessTokenSilently({
+          audience: `https://${domain}/api/v2/`,
+          scope: "read:current_user",
+        });
+        setAccessToken(accessToken);
+      } catch {
+        console.log("failed to get token");
+      }
+    };
+
+    if (isAuthenticated) {
+      getUserMetadata();
+    }
+  }, [getAccessTokenSilently, isAuthenticated, setAccessToken]);
+
+  useEffect(() => {
+    if (!isAuthenticated && !isLoading) {
+      loginWithRedirect();
+    }
+  }, [isLoading, isAuthenticated, loginWithRedirect]);
+
   return (
     <Layout>
       <Route path="/login" component={LoginNew} />
-      <Route path="/signup" component={SignUp} />
       <Route path="/addrecipe" component={AddRecipe} />
       <Route path="/myrecipes" component={MyRecipes} />
       <Route path="/profile" component={Profile} />

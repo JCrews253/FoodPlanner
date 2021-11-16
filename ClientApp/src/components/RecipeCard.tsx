@@ -9,12 +9,10 @@ import {
   Typography,
 } from "@mui/material";
 import gql from "graphql-tag";
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import graphqlRequestClient from "../clients/graphqlRequestClient";
+import { GraphqlRequestClient } from "../clients/GraphqlRequestClient";
 import { useSaveRecipeMutation } from "../gql";
-import { AuthTokens } from "../state/state";
 import LoadingIndicator from "./LoadingIndicator";
 
 gql`
@@ -40,13 +38,10 @@ const RecipeCard = ({
   saved,
   onSave,
 }: RecipeCardProps) => {
-  const accessToken = useRecoilValue(AuthTokens.access);
-  const [internalSaved, setInternalSaved] = useState(saved);
   const { isLoading, mutate } = useSaveRecipeMutation<Error>(
-    graphqlRequestClient(accessToken),
+    GraphqlRequestClient(),
     {
       onSuccess: () => {
-        console.log("save success");
         onSave && onSave();
       },
       onError: (error) => {
@@ -88,8 +83,12 @@ const RecipeCard = ({
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" onClick={() => mutate({ recipeId: id })}>
-          {saved ? "Unsave" : "Save"}
+        <Button
+          size="small"
+          onClick={() => mutate({ recipeId: id })}
+          disabled={isLoading}
+        >
+          {isLoading ? <LoadingIndicator /> : saved ? "Unsave" : "Save"}
         </Button>
         <Button size="small">Add to Calendar</Button>
       </CardActions>

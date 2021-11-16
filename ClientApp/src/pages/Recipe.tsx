@@ -1,13 +1,11 @@
 import React from "react";
 import gql from "graphql-tag";
 import { useParams } from "react-router";
-import graphqlRequestClient from "../clients/graphqlRequestClient";
+import { GraphqlRequestClient } from "../clients/GraphqlRequestClient";
 import { useGetRecipeQuery } from "../gql";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import LoadingIndicator from "../components/LoadingIndicator";
 import InvalidUrl from "../components/InvalidUrl";
-import { useRecoilValue } from "recoil";
-import { AuthTokens } from "../state/state";
 
 gql`
   query GetRecipe($recipeId: String!) {
@@ -35,15 +33,10 @@ interface RecipeRouterParams {
 }
 
 const Recipe = () => {
-  const accessToken = useRecoilValue(AuthTokens.access);
   const { recipeId } = useParams<RecipeRouterParams>();
-  const { data, isLoading } = useGetRecipeQuery(
-    graphqlRequestClient(accessToken),
-    {
-      recipeId: recipeId,
-    }
-  );
-  console.log({ data });
+  const { data, isLoading } = useGetRecipeQuery(GraphqlRequestClient(), {
+    recipeId: recipeId,
+  });
   return (
     <>
       {isLoading ? (
@@ -78,6 +71,7 @@ const Recipe = () => {
                   data?.recipe?.photo ??
                   "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
                 }
+                alt="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
               />
             </Box>
             <Typography

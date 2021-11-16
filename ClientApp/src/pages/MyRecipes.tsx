@@ -1,12 +1,10 @@
 import { Box } from "@mui/material";
 import gql from "graphql-tag";
 import React from "react";
-import { useRecoilValue } from "recoil";
-import graphqlRequestClient from "../clients/graphqlRequestClient";
+import { GraphqlRequestClient } from "../clients/GraphqlRequestClient";
 import LoadingIndicator from "../components/LoadingIndicator";
 import RecipeCard from "../components/RecipeCard";
 import { useMyRecipesQuery } from "../gql";
-import { AuthTokens } from "../state/state";
 
 gql`
   query MyRecipes {
@@ -20,9 +18,8 @@ gql`
 `;
 
 const MyRecipes = () => {
-  const accessToken = useRecoilValue(AuthTokens.access);
   const { data, isLoading, refetch } = useMyRecipesQuery(
-    graphqlRequestClient(accessToken)
+    GraphqlRequestClient()
   );
   return (
     <Box
