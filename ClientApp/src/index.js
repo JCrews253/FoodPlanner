@@ -32,6 +32,7 @@ ReactDOM.render(
     audience="https://dev-r1o3z-ez.us.auth0.com/api/v2/"
     scope="read:current_user update:current_user_metadata"
     useRefreshTokens={true}
+    cacheLocation="localstorage"
   >
     <RecoilRoot>
       <ThemeProvider>

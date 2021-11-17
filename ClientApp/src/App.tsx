@@ -12,19 +12,13 @@ import { useSetRecoilState } from "recoil";
 import { AuthTokens } from "./state/state";
 
 const App = () => {
-  const {
-    isLoading,
-    isAuthenticated,
-    getAccessTokenSilently,
-    loginWithRedirect,
-  } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const setAccessToken = useSetRecoilState(AuthTokens.access);
   useEffect(() => {
     const getUserMetadata = async () => {
-      const domain = "dev-r1o3z-ez.us.auth0.com";
       try {
         const accessToken = await getAccessTokenSilently({
-          audience: `https://${domain}/api/v2/`,
+          audience: "https://dev-r1o3z-ez.us.auth0.com/api/v2/",
           scope: "read:current_user",
         });
         setAccessToken(accessToken);
@@ -37,12 +31,6 @@ const App = () => {
       getUserMetadata();
     }
   }, [getAccessTokenSilently, isAuthenticated, setAccessToken]);
-
-  useEffect(() => {
-    if (!isAuthenticated && !isLoading) {
-      loginWithRedirect();
-    }
-  }, [isLoading, isAuthenticated, loginWithRedirect]);
 
   return (
     <Layout>
