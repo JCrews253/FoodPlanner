@@ -23,7 +23,7 @@ type Recipe {
   description: String!
   ingredients: [RecipeIngredient!]!
   steps: [String!]!
-  tags: [String]!
+  tags: [String!]!
   times: [RecipeTime!]!
 }
 

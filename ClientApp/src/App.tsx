@@ -40,7 +40,7 @@ const App = () => {
       <Route path="/profile" component={Profile} />
       <Route path="/recipe/:recipeId" component={Recipe} />
       <Route path="/home" component={Home} />
-      <Route exact path="/" component={isAuthenticated ? Home : LoginNew} />
+      <Route exact path="/" component={Home} />
     </Layout>
   );
 };

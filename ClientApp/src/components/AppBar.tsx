@@ -1,5 +1,5 @@
 import {
-  AppBar,
+  AppBar as MuiAppBar,
   Box,
   Button,
   IconButton,
@@ -12,14 +12,14 @@ import AppBarDrawer from "./AppBarDrawer";
 import { AccountCircle } from "@mui/icons-material";
 import { useAuth0 } from "@auth0/auth0-react";
 
-const TopAppBar = () => {
+const AppBar = () => {
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const { user, isAuthenticated, loginWithRedirect } = useAuth0();
 
   return (
     <>
       <Box sx={{ zIndex: 10 }}>
-        <AppBar position="static" color="primary">
+        <MuiAppBar position="static" color="primary">
           <Toolbar>
             {isAuthenticated ? (
               <IconButton
@@ -58,7 +58,7 @@ const TopAppBar = () => {
               </Button>
             )}
           </Toolbar>
-        </AppBar>
+        </MuiAppBar>
       </Box>
       <AppBarDrawer
         open={showMenu}
@@ -69,4 +69,4 @@ const TopAppBar = () => {
   );
 };
 
-export default TopAppBar;
+export default AppBar;

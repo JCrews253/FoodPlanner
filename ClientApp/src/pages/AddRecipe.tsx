@@ -159,24 +159,40 @@ const AddRecipe = () => {
                       xs={12}
                       sx={{
                         mb: 2,
+                        display: "flex",
                       }}
                       key={`ingredient-${i}-grid`}
                     >
                       <TextField
                         required={i === 0}
+                        autoFocus
                         fullWidth
                         label={`Ingredient ${i + 1}`}
                         value={ingredient.ingredient}
                         onChange={(e) => {
                           let newIngredients = [...ingredients];
                           newIngredients[i] = {
+                            ...newIngredients[i],
                             amount: 1.0,
                             ingredient: e.currentTarget.value,
-                            unit: "test",
                           };
                           setIngredients(newIngredients);
                         }}
                         key={`ingredient-${i}-input`}
+                        sx={{ marginRight: 2 }}
+                      />
+                      <TextField
+                        label="Unit"
+                        key={`ingredient-${i}-unit`}
+                        placeholder="E.g. teaspoons"
+                        onChange={(e) => {
+                          let newIngredients = [...ingredients];
+                          newIngredients[i] = {
+                            ...newIngredients[i],
+                            unit: e.currentTarget.value,
+                          };
+                          setIngredients(newIngredients);
+                        }}
                       />
                     </Grid>
                   );
@@ -200,13 +216,27 @@ const AddRecipe = () => {
                         {
                           amount: 1,
                           ingredient: e.currentTarget.value,
-                          unit: "test",
                         },
                       ];
-                      // newIngredients[i] = e.currentTarget.value;
                       setIngredients(newIngredients);
                     }}
                     key={`ingredient-1-input`}
+                  />
+                  <TextField
+                    label="Unit"
+                    key={`ingredient-1-unit`}
+                    placeholder="E.g. teaspoons"
+                    onChange={(e) => {
+                      let newIngredients = [
+                        ...ingredients,
+                        {
+                          ingredient: "",
+                          amount: 0,
+                          unit: e.currentTarget.value,
+                        },
+                      ];
+                      setIngredients(newIngredients);
+                    }}
                   />
                 </Grid>
               )}

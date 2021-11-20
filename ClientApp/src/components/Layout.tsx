@@ -1,7 +1,7 @@
 import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
-import TopAppBar from "./TopAppBar";
+import AppBar from "./AppBar";
 
 interface LayoutProps {
   children: any;
@@ -18,7 +18,7 @@ const Layout = ({ children }: LayoutProps) => {
         overflow: "hidden",
       }}
     >
-      <TopAppBar />
+      <AppBar />
       <Container
         sx={{
           height: "100%",

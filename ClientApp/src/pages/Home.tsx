@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { Box } from "@mui/material";
 import gql from "graphql-tag";
 import React from "react";
@@ -24,8 +25,13 @@ gql`
 `;
 
 const Home = () => {
+  const { isAuthenticated } = useAuth0();
   const { data: myRecipes, refetch } = useSavedRecipeIdsQuery(
-    GraphqlRequestClient()
+    GraphqlRequestClient(),
+    undefined,
+    {
+      enabled: isAuthenticated,
+    }
   );
   const { data, isLoading } = useAllRecipesQuery(GraphqlRequestClient());
 
