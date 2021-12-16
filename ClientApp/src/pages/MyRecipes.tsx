@@ -28,6 +28,7 @@ const MyRecipes = () => {
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "center",
+        height: "100%",
       }}
     >
       {isLoading ? (
@@ -38,7 +39,6 @@ const MyRecipes = () => {
             <RecipeCard
               id={r.id}
               name={r.name}
-              description={r.description}
               photo={
                 r.photo ??
                 "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"

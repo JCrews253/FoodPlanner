@@ -1,27 +1,23 @@
 import { Box, CircularProgress } from "@mui/material";
 import React from "react";
 
-const LoadingIndicator = () => {
+interface LoadingIndicatorProps {
+  size?: number;
+}
+
+const LoadingIndicator = ({ size }: LoadingIndicatorProps) => {
   return (
     <Box
       id="loading indicator"
-      // sx={{
-      //   width: "100%",
-      //   height: "100%",
-      //   display: "flex",
-      //   justifyContent: "center",
-      //   alignItems: "center",
-      // }}
       sx={{
-        margin: "auto",
-        position: "absolute",
-        top: "50%",
-        bottom: "auto",
-        left: "50%",
-        right: "auto",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <CircularProgress color="primary" />
+      <CircularProgress color="primary" size={size ?? 40} />
     </Box>
   );
 };

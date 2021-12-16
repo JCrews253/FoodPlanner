@@ -19,9 +19,9 @@ type Mutation {
 type Recipe {
   id: ID!
   name: String!
-  photo: String!
+  photo: String
   description: String!
-  ingredients: [RecipeIngredient!]!
+  ingredients: [String!]!
   steps: [String!]!
   tags: [String!]!
   times: [RecipeTime!]!
@@ -32,12 +32,6 @@ type RecipeTime {
   time: String!
 }
 
-type RecipeIngredient {
-  ingredient: String!
-  amount: Float!
-  unit: String
-}
-
 type User {
   id: ID!
   userId: ID!
@@ -46,18 +40,12 @@ type User {
 
 input RecipeInput {
   name: String!
-  photo: String!
+  photo: String
   description: String!
-  ingredients: [RecipeIngredientInput!]!
+  ingredients: [String!]!
   steps: [String!]!
-  tags: [String]
+  tags: [String!]!
   times: [RecipeTimeInput!]!
-}
-
-input RecipeIngredientInput {
-  ingredient: String!
-  amount: Float!
-  unit: String
 }
 
 input RecipeTimeInput {

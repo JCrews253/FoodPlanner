@@ -25,19 +25,11 @@ interface RecipeCardProps {
   id: string;
   name: string;
   photo: string;
-  description: string;
   saved: boolean;
   onSave?: () => void;
 }
 
-const RecipeCard = ({
-  id,
-  name,
-  photo,
-  description,
-  saved,
-  onSave,
-}: RecipeCardProps) => {
+const RecipeCard = ({ id, name, photo, saved, onSave }: RecipeCardProps) => {
   const { isLoading, mutate } = useSaveRecipeMutation<Error>(
     GraphqlRequestClient(),
     {
@@ -51,7 +43,13 @@ const RecipeCard = ({
   );
   return (
     <Card
-      sx={{ maxWidth: 500, margin: 2, overflow: "unset", width: "100%" }}
+      sx={{
+        maxWidth: 500,
+        margin: 2,
+        overflow: "unset",
+        width: "100%",
+        height: "fit-content",
+      }}
       id="card"
     >
       <CardActionArea component={Link} to={`/recipe/${id}`}>
@@ -77,9 +75,6 @@ const RecipeCard = ({
           <Typography gutterBottom variant="h5" component="div">
             {name}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {description}
-          </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
@@ -87,10 +82,17 @@ const RecipeCard = ({
           size="small"
           onClick={() => mutate({ recipeId: id })}
           disabled={isLoading}
+          sx={{ minHeight: "30px" }}
         >
-          {isLoading ? <LoadingIndicator /> : saved ? "Unsave" : "Save"}
+          {isLoading ? (
+            <LoadingIndicator size={25} />
+          ) : saved ? (
+            "Unsave"
+          ) : (
+            "Save"
+          )}
         </Button>
-        <Button size="small">Add to Calendar</Button>
+        {/* <Button size="small">Add to Calendar</Button> */}
       </CardActions>
     </Card>
   );

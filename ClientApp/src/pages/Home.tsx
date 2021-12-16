@@ -52,7 +52,6 @@ const Home = () => {
             <RecipeCard
               id={r.id}
               name={r.name}
-              description={r.description}
               photo={
                 r.photo ??
                 "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"

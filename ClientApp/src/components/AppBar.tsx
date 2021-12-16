@@ -1,7 +1,6 @@
 import {
   AppBar as MuiAppBar,
   Box,
-  Button,
   IconButton,
   Toolbar,
   Typography,
@@ -9,13 +8,14 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import React, { useState } from "react";
 import AppBarDrawer from "./AppBarDrawer";
-import { AccountCircle } from "@mui/icons-material";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useHistory } from "react-router";
+import ProfileButton from "./buttons/ProfileButton";
 
 const AppBar = () => {
   const [showMenu, setShowMenu] = useState<boolean>(false);
-  const { user, isAuthenticated, loginWithRedirect } = useAuth0();
-
+  const { isAuthenticated } = useAuth0();
+  const history = useHistory();
   return (
     <>
       <Box sx={{ zIndex: 10 }}>
@@ -33,30 +33,15 @@ const AppBar = () => {
                 <MenuIcon />
               </IconButton>
             ) : null}
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1, cursor: "pointer" }}
+              onClick={() => history.push("/")}
+            >
               Food Planner
             </Typography>
-            {isAuthenticated ? (
-              <IconButton size="large" color="inherit">
-                {user?.picture ? (
-                  <img
-                    src={user.picture}
-                    alt={""}
-                    style={{
-                      width: "32px",
-                      height: "32px",
-                      borderRadius: "50%",
-                    }}
-                  />
-                ) : (
-                  <AccountCircle />
-                )}
-              </IconButton>
-            ) : (
-              <Button color="inherit" onClick={() => loginWithRedirect()}>
-                Login
-              </Button>
-            )}
+            <ProfileButton />
           </Toolbar>
         </MuiAppBar>
       </Box>

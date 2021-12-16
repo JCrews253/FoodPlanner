@@ -52,34 +52,21 @@ export type Recipe = {
   __typename?: 'Recipe';
   description: Scalars['String'];
   id: Scalars['ID'];
-  ingredients: Array<RecipeIngredient>;
+  ingredients: Array<Scalars['String']>;
   name: Scalars['String'];
-  photo: Scalars['String'];
+  photo?: Maybe<Scalars['String']>;
   steps: Array<Scalars['String']>;
-  tags: Array<Maybe<Scalars['String']>>;
+  tags: Array<Scalars['String']>;
   times: Array<RecipeTime>;
-};
-
-export type RecipeIngredient = {
-  __typename?: 'RecipeIngredient';
-  amount: Scalars['Float'];
-  ingredient: Scalars['String'];
-  unit?: Maybe<Scalars['String']>;
-};
-
-export type RecipeIngredientInput = {
-  amount: Scalars['Float'];
-  ingredient: Scalars['String'];
-  unit?: Maybe<Scalars['String']>;
 };
 
 export type RecipeInput = {
   description: Scalars['String'];
-  ingredients: Array<RecipeIngredientInput>;
+  ingredients: Array<Scalars['String']>;
   name: Scalars['String'];
-  photo: Scalars['String'];
+  photo?: Maybe<Scalars['String']>;
   steps: Array<Scalars['String']>;
-  tags?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags: Array<Scalars['String']>;
   times: Array<RecipeTimeInput>;
 };
 
@@ -118,7 +105,7 @@ export type NewRecipeMutation = { __typename?: 'Mutation', newRecipe: boolean };
 export type AllRecipesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllRecipesQuery = { __typename?: 'Query', recipes: Array<{ __typename?: 'Recipe', id: string, name: string, photo: string, description: string }> };
+export type AllRecipesQuery = { __typename?: 'Query', recipes: Array<{ __typename?: 'Recipe', id: string, name: string, photo?: Maybe<string>, description: string }> };
 
 export type SavedRecipeIdsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -128,14 +115,14 @@ export type SavedRecipeIdsQuery = { __typename?: 'Query', myRecipes: Array<{ __t
 export type MyRecipesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyRecipesQuery = { __typename?: 'Query', myRecipes: Array<{ __typename?: 'Recipe', id: string, name: string, photo: string, description: string }> };
+export type MyRecipesQuery = { __typename?: 'Query', myRecipes: Array<{ __typename?: 'Recipe', id: string, name: string, photo?: Maybe<string>, description: string }> };
 
 export type GetRecipeQueryVariables = Exact<{
   recipeId: Scalars['String'];
 }>;
 
 
-export type GetRecipeQuery = { __typename?: 'Query', recipe?: Maybe<{ __typename?: 'Recipe', name: string, photo: string, description: string, steps: Array<string>, tags: Array<Maybe<string>>, times: Array<{ __typename?: 'RecipeTime', name: string, time: string }>, ingredients: Array<{ __typename?: 'RecipeIngredient', amount: number, ingredient: string, unit?: Maybe<string> }> }> };
+export type GetRecipeQuery = { __typename?: 'Query', recipe?: Maybe<{ __typename?: 'Recipe', name: string, photo?: Maybe<string>, description: string, ingredients: Array<string>, steps: Array<string>, tags: Array<string>, times: Array<{ __typename?: 'RecipeTime', name: string, time: string }> }> };
 
 
 export const SaveRecipeDocument = `
@@ -251,11 +238,7 @@ export const GetRecipeDocument = `
       name
       time
     }
-    ingredients {
-      amount
-      ingredient
-      unit
-    }
+    ingredients
     steps
     tags
   }

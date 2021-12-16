@@ -31,14 +31,14 @@ namespace GraphQLCodeGen {
     #endregion
     
     #region Recipe
-    public record Recipe(string Description, string Id, List<RecipeIngredient> Ingredients, string Name, string Photo, List<string> Steps, List<string> Tags, List<RecipeTime> Times) {
+    public record Recipe(string Description, string Id, List<string> Ingredients, string Name, string Photo, List<string> Steps, List<string> Tags, List<RecipeTime> Times) {
       #region members
       public string Description { get; init; } = Description;
     
       [BsonRepresentation(BsonType.ObjectId)]
       public string Id { get; init; } = Id;
     
-      public List<RecipeIngredient> Ingredients { get; init; } = Ingredients;
+      public List<string> Ingredients { get; init; } = Ingredients;
     
       public string Name { get; init; } = Name;
     
@@ -53,54 +53,6 @@ namespace GraphQLCodeGen {
     }
     #endregion
     
-    #region RecipeIngredient
-    public record RecipeIngredient(double Amount, string Ingredient, string Unit) {
-      #region members
-      public double Amount { get; init; } = Amount;
-    
-      public string Ingredient { get; init; } = Ingredient;
-    
-      public string Unit { get; init; } = Unit;
-      #endregion
-    }
-    #endregion
-    
-    #region RecipeIngredientInput
-    public class RecipeIngredientInput {
-      #region members
-      [Required]
-      public double amount { get; set; }
-    
-      [Required]
-      public string ingredient { get; set; }
-    
-      public string unit { get; set; }
-      #endregion
-    
-      #region methods
-      public dynamic GetInputObject()
-      {
-        IDictionary<string, object> d = new System.Dynamic.ExpandoObject();
-    
-        var properties = GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-        foreach (var propertyInfo in properties)
-        {
-          var value = propertyInfo.GetValue(this);
-          var defaultValue = propertyInfo.PropertyType.IsValueType ? Activator.CreateInstance(propertyInfo.PropertyType) : null;
-    
-          var requiredProp = propertyInfo.GetCustomAttributes(typeof(RequiredAttribute), false).Length > 0;
-    
-          if (requiredProp || value != defaultValue)
-          {
-            d[propertyInfo.Name] = value;
-          }
-        }
-        return d;
-      }
-      #endregion
-    }
-    #endregion
-    
     #region RecipeInput
     public class RecipeInput {
       #region members
@@ -108,17 +60,17 @@ namespace GraphQLCodeGen {
       public string description { get; set; }
     
       [Required]
-      public List<RecipeIngredientInput> ingredients { get; set; }
+      public List<string> ingredients { get; set; }
     
       [Required]
       public string name { get; set; }
     
-      [Required]
       public string photo { get; set; }
     
       [Required]
       public List<string> steps { get; set; }
     
+      [Required]
       public List<string> tags { get; set; }
     
       [Required]

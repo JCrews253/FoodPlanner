@@ -57,10 +57,13 @@ namespace FoodPlanner.Services
 
     public async Task AddRecipeAsync(Recipe recipe)
     {
-      var azureBlobService = _provider.GetRequiredService<IAzureBlobService>();
-      var photoUrl = await azureBlobService.UploadPhoto(recipe.Photo);
+      string photoUrl = null;
+      if(recipe.Photo != null)
+      {
+        var azureBlobService = _provider.GetRequiredService<IAzureBlobService>();
+        photoUrl = await azureBlobService.UploadPhoto(recipe.Photo);
+      }
 
-      //var newRecipe = new Recipe(recipe.cookTime, recipe.description, ObjectId.GenerateNewId().ToString(), (List<RecipeIngredientInput>)recipe.ingredients, recipe.name, photoUrls, recipe.prepTime, recipe.steps, recipe.tags);
       var newRecipe = new Recipe( 
         Description: recipe.Description,
         Id: recipe.Id,

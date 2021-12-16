@@ -17,11 +17,7 @@ gql`
         name
         time
       }
-      ingredients {
-        amount
-        ingredient
-        unit
-      }
+      ingredients
       steps
       tags
     }
@@ -64,9 +60,9 @@ const Recipe = () => {
             >
               {data?.recipe?.name}
             </Typography>
-            <Box>
+            <Box sx={{ maxHeight: "" }}>
               <img
-                style={{ maxWidth: "100%", maxHeight: "100%" }}
+                style={{ maxWidth: "100%", maxHeight: "400px" }}
                 src={
                   data?.recipe?.photo ??
                   "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
@@ -129,6 +125,7 @@ const Recipe = () => {
             {data?.recipe?.ingredients.map((i, idx) => {
               return (
                 <Typography
+                  key={idx}
                   sx={{
                     alignSelf: "left",
                     width: "100%",
@@ -136,9 +133,7 @@ const Recipe = () => {
                     pl: 3,
                   }}
                   variant="body1"
-                >{`${idx + 1}) ${i.amount} ${i?.unit} ${
-                  i.ingredient
-                }`}</Typography>
+                >{`${idx + 1}) ${i}`}</Typography>
               );
             })}
             <Typography
@@ -154,6 +149,7 @@ const Recipe = () => {
             {data?.recipe?.steps.map((s, idx) => {
               return (
                 <Typography
+                  key={idx}
                   sx={{
                     alignSelf: "left",
                     width: "100%",
@@ -173,24 +169,28 @@ const Recipe = () => {
                 pb: 4,
               }}
             >
-              <Typography variant="h6">Tags:</Typography>
-              {data?.recipe?.tags.map((t, idx) => {
-                return (
-                  <Box
-                    sx={{
-                      border: "solid 1px black",
-                      borderRadius: "30px",
-                      ml: 2,
-                      pt: 0.5,
-                      pb: 0.5,
-                      pl: 2,
-                      pr: 2,
-                    }}
-                  >
-                    <Typography variant="body1">{t}</Typography>
-                  </Box>
-                );
-              })}
+              {data?.recipe?.tags && data.recipe.tags.length > 0 && (
+                <>
+                  <Typography variant="h6">Tags:</Typography>
+                  {data?.recipe?.tags?.map((t) => {
+                    return (
+                      <Box
+                        sx={{
+                          border: "solid 1px black",
+                          borderRadius: "30px",
+                          ml: 2,
+                          pt: 0.5,
+                          pb: 0.5,
+                          pl: 2,
+                          pr: 2,
+                        }}
+                      >
+                        <Typography variant="body1">{t}</Typography>
+                      </Box>
+                    );
+                  })}
+                </>
+              )}
             </Box>
           </Container>
         </Box>
