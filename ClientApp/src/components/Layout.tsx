@@ -10,7 +10,6 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <Box
-      id="app-frame"
       sx={{
         height: "100vh",
         display: "flex",
@@ -21,9 +20,10 @@ const Layout = ({ children }: LayoutProps) => {
       <AppBar />
       <Container
         sx={{
-          height: "100%",
+          display: "flex",
+          justifyContent: "center",
           overflowX: "hidden",
-          paddingBottom: "20px",
+          padding: "0px !important",
         }}
         maxWidth={false}
       >

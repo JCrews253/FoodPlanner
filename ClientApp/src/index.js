@@ -10,7 +10,7 @@ import { darkTheme, lightTheme } from "./Theme";
 import { CssBaseline, ThemeProvider as MuiThemeProvider } from "@mui/material";
 import { Auth0Provider } from "@auth0/auth0-react";
 
-const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
+// const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const rootElement = document.getElementById("root");
 
 const queryClient = new QueryClient();
@@ -39,7 +39,7 @@ ReactDOM.render(
         <CssBaseline />
         <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools />
-          <BrowserRouter basename={baseUrl}>
+          <BrowserRouter>
             <App />
           </BrowserRouter>
         </QueryClientProvider>

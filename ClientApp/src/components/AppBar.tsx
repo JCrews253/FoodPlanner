@@ -19,14 +19,14 @@ const AppBar = () => {
   return (
     <>
       <Box sx={{ zIndex: 10 }}>
-        <MuiAppBar position="static" color="primary">
+        <MuiAppBar position="static" color="primary" enableColorOnDark>
           <Toolbar>
             {isAuthenticated ? (
               <IconButton
                 size="large"
                 edge="start"
-                color="inherit"
                 aria-label="menu"
+                color="secondary"
                 sx={{ mr: 2 }}
                 onClick={() => setShowMenu(true)}
               >
@@ -36,7 +36,11 @@ const AppBar = () => {
             <Typography
               variant="h6"
               component="div"
-              sx={{ flexGrow: 1, cursor: "pointer" }}
+              sx={{
+                flexGrow: 1,
+                cursor: "pointer",
+                color: (theme) => theme.palette.secondary.main,
+              }}
               onClick={() => history.push("/")}
             >
               Food Planner

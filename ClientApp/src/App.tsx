@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useSetRecoilState } from "recoil";
 import { AuthTokens } from "./state/state";
+import RecipeNew from "./pages/RecipeNew";
 
 const App = () => {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -39,6 +40,7 @@ const App = () => {
       <Route path="/myrecipes" component={MyRecipes} />
       <Route path="/profile" component={Profile} />
       <Route path="/recipe/:recipeId" component={Recipe} />
+      <Route path="/recipenew/:recipeId" component={RecipeNew} />
       <Route path="/home" component={Home} />
       <Route exact path="/" component={Home} />
     </Layout>

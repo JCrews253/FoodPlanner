@@ -25,6 +25,8 @@ type Recipe {
   steps: [String!]!
   tags: [String!]!
   times: [RecipeTime!]!
+  creator: ID!
+  parentId: ID
 }
 
 type RecipeTime {

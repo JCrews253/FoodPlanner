@@ -14,9 +14,8 @@ namespace FoodPlanner.Services
     Task<List<Recipe>> GetAllRecipesAsync();
     Task<Recipe> GetRecipeByIdAsync(string id);
     Task<List<Recipe>> GetUserSavedRecipesAsync(string userId);
-    Task AddRecipeAsync(Recipe recipe);
+    Task AddRecipeAsync(Recipe recipe, string userId);
   }
-
 
   public class RecipeService : IRecipeService
   {
@@ -55,7 +54,7 @@ namespace FoodPlanner.Services
       return recipes.ToList();
     }
 
-    public async Task AddRecipeAsync(Recipe recipe)
+    public async Task AddRecipeAsync(Recipe recipe, string userId)
     {
       string photoUrl = null;
       if(recipe.Photo != null)
@@ -72,7 +71,9 @@ namespace FoodPlanner.Services
         Steps: recipe.Steps,
         Photo: photoUrl,
         Tags: recipe.Tags,
-        Times: recipe.Times
+        Times: recipe.Times,
+        Creator: userId,
+        ParentId: null
       );
       await _recipes.InsertOneAsync(newRecipe with { Id = ObjectId.GenerateNewId().ToString() });
     }

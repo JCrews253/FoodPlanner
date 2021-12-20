@@ -50,10 +50,12 @@ export type QueryRecipeArgs = {
 
 export type Recipe = {
   __typename?: 'Recipe';
+  creator: Scalars['ID'];
   description: Scalars['String'];
   id: Scalars['ID'];
   ingredients: Array<Scalars['String']>;
   name: Scalars['String'];
+  parentId?: Maybe<Scalars['ID']>;
   photo?: Maybe<Scalars['String']>;
   steps: Array<Scalars['String']>;
   tags: Array<Scalars['String']>;

@@ -1,10 +1,10 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Box } from "@mui/material";
 import gql from "graphql-tag";
-import React from "react";
+import { useEffect } from "react";
 import { GraphqlRequestClient } from "../clients/GraphqlRequestClient";
-import LoadingIndicator from "../components/LoadingIndicator";
 import RecipeCard from "../components/RecipeCard";
+import RecipeCardSkeleton from "../components/Skeletons/RecipeCardSkeleton";
 import { useAllRecipesQuery, useSavedRecipeIdsQuery } from "../gql";
 
 gql`
@@ -35,6 +35,10 @@ const Home = () => {
   );
   const { data, isLoading } = useAllRecipesQuery(GraphqlRequestClient());
 
+  useEffect(() => {
+    refetch();
+  }, [isAuthenticated]);
+
   return (
     <Box
       id="box"
@@ -44,24 +48,24 @@ const Home = () => {
         justifyContent: "center",
       }}
     >
-      {isLoading ? (
-        <LoadingIndicator />
-      ) : (
-        data?.recipes.map((r) => {
-          return (
-            <RecipeCard
-              id={r.id}
-              name={r.name}
-              photo={
-                r.photo ??
-                "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
-              }
-              onSave={refetch}
-              saved={myRecipes?.myRecipes.some((m) => m.id === r.id) ?? false}
-            />
-          );
-        })
-      )}
+      {isLoading
+        ? new Array(19).fill("").map(() => {
+            return <RecipeCardSkeleton />;
+          })
+        : data?.recipes.map((r) => {
+            return (
+              <RecipeCard
+                id={r.id}
+                name={r.name}
+                photo={
+                  r.photo ??
+                  "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
+                }
+                onSave={refetch}
+                saved={myRecipes?.myRecipes.some((m) => m.id === r.id) ?? false}
+              />
+            );
+          })}
     </Box>
   );
 };

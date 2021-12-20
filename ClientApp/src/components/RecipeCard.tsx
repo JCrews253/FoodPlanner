@@ -1,19 +1,18 @@
 import {
-  Box,
-  Button,
   Card,
   CardActionArea,
   CardActions,
-  CardContent,
+  CardHeader,
   CardMedia,
-  Typography,
+  IconButton,
 } from "@mui/material";
+import { red } from "@mui/material/colors";
 import gql from "graphql-tag";
-import React from "react";
 import { Link } from "react-router-dom";
 import { GraphqlRequestClient } from "../clients/GraphqlRequestClient";
 import { useSaveRecipeMutation } from "../gql";
-import LoadingIndicator from "./LoadingIndicator";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 gql`
   mutation SaveRecipe($recipeId: String!) {
@@ -44,55 +43,30 @@ const RecipeCard = ({ id, name, photo, saved, onSave }: RecipeCardProps) => {
   return (
     <Card
       sx={{
-        maxWidth: 500,
+        width: 350,
         margin: 2,
-        overflow: "unset",
-        width: "100%",
         height: "fit-content",
       }}
-      id="card"
     >
       <CardActionArea component={Link} to={`/recipe/${id}`}>
-        <Box
-          sx={{
-            backgroundColor: "lightgrey",
-            height: "250px",
-            overflow: "hidden",
-            display: "flex",
-          }}
-        >
-          <CardMedia
-            component="img"
-            alt="green iguana"
-            image={photo ?? ""}
-            sx={{
-              width: "100%",
-              margin: "0 auto",
-            }}
-          />
-        </Box>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {name}
-          </Typography>
-        </CardContent>
+        <CardHeader title={name} />
+        <CardMedia component="img" alt="" image={photo ?? ""} height={194} />
       </CardActionArea>
-      <CardActions>
-        <Button
-          size="small"
+      <CardActions disableSpacing>
+        <IconButton
+          aria-label="add to favorites"
           onClick={() => mutate({ recipeId: id })}
-          disabled={isLoading}
-          sx={{ minHeight: "30px" }}
         >
-          {isLoading ? (
-            <LoadingIndicator size={25} />
-          ) : saved ? (
-            "Unsave"
+          {saved ? (
+            <FavoriteIcon
+              sx={{
+                color: red[500],
+              }}
+            />
           ) : (
-            "Save"
+            <FavoriteBorderIcon />
           )}
-        </Button>
-        {/* <Button size="small">Add to Calendar</Button> */}
+        </IconButton>
       </CardActions>
     </Card>
   );
