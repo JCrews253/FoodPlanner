@@ -2,6 +2,7 @@ import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
 import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from 'react-query';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -19,7 +20,6 @@ export type Scalars = {
   Date: any;
 };
 
-
 export type Mutation = {
   __typename?: 'Mutation';
   newRecipe: Scalars['Boolean'];
@@ -28,7 +28,7 @@ export type Mutation = {
 
 
 export type MutationNewRecipeArgs = {
-  recipe?: Maybe<RecipeInput>;
+  recipe?: InputMaybe<RecipeInput>;
 };
 
 
@@ -66,7 +66,7 @@ export type RecipeInput = {
   description: Scalars['String'];
   ingredients: Array<Scalars['String']>;
   name: Scalars['String'];
-  photo?: Maybe<Scalars['String']>;
+  photo?: InputMaybe<Scalars['String']>;
   steps: Array<Scalars['String']>;
   tags: Array<Scalars['String']>;
   times: Array<RecipeTimeInput>;
@@ -95,7 +95,7 @@ export type SaveRecipeMutationVariables = Exact<{
 }>;
 
 
-export type SaveRecipeMutation = { __typename?: 'Mutation', saveRecipe?: Maybe<boolean> };
+export type SaveRecipeMutation = { __typename?: 'Mutation', saveRecipe?: boolean | null | undefined };
 
 export type NewRecipeMutationVariables = Exact<{
   inputs: RecipeInput;
@@ -107,7 +107,7 @@ export type NewRecipeMutation = { __typename?: 'Mutation', newRecipe: boolean };
 export type AllRecipesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllRecipesQuery = { __typename?: 'Query', recipes: Array<{ __typename?: 'Recipe', id: string, name: string, photo?: Maybe<string>, description: string }> };
+export type AllRecipesQuery = { __typename?: 'Query', recipes: Array<{ __typename?: 'Recipe', id: string, name: string, photo?: string | null | undefined, description: string }> };
 
 export type SavedRecipeIdsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -117,14 +117,14 @@ export type SavedRecipeIdsQuery = { __typename?: 'Query', myRecipes: Array<{ __t
 export type MyRecipesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyRecipesQuery = { __typename?: 'Query', myRecipes: Array<{ __typename?: 'Recipe', id: string, name: string, photo?: Maybe<string>, description: string }> };
+export type MyRecipesQuery = { __typename?: 'Query', myRecipes: Array<{ __typename?: 'Recipe', id: string, name: string, photo?: string | null | undefined, description: string }> };
 
 export type GetRecipeQueryVariables = Exact<{
   recipeId: Scalars['String'];
 }>;
 
 
-export type GetRecipeQuery = { __typename?: 'Query', recipe?: Maybe<{ __typename?: 'Recipe', name: string, photo?: Maybe<string>, description: string, ingredients: Array<string>, steps: Array<string>, tags: Array<string>, times: Array<{ __typename?: 'RecipeTime', name: string, time: string }> }> };
+export type GetRecipeQuery = { __typename?: 'Query', recipe?: { __typename?: 'Recipe', name: string, photo?: string | null | undefined, description: string, ingredients: Array<string>, steps: Array<string>, tags: Array<string>, times: Array<{ __typename?: 'RecipeTime', name: string, time: string }> } | null | undefined };
 
 
 export const SaveRecipeDocument = `
@@ -136,11 +136,12 @@ export const useSaveRecipeMutation = <
       TError = unknown,
       TContext = unknown
     >(
-      client: GraphQLClient, 
+      client: GraphQLClient,
       options?: UseMutationOptions<SaveRecipeMutation, TError, SaveRecipeMutationVariables, TContext>,
       headers?: RequestInit['headers']
-    ) => 
+    ) =>
     useMutation<SaveRecipeMutation, TError, SaveRecipeMutationVariables, TContext>(
+      'SaveRecipe',
       (variables?: SaveRecipeMutationVariables) => fetcher<SaveRecipeMutation, SaveRecipeMutationVariables>(client, SaveRecipeDocument, variables, headers)(),
       options
     );
@@ -153,11 +154,12 @@ export const useNewRecipeMutation = <
       TError = unknown,
       TContext = unknown
     >(
-      client: GraphQLClient, 
+      client: GraphQLClient,
       options?: UseMutationOptions<NewRecipeMutation, TError, NewRecipeMutationVariables, TContext>,
       headers?: RequestInit['headers']
-    ) => 
+    ) =>
     useMutation<NewRecipeMutation, TError, NewRecipeMutationVariables, TContext>(
+      'NewRecipe',
       (variables?: NewRecipeMutationVariables) => fetcher<NewRecipeMutation, NewRecipeMutationVariables>(client, NewRecipeDocument, variables, headers)(),
       options
     );
@@ -175,11 +177,11 @@ export const useAllRecipesQuery = <
       TData = AllRecipesQuery,
       TError = unknown
     >(
-      client: GraphQLClient, 
-      variables?: AllRecipesQueryVariables, 
+      client: GraphQLClient,
+      variables?: AllRecipesQueryVariables,
       options?: UseQueryOptions<AllRecipesQuery, TError, TData>,
       headers?: RequestInit['headers']
-    ) => 
+    ) =>
     useQuery<AllRecipesQuery, TError, TData>(
       variables === undefined ? ['AllRecipes'] : ['AllRecipes', variables],
       fetcher<AllRecipesQuery, AllRecipesQueryVariables>(client, AllRecipesDocument, variables, headers),
@@ -196,11 +198,11 @@ export const useSavedRecipeIdsQuery = <
       TData = SavedRecipeIdsQuery,
       TError = unknown
     >(
-      client: GraphQLClient, 
-      variables?: SavedRecipeIdsQueryVariables, 
+      client: GraphQLClient,
+      variables?: SavedRecipeIdsQueryVariables,
       options?: UseQueryOptions<SavedRecipeIdsQuery, TError, TData>,
       headers?: RequestInit['headers']
-    ) => 
+    ) =>
     useQuery<SavedRecipeIdsQuery, TError, TData>(
       variables === undefined ? ['savedRecipeIds'] : ['savedRecipeIds', variables],
       fetcher<SavedRecipeIdsQuery, SavedRecipeIdsQueryVariables>(client, SavedRecipeIdsDocument, variables, headers),
@@ -220,11 +222,11 @@ export const useMyRecipesQuery = <
       TData = MyRecipesQuery,
       TError = unknown
     >(
-      client: GraphQLClient, 
-      variables?: MyRecipesQueryVariables, 
+      client: GraphQLClient,
+      variables?: MyRecipesQueryVariables,
       options?: UseQueryOptions<MyRecipesQuery, TError, TData>,
       headers?: RequestInit['headers']
-    ) => 
+    ) =>
     useQuery<MyRecipesQuery, TError, TData>(
       variables === undefined ? ['MyRecipes'] : ['MyRecipes', variables],
       fetcher<MyRecipesQuery, MyRecipesQueryVariables>(client, MyRecipesDocument, variables, headers),
@@ -250,11 +252,11 @@ export const useGetRecipeQuery = <
       TData = GetRecipeQuery,
       TError = unknown
     >(
-      client: GraphQLClient, 
-      variables: GetRecipeQueryVariables, 
+      client: GraphQLClient,
+      variables: GetRecipeQueryVariables,
       options?: UseQueryOptions<GetRecipeQuery, TError, TData>,
       headers?: RequestInit['headers']
-    ) => 
+    ) =>
     useQuery<GetRecipeQuery, TError, TData>(
       ['GetRecipe', variables],
       fetcher<GetRecipeQuery, GetRecipeQueryVariables>(client, GetRecipeDocument, variables, headers),

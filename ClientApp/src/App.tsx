@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Route } from "react-router";
 import Home from "./pages/Home";
 import Layout from "./components/Layout";
@@ -11,9 +11,11 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useSetRecoilState } from "recoil";
 import { AuthTokens } from "./state/state";
 import RecipeNew from "./pages/RecipeNew";
+import { useQueryClient } from "react-query";
 
 const App = () => {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const queryClient = useQueryClient();
   const setAccessToken = useSetRecoilState(AuthTokens.access);
   useEffect(() => {
     const getUserMetadata = async () => {
@@ -23,6 +25,7 @@ const App = () => {
           scope: "read:current_user",
         });
         setAccessToken(accessToken);
+        queryClient.invalidateQueries();
       } catch {
         console.log("failed to get token");
       }
