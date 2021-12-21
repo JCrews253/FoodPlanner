@@ -9,7 +9,7 @@ import { useMyRecipesQuery } from "../gql";
 gql`
   query MyRecipes {
     myRecipes {
-      id
+      recipeId
       name
       photo
       description
@@ -37,7 +37,7 @@ const MyRecipes = () => {
         data?.myRecipes.map((r) => {
           return (
             <RecipeCard
-              id={r.id}
+              id={r.recipeId}
               name={r.name}
               photo={
                 r.photo ??

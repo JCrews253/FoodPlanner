@@ -52,11 +52,11 @@ export type Recipe = {
   __typename?: 'Recipe';
   creator: Scalars['ID'];
   description: Scalars['String'];
-  id: Scalars['ID'];
   ingredients: Array<Scalars['String']>;
   name: Scalars['String'];
   parentId?: Maybe<Scalars['ID']>;
   photo?: Maybe<Scalars['String']>;
+  recipeId: Scalars['ID'];
   steps: Array<Scalars['String']>;
   tags: Array<Scalars['String']>;
   times: Array<RecipeTime>;
@@ -85,7 +85,6 @@ export type RecipeTimeInput = {
 
 export type User = {
   __typename?: 'User';
-  id: Scalars['ID'];
   savedRecipeIds: Array<Maybe<Scalars['String']>>;
   userId: Scalars['ID'];
 };
@@ -107,17 +106,17 @@ export type NewRecipeMutation = { __typename?: 'Mutation', newRecipe: boolean };
 export type AllRecipesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllRecipesQuery = { __typename?: 'Query', recipes: Array<{ __typename?: 'Recipe', id: string, name: string, photo?: string | null | undefined, description: string }> };
+export type AllRecipesQuery = { __typename?: 'Query', recipes: Array<{ __typename?: 'Recipe', recipeId: string, name: string, photo?: string | null | undefined, description: string }> };
 
 export type SavedRecipeIdsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SavedRecipeIdsQuery = { __typename?: 'Query', myRecipes: Array<{ __typename?: 'Recipe', id: string }> };
+export type SavedRecipeIdsQuery = { __typename?: 'Query', myRecipes: Array<{ __typename?: 'Recipe', recipeId: string }> };
 
 export type MyRecipesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyRecipesQuery = { __typename?: 'Query', myRecipes: Array<{ __typename?: 'Recipe', id: string, name: string, photo?: string | null | undefined, description: string }> };
+export type MyRecipesQuery = { __typename?: 'Query', myRecipes: Array<{ __typename?: 'Recipe', recipeId: string, name: string, photo?: string | null | undefined, description: string }> };
 
 export type GetRecipeQueryVariables = Exact<{
   recipeId: Scalars['String'];
@@ -166,7 +165,7 @@ export const useNewRecipeMutation = <
 export const AllRecipesDocument = `
     query AllRecipes {
   recipes {
-    id
+    recipeId
     name
     photo
     description
@@ -190,7 +189,7 @@ export const useAllRecipesQuery = <
 export const SavedRecipeIdsDocument = `
     query savedRecipeIds {
   myRecipes {
-    id
+    recipeId
   }
 }
     `;
@@ -211,7 +210,7 @@ export const useSavedRecipeIdsQuery = <
 export const MyRecipesDocument = `
     query MyRecipes {
   myRecipes {
-    id
+    recipeId
     name
     photo
     description

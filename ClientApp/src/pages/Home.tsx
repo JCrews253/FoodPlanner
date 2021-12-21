@@ -10,7 +10,7 @@ import { useAllRecipesQuery, useSavedRecipeIdsQuery } from "../gql";
 gql`
   query AllRecipes {
     recipes {
-      id
+      recipeId
       name
       photo
       description
@@ -19,7 +19,7 @@ gql`
 
   query savedRecipeIds {
     myRecipes {
-      id
+      recipeId
     }
   }
 `;
@@ -55,14 +55,17 @@ const Home = () => {
         : data?.recipes.map((r) => {
             return (
               <RecipeCard
-                id={r.id}
+                id={r.recipeId}
                 name={r.name}
                 photo={
                   r.photo ??
                   "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
                 }
                 onSave={refetch}
-                saved={myRecipes?.myRecipes.some((m) => m.id === r.id) ?? false}
+                saved={
+                  myRecipes?.myRecipes.some((m) => m.recipeId === r.recipeId) ??
+                  false
+                }
               />
             );
           })}

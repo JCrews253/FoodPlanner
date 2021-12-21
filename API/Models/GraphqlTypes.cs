@@ -1,6 +1,3 @@
-//[BsonRepresentation(BsonType.ObjectId)]
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -31,14 +28,11 @@ namespace GraphQLCodeGen {
     #endregion
     
     #region Recipe
-    public record Recipe(string Creator, string Description, string Id, List<string> Ingredients, string Name, string ParentId, string Photo, List<string> Steps, List<string> Tags, List<RecipeTime> Times) {
+    public record Recipe(string Creator, string Description, List<string> Ingredients, string Name, string ParentId, string Photo, string RecipeId, List<string> Steps, List<string> Tags, List<RecipeTime> Times) {
       #region members
       public string Creator { get; init; } = Creator;
     
       public string Description { get; init; } = Description;
-    
-      [BsonRepresentation(BsonType.ObjectId)]
-      public string Id { get; init; } = Id;
     
       public List<string> Ingredients { get; init; } = Ingredients;
     
@@ -47,6 +41,8 @@ namespace GraphQLCodeGen {
       public string ParentId { get; init; } = ParentId;
     
       public string Photo { get; init; } = Photo;
+    
+      public string RecipeId { get; init; } = RecipeId;
     
       public List<string> Steps { get; init; } = Steps;
     
@@ -150,11 +146,8 @@ namespace GraphQLCodeGen {
     #endregion
     
     #region User
-    public record User(string Id, List<string> SavedRecipeIds, string UserId) {
+    public record User(List<string> SavedRecipeIds, string UserId) {
       #region members
-      [BsonRepresentation(BsonType.ObjectId)]
-      public string Id { get; init; } = Id;
-    
       public List<string> SavedRecipeIds { get; init; } = SavedRecipeIds;
     
       public string UserId { get; init; } = UserId;

@@ -12,13 +12,6 @@ generates:
   ../API/Models/GraphqlTypes.cs:
     plugins:
       - c-sharp
-      - add:
-          content:
-            [
-              "//[BsonRepresentation(BsonType.ObjectId)]",
-              "using MongoDB.Bson;",
-              "using MongoDB.Bson.Serialization.Attributes;",
-            ]
     config:
       className: GraqhqlTypes
       emitRecords: true

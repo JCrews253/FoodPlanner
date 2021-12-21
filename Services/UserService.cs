@@ -30,7 +30,7 @@ namespace FoodPlanner.Services
 
     public async Task InsertUserAsync(User user)
     {
-      await _users.InsertOneAsync(user with { Id = ObjectId.GenerateNewId().ToString() });
+      await _users.InsertOneAsync(user);
     }
 
     public async Task ModifySavedRecipesAsync(string userId, string recipeId)
@@ -54,7 +54,7 @@ namespace FoodPlanner.Services
       var user = await _users.Find(u => u.UserId == userId).FirstOrDefaultAsync();
       if(user == null)
       {
-        await _users.InsertOneAsync(new User(ObjectId.GenerateNewId().ToString(), new List<string>(), userId));
+        await _users.InsertOneAsync(new User(new List<string>(), userId));
         return new List<string>();
       }
       return user.SavedRecipeIds;

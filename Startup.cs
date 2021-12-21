@@ -9,6 +9,8 @@ using MongoDB.Driver;
 using HotChocolate;
 using FoodPlanner.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using MongoDB.Bson.Serialization;
+using static GraphQLCodeGen.GraqhqlTypes;
 
 namespace FoodPlanner
 {
@@ -35,6 +37,16 @@ namespace FoodPlanner
       services.AddSingleton<IMongoClient, MongoClient>(s =>
       {
         var uri = s.GetRequiredService<IConfiguration>()["MongoUri"];
+        BsonClassMap.RegisterClassMap<Recipe>(recipe =>
+        {
+          recipe.AutoMap();
+          recipe.SetIgnoreExtraElements(true);
+        });
+        BsonClassMap.RegisterClassMap<User>(user =>
+        {
+          user.AutoMap();
+          user.SetIgnoreExtraElements(true);
+        });
         return new MongoClient(uri);
       });
       services.AddSingleton<IRecipeService, RecipeService>(s => new RecipeService(s));
@@ -55,8 +67,8 @@ namespace FoodPlanner
       services
         .AddGraphQLServer()
         .AddAuthorization()
-        .AddQueryType<Query>()
-        .AddMutationType<Mutation>()
+        .AddQueryType<API.Query>()
+        .AddMutationType<API.Mutation>()
         .AddFiltering()
         .AddSorting();
     } 

@@ -38,18 +38,14 @@ namespace FoodPlanner.Services
     
     public async Task<Recipe> GetRecipeByIdAsync(string id)
     {
-      if (!ObjectId.TryParse(id, out _))
-      {
-        return null;
-      }
-      return await _recipes.Find(r => r.Id == id).FirstOrDefaultAsync();
+      return await _recipes.Find(r => r.RecipeId == id).FirstOrDefaultAsync();
     }
 
     public async Task<List<Recipe>> GetUserSavedRecipesAsync(string userId)
     {
       var userService = _provider.GetRequiredService<IUserService>();
       var recipeIds = await userService.GetSavedRecipeIdsAsync(userId);
-      var filter = Builders<Recipe>.Filter.In(r => r.Id, recipeIds);
+      var filter = Builders<Recipe>.Filter.In(r => r.RecipeId, recipeIds);
       var recipes = await _recipes.FindAsync(filter);
       return recipes.ToList();
     }
@@ -65,7 +61,7 @@ namespace FoodPlanner.Services
 
       var newRecipe = new Recipe( 
         Description: recipe.Description,
-        Id: recipe.Id,
+        RecipeId: recipe.RecipeId,
         Ingredients: recipe.Ingredients,
         Name: recipe.Name,
         Steps: recipe.Steps,
@@ -75,7 +71,7 @@ namespace FoodPlanner.Services
         Creator: userId,
         ParentId: null
       );
-      await _recipes.InsertOneAsync(newRecipe with { Id = ObjectId.GenerateNewId().ToString() });
+      await _recipes.InsertOneAsync(newRecipe with { RecipeId = new Guid().ToString() });
     }
   }
 }

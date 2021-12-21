@@ -17,7 +17,7 @@ type Mutation {
 }
 
 type Recipe {
-  id: ID!
+  recipeId: ID!
   name: String!
   photo: String
   description: String!
@@ -35,7 +35,6 @@ type RecipeTime {
 }
 
 type User {
-  id: ID!
   userId: ID!
   savedRecipeIds: [String]!
 }
