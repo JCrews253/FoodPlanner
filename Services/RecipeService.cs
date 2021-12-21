@@ -71,7 +71,7 @@ namespace FoodPlanner.Services
         Creator: userId,
         ParentId: null
       );
-      await _recipes.InsertOneAsync(newRecipe with { RecipeId = new Guid().ToString() });
+      await _recipes.InsertOneAsync(newRecipe with { RecipeId = Guid.NewGuid().ToString() });
     }
   }
 }
