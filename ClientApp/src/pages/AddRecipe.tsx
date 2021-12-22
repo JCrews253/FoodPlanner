@@ -27,11 +27,11 @@ const AddRecipe = () => {
   const [steps, setSteps] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [cookTime, setCookTime] = useState<RecipeTimeInput>({
-    name: "Cook Time",
+    name: "Cook",
     time: "",
   });
   const [prepTime, setPrepTime] = useState<RecipeTimeInput>({
-    name: "Prep Time",
+    name: "Prep",
     time: "",
   });
   const [tags, setTags] = useState<string[]>([]);

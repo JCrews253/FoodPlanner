@@ -1,28 +1,24 @@
-import React from "react";
-import gql from "graphql-tag";
+import {
+  Box,
+  Chip,
+  Divider,
+  IconButton,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useParams } from "react-router";
 import { GraphqlRequestClient } from "../clients/GraphqlRequestClient";
-import { useGetRecipeQuery } from "../gql";
-import { Box, Container, Grid, Typography } from "@mui/material";
-import LoadingIndicator from "../components/LoadingIndicator";
-import InvalidUrl from "../components/InvalidUrl";
-
-gql`
-  query GetRecipe($recipeId: String!) {
-    recipe(recipeId: $recipeId) {
-      name
-      photo
-      description
-      times {
-        name
-        time
-      }
-      ingredients
-      steps
-      tags
-    }
-  }
-`;
+import {
+  useGetRecipeQuery,
+  useSavedRecipeIdsQuery,
+  useSaveRecipeMutation,
+} from "../gql";
+import SaveIcon from "@mui/icons-material/BookmarkBorder";
+import SavedIcon from "@mui/icons-material/Bookmark";
+import EditIcon from "@mui/icons-material/Edit";
+import TimeIcon from "@mui/icons-material/AccessTime";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface RecipeRouterParams {
   recipeId: string;
@@ -30,172 +26,180 @@ interface RecipeRouterParams {
 
 const Recipe = () => {
   const { recipeId } = useParams<RecipeRouterParams>();
-  const { data, isLoading } = useGetRecipeQuery(GraphqlRequestClient(), {
-    recipeId: recipeId,
+  const { data } = useGetRecipeQuery(GraphqlRequestClient(), {
+    recipeId: recipeId ?? "",
   });
+
+  const { isAuthenticated } = useAuth0();
+  const { data: savedRecipes, refetch } = useSavedRecipeIdsQuery(
+    GraphqlRequestClient(),
+    undefined,
+    {
+      enabled: isAuthenticated,
+    }
+  );
+  const { mutate } = useSaveRecipeMutation(GraphqlRequestClient(), {
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const recipeSaved =
+    savedRecipes?.myRecipes.some((r) => r.recipeId === recipeId) ?? false;
+
   return (
-    <>
-      {isLoading ? (
-        <LoadingIndicator />
-      ) : data?.recipe === null ? (
-        <InvalidUrl />
-      ) : (
-        <Box id="my-box" sx={{ width: "100%" }}>
-          <Container
+    <Paper
+      sx={{
+        maxWidth: "960px",
+        width: "100%",
+        height: "fit-content",
+        margin: (theme) => theme.spacing(4),
+        borderRadius: (theme) => theme.spacing(2),
+        padding: (theme) => theme.spacing(5),
+      }}
+    >
+      <Box display="flex">
+        <img
+          style={{
+            width: "100%",
+            maxWidth: "320px",
+            maxHeight: "220px",
+            objectFit: "cover",
+            borderRadius: "16px",
+          }}
+          src={
+            data?.recipe?.photo ??
+            "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
+          }
+          alt="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
+        />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            paddingLeft: (theme) => theme.spacing(5),
+            flexGrow: 1,
+          }}
+        >
+          <Box
             sx={{
-              marginTop: 4,
               display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              maxWidth: "680px !important",
+              justifyContent: "space-between",
+              alignItems: "start",
+              height: "fit-content",
             }}
           >
             <Typography
-              sx={{
-                alignSelf: "left",
-                width: "100%",
-                pb: 2,
-              }}
               variant="h4"
+              sx={{
+                fontWeight: 700,
+              }}
             >
               {data?.recipe?.name}
             </Typography>
-            <Box sx={{ maxHeight: "" }}>
-              <img
-                style={{ maxWidth: "100%", maxHeight: "400px" }}
-                src={
-                  data?.recipe?.photo ??
-                  "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
-                }
-                alt="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
-              />
+            <Box sx={{ display: "flex", flexWrap: "nowrap" }}>
+              <IconButton>
+                <EditIcon />
+              </IconButton>
+              <IconButton onClick={() => mutate({ recipeId: recipeId })}>
+                {recipeSaved ? <SavedIcon /> : <SaveIcon />}
+              </IconButton>
             </Box>
-            <Typography
-              sx={{
-                alignSelf: "left",
-                width: "100%",
-                pb: 2,
-                pt: 1,
-              }}
-              variant="body1"
-            >
-              {data?.recipe?.description}
-            </Typography>
-            <Grid
-              container
-              sx={{
-                justifyContent: "center",
-                "&:last-child": {
-                  border: "solid 3px red",
-                },
-              }}
-              rowSpacing={0}
-              columnSpacing={0}
-            >
-              {data?.recipe?.times.map((r, idx) => {
-                return (
-                  <Grid item>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        borderLeft: idx === 0 ? "solid 1px grey" : "none",
-                        borderRight: "solid 1px grey",
-                        padding: 1,
-                      }}
-                    >
-                      <Typography variant="body1">{r.name}:</Typography>
-                      <Typography variant="body1">{r.time}</Typography>
-                    </Box>
-                  </Grid>
-                );
-              })}
-            </Grid>
-            <Typography
-              sx={{
-                alignSelf: "left",
-                width: "100%",
-                pt: 2,
-              }}
-              variant="h6"
-            >
-              Ingredients:
-            </Typography>
-            {data?.recipe?.ingredients.map((i, idx) => {
-              return (
+          </Box>
+          <Box display="flex" sx={{ width: "max-content" }}>
+            <TimeIcon sx={{ color: (theme) => theme.palette.text.secondary }} />
+            {data?.recipe?.times.map((time) => (
+              <Box
+                sx={{
+                  display: "flex",
+
+                  padding: (theme) => `0px ${theme.spacing(1)}`,
+                }}
+              >
                 <Typography
-                  key={idx}
                   sx={{
-                    alignSelf: "left",
-                    width: "100%",
-                    pt: 1,
-                    pl: 3,
+                    paddingRight: (theme) => theme.spacing(0.25),
+                    color: (theme) => theme.palette.text.secondary,
                   }}
-                  variant="body1"
-                >{`${idx + 1}) ${i}`}</Typography>
-              );
-            })}
-            <Typography
-              sx={{
-                alignSelf: "left",
-                width: "100%",
-                pt: 2,
-              }}
-              variant="h6"
-            >
-              Steps:
-            </Typography>
-            {data?.recipe?.steps.map((s, idx) => {
-              return (
-                <Typography
-                  key={idx}
-                  sx={{
-                    alignSelf: "left",
-                    width: "100%",
-                    pt: 1,
-                    pl: 3,
-                  }}
-                  variant="body1"
-                >{`${idx + 1}) ${s}`}</Typography>
-              );
-            })}
-            <Box
-              sx={{
-                display: "flex",
-                width: "100%",
-                alignItems: "center",
-                pt: 4,
-                pb: 4,
-              }}
-            >
-              {data?.recipe?.tags && data.recipe.tags.length > 0 && (
-                <>
-                  <Typography variant="h6">Tags:</Typography>
-                  {data?.recipe?.tags?.map((t) => {
-                    return (
-                      <Box
-                        sx={{
-                          border: "solid 1px black",
-                          borderRadius: "30px",
-                          ml: 2,
-                          pt: 0.5,
-                          pb: 0.5,
-                          pl: 2,
-                          pr: 2,
-                        }}
-                      >
-                        <Typography variant="body1">{t}</Typography>
-                      </Box>
-                    );
-                  })}
-                </>
-              )}
-            </Box>
-          </Container>
+                >
+                  {time.name}:
+                </Typography>
+                <Typography>{time.time}</Typography>
+              </Box>
+            ))}
+          </Box>
         </Box>
+      </Box>
+      <Divider
+        sx={{
+          marginTop: (theme) => theme.spacing(5),
+          marginBottom: (theme) => theme.spacing(2),
+        }}
+      />
+      <Typography
+        variant="h6"
+        sx={{
+          fontWeight: 600,
+        }}
+      >
+        Ingredients
+      </Typography>
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        {data?.recipe?.ingredients.map((ingredient) => {
+          return (
+            <Box sx={{ padding: (theme) => theme.spacing(1) }}>
+              {ingredient}
+            </Box>
+          );
+        })}
+      </Box>
+      <Divider
+        sx={{
+          marginTop: (theme) => theme.spacing(2),
+          marginBottom: (theme) => theme.spacing(2),
+        }}
+      />
+      <Typography
+        variant="h6"
+        sx={{
+          fontWeight: 600,
+        }}
+      >
+        Steps
+      </Typography>
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        {data?.recipe?.steps.map((step, idx) => {
+          return (
+            <Box sx={{ padding: (theme) => theme.spacing(1) }}>
+              <Typography color="gray">Step {idx + 1}</Typography>
+              <Typography>{step}</Typography>
+            </Box>
+          );
+        })}
+      </Box>
+      {data?.recipe?.tags && data.recipe.tags.length > 0 && (
+        <>
+          <Divider
+            sx={{
+              marginTop: (theme) => theme.spacing(2),
+              marginBottom: (theme) => theme.spacing(2),
+            }}
+          />
+          <Stack direction="row" spacing={1}>
+            <Typography
+              variant="h6"
+              sx={{ paddingRight: (theme) => theme.spacing(1) }}
+            >
+              Tags:
+            </Typography>
+            {data.recipe.tags.map((tag) => (
+              <Chip label={tag} />
+            ))}
+          </Stack>
+        </>
       )}
-    </>
+    </Paper>
   );
 };
 

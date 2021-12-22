@@ -11,8 +11,8 @@ import gql from "graphql-tag";
 import { Link } from "react-router-dom";
 import { GraphqlRequestClient } from "../clients/GraphqlRequestClient";
 import { useSaveRecipeMutation } from "../gql";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import SaveIcon from "@mui/icons-material/BookmarkBorder";
+import SavedIcon from "@mui/icons-material/Bookmark";
 
 gql`
   mutation SaveRecipe($recipeId: String!) {
@@ -29,17 +29,14 @@ interface RecipeCardProps {
 }
 
 const RecipeCard = ({ id, name, photo, saved, onSave }: RecipeCardProps) => {
-  const { isLoading, mutate } = useSaveRecipeMutation<Error>(
-    GraphqlRequestClient(),
-    {
-      onSuccess: () => {
-        onSave && onSave();
-      },
-      onError: (error) => {
-        console.log({ error });
-      },
-    }
-  );
+  const { mutate } = useSaveRecipeMutation<Error>(GraphqlRequestClient(), {
+    onSuccess: () => {
+      onSave && onSave();
+    },
+    onError: (error) => {
+      console.log({ error });
+    },
+  });
   return (
     <Card
       sx={{
@@ -57,15 +54,7 @@ const RecipeCard = ({ id, name, photo, saved, onSave }: RecipeCardProps) => {
           aria-label="add to favorites"
           onClick={() => mutate({ recipeId: id })}
         >
-          {saved ? (
-            <FavoriteIcon
-              sx={{
-                color: red[500],
-              }}
-            />
-          ) : (
-            <FavoriteBorderIcon />
-          )}
+          {saved ? <SavedIcon color="primary" /> : <SaveIcon color="primary" />}
         </IconButton>
       </CardActions>
     </Card>

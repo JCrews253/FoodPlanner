@@ -46,3 +46,8 @@ export const themeAtom = atom<"light" | "dark">({
     },
   ],
 });
+
+export const isMobileAtom = atom<boolean>({
+  key: "isMobile",
+  default: window.innerWidth < 750,
+});

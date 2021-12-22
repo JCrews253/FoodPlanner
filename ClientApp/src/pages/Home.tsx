@@ -37,7 +37,7 @@ const Home = () => {
 
   useEffect(() => {
     refetch();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, refetch]);
 
   return (
     <Box

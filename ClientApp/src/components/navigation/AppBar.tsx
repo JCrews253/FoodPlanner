@@ -7,10 +7,10 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import React, { useState } from "react";
-import AppBarDrawer from "./AppBarDrawer";
+import AppBarDrawer from "../AppBarDrawer";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useHistory } from "react-router";
-import ProfileButton from "./buttons/ProfileButton";
+import ProfileButton from "../buttons/ProfileButton";
 
 const AppBar = () => {
   const [showMenu, setShowMenu] = useState<boolean>(false);
