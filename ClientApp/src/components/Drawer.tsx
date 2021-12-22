@@ -1,20 +1,18 @@
 import { Box, List, SwipeableDrawer } from "@mui/material";
-import React from "react";
 import CalendarIcon from "@mui/icons-material/CalendarToday";
 import AddIcon from "@mui/icons-material/Add";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
-import DinnerDiningIcon from "@mui/icons-material/DinnerDining";
 import DrawerMenuItem from "./DrawerMenuItem";
 import HomeIcon from "@mui/icons-material/Home";
 
-interface AppBarDrawerProps {
+interface DrawerProps {
   open: boolean;
   onClose(): void;
   onOpen(): void;
 }
 
-const AppBarDrawer = ({ open, onClose, onOpen }: AppBarDrawerProps) => {
+const Drawer = ({ open, onClose, onOpen }: DrawerProps) => {
   return (
     <SwipeableDrawer
       anchor="left"
@@ -47,12 +45,6 @@ const AppBarDrawer = ({ open, onClose, onOpen }: AppBarDrawerProps) => {
             onClick={onClose}
           />
           <DrawerMenuItem
-            title="My Recipes"
-            linkUrl="/myrecipes"
-            Icon={<DinnerDiningIcon />}
-            onClick={onClose}
-          />
-          <DrawerMenuItem
             title="Calendar"
             linkUrl="/calendar"
             Icon={<CalendarIcon />}
@@ -70,4 +62,4 @@ const AppBarDrawer = ({ open, onClose, onOpen }: AppBarDrawerProps) => {
   );
 };
 
-export default AppBarDrawer;
+export default Drawer;

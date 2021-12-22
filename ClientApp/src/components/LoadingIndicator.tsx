@@ -17,7 +17,7 @@ const LoadingIndicator = ({ size }: LoadingIndicatorProps) => {
         alignItems: "center",
       }}
     >
-      <CircularProgress color="primary" size={size ?? 40} />
+      <CircularProgress color="primary" size={size} />
     </Box>
   );
 };

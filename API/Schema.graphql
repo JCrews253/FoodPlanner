@@ -19,7 +19,7 @@ type Mutation {
 type Recipe {
   recipeId: ID!
   name: String!
-  photo: String
+  photos: [String!]!
   description: String!
   ingredients: [String!]!
   steps: [String!]!
@@ -41,7 +41,7 @@ type User {
 
 input RecipeInput {
   name: String!
-  photo: String
+  photo: [String!]!
   description: String!
   ingredients: [String!]!
   steps: [String!]!

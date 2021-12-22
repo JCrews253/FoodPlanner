@@ -10,7 +10,7 @@ gql`
   query GetRecipe($recipeId: String!) {
     recipe(recipeId: $recipeId) {
       name
-      photo
+      photos
       description
       times {
         name
@@ -63,8 +63,9 @@ const RecipeMobile = () => {
               <img
                 style={{ maxWidth: "100%", maxHeight: "400px" }}
                 src={
-                  data?.recipe?.photo ??
-                  "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
+                  data?.recipe?.photos.length
+                    ? data.recipe.photos[0]
+                    : "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
                 }
                 alt="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
               />

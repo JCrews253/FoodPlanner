@@ -19,6 +19,7 @@ import SavedIcon from "@mui/icons-material/Bookmark";
 import EditIcon from "@mui/icons-material/Edit";
 import TimeIcon from "@mui/icons-material/AccessTime";
 import { useAuth0 } from "@auth0/auth0-react";
+import ImageStack from "../components/ImageStack";
 
 interface RecipeRouterParams {
   recipeId: string;
@@ -30,7 +31,7 @@ const Recipe = () => {
     recipeId: recipeId ?? "",
   });
 
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
   const { data: savedRecipes, refetch } = useSavedRecipeIdsQuery(
     GraphqlRequestClient(),
     undefined,
@@ -59,7 +60,7 @@ const Recipe = () => {
       }}
     >
       <Box display="flex">
-        <img
+        {/* <img
           style={{
             width: "100%",
             maxWidth: "320px",
@@ -72,6 +73,14 @@ const Recipe = () => {
             "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
           }
           alt="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
+        /> */}
+        <ImageStack
+          images={[
+            "https://images.everydayhealth.com/images/diet-nutrition/34da4c4e-82c3-47d7-953d-121945eada1e00-giveitup-unhealthyfood.jpg?w=1110",
+            "https://static01.nyt.com/images/2021/01/26/well/well-foods-microbiome/well-foods-microbiome-superJumbo.jpg",
+            "https://images.squarespace-cdn.com/content/v1/53b839afe4b07ea978436183/1608506169128-S6KYNEV61LEP5MS1UIH4/traditional-food-around-the-world-Travlinmad.jpg?format=1000w",
+            "https://ychef.files.bbci.co.uk/1600x900/p04tx3m6.webp",
+          ]}
         />
         <Box
           sx={{
@@ -102,7 +111,16 @@ const Recipe = () => {
               <IconButton>
                 <EditIcon />
               </IconButton>
-              <IconButton onClick={() => mutate({ recipeId: recipeId })}>
+              <IconButton
+                color="primary"
+                onClick={() => {
+                  if (isAuthenticated) {
+                    mutate({ recipeId: recipeId });
+                  } else {
+                    loginWithRedirect();
+                  }
+                }}
+              >
                 {recipeSaved ? <SavedIcon /> : <SaveIcon />}
               </IconButton>
             </Box>

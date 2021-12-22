@@ -29,7 +29,7 @@ const Layout = ({ children }: LayoutProps) => {
           display: "flex",
           justifyContent: "center",
           overflowX: "hidden",
-          marginBottom: isMobile ? "56px" : undefined,
+          marginBottom: isMobile ? "66px" : undefined,
         }}
         maxWidth={false}
       >

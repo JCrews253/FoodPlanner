@@ -155,7 +155,7 @@ const AddRecipe = () => {
                   steps: steps.split(/\r?\n/),
                   ingredients: ingredients.split(/\r?\n/),
                   times: [prepTime, cookTime],
-                  photo: image,
+                  photo: [image ?? ""],
                   tags: tags,
                 },
               });

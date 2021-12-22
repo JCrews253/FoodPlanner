@@ -7,18 +7,23 @@ import HomeIcon from "@mui/icons-material/Home";
 import SavedIcon from "@mui/icons-material/BookmarkBorder";
 import AddIcon from "@mui/icons-material/Add";
 import CalendarIcon from "@mui/icons-material/CalendarToday";
-import ListAltIcon from "@mui/icons-material/ListAlt";
+import ProfileIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
 import { Button } from "@mui/material";
+import { useRecoilState } from "recoil";
+import { themeAtom } from "../../state/state";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const BottomNavBar = () => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState("/home");
+  const [theme, setTheme] = useRecoilState(themeAtom);
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
   return (
     <>
       <Paper
         sx={{
           position: "fixed",
-          bottom: 76,
+          bottom: 86,
           right: 20,
           borderRadius: "100%",
           backgroundColor: "transparent",
@@ -37,7 +42,13 @@ const BottomNavBar = () => {
       </Paper>
 
       <Paper
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        sx={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          paddingBottom: "10px",
+        }}
         elevation={3}
       >
         <BottomNavigation
@@ -48,6 +59,7 @@ const BottomNavBar = () => {
           }}
         >
           <BottomNavigationAction
+            value={"/home"}
             label="Home"
             icon={<HomeIcon />}
             component={Link}
@@ -72,17 +84,18 @@ const BottomNavBar = () => {
             to="/calendar"
           />
           <BottomNavigationAction
-            label="Lists"
-            icon={<ListAltIcon />}
-            component={Link}
-            to="/cart"
+            label="Proile"
+            icon={<ProfileIcon />}
+            onClick={() => {
+              if (isAuthenticated) {
+                setTheme(theme === "light" ? "dark" : "light");
+              } else {
+                loginWithRedirect();
+              }
+            }}
+            // component={Link}
+            // to="/profile"
           />
-          {/* <BottomNavigationAction
-          label="New"
-          icon={<AddIcon />}
-          component={Link}
-          to="/addRecipe"
-        /> */}
         </BottomNavigation>
       </Paper>
     </>

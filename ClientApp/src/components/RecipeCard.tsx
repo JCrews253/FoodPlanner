@@ -6,7 +6,6 @@ import {
   CardMedia,
   IconButton,
 } from "@mui/material";
-import { red } from "@mui/material/colors";
 import gql from "graphql-tag";
 import { Link } from "react-router-dom";
 import { GraphqlRequestClient } from "../clients/GraphqlRequestClient";

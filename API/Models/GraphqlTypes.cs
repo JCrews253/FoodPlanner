@@ -28,7 +28,7 @@ namespace GraphQLCodeGen {
     #endregion
     
     #region Recipe
-    public record Recipe(string Creator, string Description, List<string> Ingredients, string Name, string ParentId, string Photo, string RecipeId, List<string> Steps, List<string> Tags, List<RecipeTime> Times) {
+    public record Recipe(string Creator, string Description, List<string> Ingredients, string Name, string ParentId, List<string> Photos, string RecipeId, List<string> Steps, List<string> Tags, List<RecipeTime> Times) {
       #region members
       public string Creator { get; init; } = Creator;
     
@@ -40,7 +40,7 @@ namespace GraphQLCodeGen {
     
       public string ParentId { get; init; } = ParentId;
     
-      public string Photo { get; init; } = Photo;
+      public List<string> Photos { get; init; } = Photos;
     
       public string RecipeId { get; init; } = RecipeId;
     
@@ -65,7 +65,8 @@ namespace GraphQLCodeGen {
       [Required]
       public string name { get; set; }
     
-      public string photo { get; set; }
+      [Required]
+      public List<string> photo { get; set; }
     
       [Required]
       public List<string> steps { get; set; }

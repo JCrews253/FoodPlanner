@@ -6,8 +6,8 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import React, { useState } from "react";
-import AppBarDrawer from "../AppBarDrawer";
+import { useState } from "react";
+import Drawer from "../Drawer";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useHistory } from "react-router";
 import ProfileButton from "../buttons/ProfileButton";
@@ -43,13 +43,13 @@ const AppBar = () => {
               }}
               onClick={() => history.push("/")}
             >
-              Food Planner
+              Minced
             </Typography>
             <ProfileButton />
           </Toolbar>
         </MuiAppBar>
       </Box>
-      <AppBarDrawer
+      <Drawer
         open={showMenu}
         onOpen={() => setShowMenu(true)}
         onClose={() => setShowMenu(false)}

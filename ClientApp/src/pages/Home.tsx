@@ -12,7 +12,7 @@ gql`
     recipes {
       recipeId
       name
-      photo
+      photos
       description
     }
   }
@@ -58,8 +58,9 @@ const Home = () => {
                 id={r.recipeId}
                 name={r.name}
                 photo={
-                  r.photo ??
-                  "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
+                  r.photos.length > 0
+                    ? r.photos[0]
+                    : "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
                 }
                 onSave={refetch}
                 saved={

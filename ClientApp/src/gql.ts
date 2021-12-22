@@ -55,7 +55,7 @@ export type Recipe = {
   ingredients: Array<Scalars['String']>;
   name: Scalars['String'];
   parentId?: Maybe<Scalars['ID']>;
-  photo?: Maybe<Scalars['String']>;
+  photos: Array<Scalars['String']>;
   recipeId: Scalars['ID'];
   steps: Array<Scalars['String']>;
   tags: Array<Scalars['String']>;
@@ -66,7 +66,7 @@ export type RecipeInput = {
   description: Scalars['String'];
   ingredients: Array<Scalars['String']>;
   name: Scalars['String'];
-  photo?: InputMaybe<Scalars['String']>;
+  photo: Array<Scalars['String']>;
   steps: Array<Scalars['String']>;
   tags: Array<Scalars['String']>;
   times: Array<RecipeTimeInput>;
@@ -106,7 +106,7 @@ export type NewRecipeMutation = { __typename?: 'Mutation', newRecipe: boolean };
 export type AllRecipesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllRecipesQuery = { __typename?: 'Query', recipes: Array<{ __typename?: 'Recipe', recipeId: string, name: string, photo?: string | null | undefined, description: string }> };
+export type AllRecipesQuery = { __typename?: 'Query', recipes: Array<{ __typename?: 'Recipe', recipeId: string, name: string, photos: Array<string>, description: string }> };
 
 export type SavedRecipeIdsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -116,14 +116,14 @@ export type SavedRecipeIdsQuery = { __typename?: 'Query', myRecipes: Array<{ __t
 export type MyRecipesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyRecipesQuery = { __typename?: 'Query', myRecipes: Array<{ __typename?: 'Recipe', recipeId: string, name: string, photo?: string | null | undefined, description: string }> };
+export type MyRecipesQuery = { __typename?: 'Query', myRecipes: Array<{ __typename?: 'Recipe', recipeId: string, name: string, photos: Array<string>, description: string }> };
 
 export type GetRecipeQueryVariables = Exact<{
   recipeId: Scalars['String'];
 }>;
 
 
-export type GetRecipeQuery = { __typename?: 'Query', recipe?: { __typename?: 'Recipe', name: string, photo?: string | null | undefined, description: string, ingredients: Array<string>, steps: Array<string>, tags: Array<string>, times: Array<{ __typename?: 'RecipeTime', name: string, time: string }> } | null | undefined };
+export type GetRecipeQuery = { __typename?: 'Query', recipe?: { __typename?: 'Recipe', name: string, photos: Array<string>, description: string, ingredients: Array<string>, steps: Array<string>, tags: Array<string>, times: Array<{ __typename?: 'RecipeTime', name: string, time: string }> } | null | undefined };
 
 
 export const SaveRecipeDocument = `
@@ -167,7 +167,7 @@ export const AllRecipesDocument = `
   recipes {
     recipeId
     name
-    photo
+    photos
     description
   }
 }
@@ -212,7 +212,7 @@ export const MyRecipesDocument = `
   myRecipes {
     recipeId
     name
-    photo
+    photos
     description
   }
 }
@@ -235,7 +235,7 @@ export const GetRecipeDocument = `
     query GetRecipe($recipeId: String!) {
   recipe(recipeId: $recipeId) {
     name
-    photo
+    photos
     description
     times {
       name

@@ -4,6 +4,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using static GraphQLCodeGen.GraqhqlTypes;
 
@@ -52,11 +53,15 @@ namespace FoodPlanner.Services
 
     public async Task AddRecipeAsync(Recipe recipe, string userId)
     {
-      string photoUrl = null;
-      if(recipe.Photo != null)
+      List<string> photoUrls = new List<string>();
+      if(recipe.Photos != null)
       {
         var azureBlobService = _provider.GetRequiredService<IAzureBlobService>();
-        photoUrl = await azureBlobService.UploadPhoto(recipe.Photo);
+        recipe.Photos.ForEach(async photo =>
+        {
+          var url = await azureBlobService.UploadPhoto(photo);
+          photoUrls.Add(url);
+        });
       }
 
       var newRecipe = new Recipe( 
@@ -65,7 +70,7 @@ namespace FoodPlanner.Services
         Ingredients: recipe.Ingredients,
         Name: recipe.Name,
         Steps: recipe.Steps,
-        Photo: photoUrl,
+        Photos: photoUrls,
         Tags: recipe.Tags,
         Times: recipe.Times,
         Creator: userId,
