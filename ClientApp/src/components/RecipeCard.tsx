@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import gql from "graphql-tag";
 import { Link } from "react-router-dom";
-import { GraphqlRequestClient } from "../clients/GraphqlRequestClient";
+import { GraphqlClient } from "../clients/GraphqlClient";
 import { useSaveRecipeMutation } from "../gql";
 import SaveIcon from "@mui/icons-material/BookmarkBorder";
 import SavedIcon from "@mui/icons-material/Bookmark";
@@ -28,7 +28,7 @@ interface RecipeCardProps {
 }
 
 const RecipeCard = ({ id, name, photo, saved, onSave }: RecipeCardProps) => {
-  const { mutate } = useSaveRecipeMutation<Error>(GraphqlRequestClient(), {
+  const { mutate } = useSaveRecipeMutation<Error>(GraphqlClient(), {
     onSuccess: () => {
       onSave && onSave();
     },

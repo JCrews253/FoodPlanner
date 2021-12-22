@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Box } from "@mui/material";
 import gql from "graphql-tag";
 import { useEffect } from "react";
-import { GraphqlRequestClient } from "../clients/GraphqlRequestClient";
+import { GraphqlClient } from "../clients/GraphqlClient";
 import RecipeCard from "../components/RecipeCard";
 import RecipeCardSkeleton from "../components/Skeletons/RecipeCardSkeleton";
 import { useAllRecipesQuery, useSavedRecipeIdsQuery } from "../gql";
@@ -27,13 +27,13 @@ gql`
 const Home = () => {
   const { isAuthenticated } = useAuth0();
   const { data: myRecipes, refetch } = useSavedRecipeIdsQuery(
-    GraphqlRequestClient(),
+    GraphqlClient(),
     undefined,
     {
       enabled: isAuthenticated,
     }
   );
-  const { data, isLoading } = useAllRecipesQuery(GraphqlRequestClient());
+  const { data, isLoading } = useAllRecipesQuery(GraphqlClient());
 
   useEffect(() => {
     refetch();

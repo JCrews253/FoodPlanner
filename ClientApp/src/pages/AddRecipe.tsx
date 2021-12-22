@@ -7,9 +7,9 @@ import {
   Typography,
 } from "@mui/material";
 import gql from "graphql-tag";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { GraphqlRequestClient } from "../clients/GraphqlRequestClient";
+import { GraphqlClient } from "../clients/GraphqlClient";
 import AddImage from "../components/buttons/AddImage";
 import { RecipeTimeInput, useNewRecipeMutation } from "../gql";
 
@@ -36,7 +36,7 @@ const AddRecipe = () => {
   });
   const [tags, setTags] = useState<string[]>([]);
   const { isLoading, mutate: newRecipeMutation } = useNewRecipeMutation(
-    GraphqlRequestClient(),
+    GraphqlClient(),
     { onSuccess: () => history.push("/") }
   );
 

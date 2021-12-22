@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useParams } from "react-router";
-import { GraphqlRequestClient } from "../clients/GraphqlRequestClient";
+import { GraphqlClient } from "../clients/GraphqlClient";
 import {
   useGetRecipeQuery,
   useSavedRecipeIdsQuery,
@@ -27,19 +27,19 @@ interface RecipeRouterParams {
 
 const Recipe = () => {
   const { recipeId } = useParams<RecipeRouterParams>();
-  const { data } = useGetRecipeQuery(GraphqlRequestClient(), {
+  const { data } = useGetRecipeQuery(GraphqlClient(), {
     recipeId: recipeId ?? "",
   });
 
   const { isAuthenticated, loginWithRedirect } = useAuth0();
   const { data: savedRecipes, refetch } = useSavedRecipeIdsQuery(
-    GraphqlRequestClient(),
+    GraphqlClient(),
     undefined,
     {
       enabled: isAuthenticated,
     }
   );
-  const { mutate } = useSaveRecipeMutation(GraphqlRequestClient(), {
+  const { mutate } = useSaveRecipeMutation(GraphqlClient(), {
     onSuccess: () => {
       refetch();
     },

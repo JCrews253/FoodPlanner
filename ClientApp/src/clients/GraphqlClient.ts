@@ -9,7 +9,7 @@ var GqlClient: GraphQLClient = new GraphQLClient(
     : "https://foodplanner20211113152303.azurewebsites.net/graphql"
 );
 
-export const GraphqlRequestClient = () => {
+export const GraphqlClient = () => {
   const accessToken = useRecoilValue(AuthTokens.access);
 
   useEffect(() => {
