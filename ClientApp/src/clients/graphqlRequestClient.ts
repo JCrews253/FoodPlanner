@@ -11,6 +11,7 @@ var GqlClient: GraphQLClient = new GraphQLClient(
 
 export const GraphqlRequestClient = () => {
   const accessToken = useRecoilValue(AuthTokens.access);
+
   useEffect(() => {
     GqlClient.setHeader("authorization", `Bearer ${accessToken}`);
   }, [accessToken]);

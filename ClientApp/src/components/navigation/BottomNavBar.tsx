@@ -36,6 +36,8 @@ const BottomNavBar = () => {
             height: "64px",
             width: "64px",
           }}
+          component={Link}
+          to="/addrecipe"
         >
           <AddIcon fontSize="large" />
         </Button>
