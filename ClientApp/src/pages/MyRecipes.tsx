@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import gql from "graphql-tag";
 import React from "react";
-import { GraphqlRequestClient } from "../clients/GraphqlRequestClient";
+import { GraphqlClient } from "../clients/GraphqlClient";
 import LoadingIndicator from "../components/LoadingIndicator";
 import RecipeCard from "../components/RecipeCard";
 import { useMyRecipesQuery } from "../gql";
@@ -18,9 +18,7 @@ gql`
 `;
 
 const MyRecipes = () => {
-  const { data, isLoading, refetch } = useMyRecipesQuery(
-    GraphqlRequestClient()
-  );
+  const { data, isLoading, refetch } = useMyRecipesQuery(GraphqlClient());
   return (
     <Box
       id="box"

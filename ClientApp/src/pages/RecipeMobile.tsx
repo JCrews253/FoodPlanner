@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 import { useParams } from "react-router";
-import { GraphqlRequestClient } from "../clients/GraphqlRequestClient";
+import { GraphqlClient } from "../clients/GraphqlClient";
 import { useGetRecipeQuery } from "../gql";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import LoadingIndicator from "../components/LoadingIndicator";
@@ -29,7 +29,7 @@ interface RecipeRouterParams {
 
 const RecipeMobile = () => {
   const { recipeId } = useParams<RecipeRouterParams>();
-  const { data, isLoading } = useGetRecipeQuery(GraphqlRequestClient(), {
+  const { data, isLoading } = useGetRecipeQuery(GraphqlClient(), {
     recipeId: recipeId,
   });
   return (
