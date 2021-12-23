@@ -42,6 +42,7 @@ const RecipeCard = ({ id, name, photo, saved, onSave }: RecipeCardProps) => {
         width: 350,
         margin: 2,
         height: "fit-content",
+        borderRadius: "12px",
       }}
     >
       <CardActionArea component={Link} to={`/recipe/${id}`}>
