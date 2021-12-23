@@ -82,10 +82,10 @@ const AddRecipe = () => {
                 required
                 fullWidth
                 multiline
-                label="Steps"
-                value={steps}
-                onChange={(e) => setSteps(e.currentTarget.value)}
-                placeholder="Put each step on a new line."
+                label="Ingredients"
+                placeholder="Put each ingredient on a new line."
+                value={ingredients}
+                onChange={(e) => setIngredients(e.currentTarget.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -93,10 +93,10 @@ const AddRecipe = () => {
                 required
                 fullWidth
                 multiline
-                label="Ingredients"
-                placeholder="Put each ingredient on a new line."
-                value={ingredients}
-                onChange={(e) => setIngredients(e.currentTarget.value)}
+                label="Steps"
+                value={steps}
+                onChange={(e) => setSteps(e.currentTarget.value)}
+                placeholder="Put each step on a new line."
               />
             </Grid>
             <Grid item xs={12}>
