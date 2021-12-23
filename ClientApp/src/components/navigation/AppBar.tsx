@@ -43,7 +43,7 @@ const AppBar = () => {
               }}
               onClick={() => history.push("/")}
             >
-              Minced
+              Zest
             </Typography>
             <ProfileButton />
           </Toolbar>
