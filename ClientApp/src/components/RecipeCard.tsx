@@ -14,8 +14,8 @@ import SaveIcon from "@mui/icons-material/BookmarkBorder";
 import SavedIcon from "@mui/icons-material/Bookmark";
 
 gql`
-  mutation SaveRecipe($recipeId: String!) {
-    saveRecipe(recipeId: $recipeId)
+  mutation SaveRecipe($recipeId: String!, $saved: Boolean!) {
+    saveRecipe(recipeId: $recipeId, saved: $saved)
   }
 `;
 
@@ -51,7 +51,7 @@ const RecipeCard = ({ id, name, photo, saved, onSave }: RecipeCardProps) => {
       <CardActions disableSpacing>
         <IconButton
           aria-label="add to favorites"
-          onClick={() => mutate({ recipeId: id })}
+          onClick={() => mutate({ recipeId: id, saved: !saved })}
         >
           {saved ? <SavedIcon color="primary" /> : <SaveIcon color="primary" />}
         </IconButton>

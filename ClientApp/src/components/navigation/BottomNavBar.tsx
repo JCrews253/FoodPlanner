@@ -50,6 +50,7 @@ const BottomNavBar = () => {
           left: 0,
           right: 0,
           paddingBottom: "10px",
+          backgroundImage: "none",
         }}
         elevation={3}
       >

@@ -10,7 +10,7 @@ namespace FoodPlanner.Services
 {
   public interface IUserService 
   {
-    Task ModifySavedRecipesAsync(string userId, string recipeId);
+    Task ModifySavedRecipesAsync(string userId, string recipeId, bool saved);
     Task InsertUserAsync(User user);
     Task<List<string>> GetSavedRecipeIdsAsync(string userId);
   }
@@ -33,11 +33,11 @@ namespace FoodPlanner.Services
       await _users.InsertOneAsync(user);
     }
 
-    public async Task ModifySavedRecipesAsync(string userId, string recipeId)
+    public async Task ModifySavedRecipesAsync(string userId, string recipeId, bool saved)
     {
       var user = await _users.Find(u => u.UserId == userId).FirstOrDefaultAsync();
       var recipeIds = user.SavedRecipeIds;
-      if (recipeIds.Contains(recipeId))
+      if (recipeIds.Contains(recipeId) && !saved)
       {
         recipeIds.Remove(recipeId);
       }

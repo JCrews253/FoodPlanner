@@ -46,15 +46,18 @@ const Home = () => {
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "center",
+        height: "fit-content",
+        paddingBottom: (theme) => theme.spacing(2),
       }}
     >
       {isLoading
-        ? new Array(19).fill("").map(() => {
-            return <RecipeCardSkeleton />;
+        ? new Array(19).fill("").map((_, idx) => {
+            return <RecipeCardSkeleton key={`recipe-skeleton-${idx}`} />;
           })
         : data?.recipes.map((r) => {
             return (
               <RecipeCard
+                key={r.recipeId}
                 id={r.recipeId}
                 name={r.name}
                 photo={

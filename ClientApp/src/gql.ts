@@ -22,18 +22,19 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  newRecipe: Scalars['Boolean'];
+  newRecipe: Scalars['String'];
   saveRecipe?: Maybe<Scalars['Boolean']>;
 };
 
 
 export type MutationNewRecipeArgs = {
-  recipe?: InputMaybe<RecipeInput>;
+  recipe: RecipeInput;
 };
 
 
 export type MutationSaveRecipeArgs = {
   recipeId: Scalars['String'];
+  saved: Scalars['Boolean'];
 };
 
 export type Query = {
@@ -66,7 +67,7 @@ export type RecipeInput = {
   description: Scalars['String'];
   ingredients: Array<Scalars['String']>;
   name: Scalars['String'];
-  photo: Array<Scalars['String']>;
+  photos: Array<Scalars['String']>;
   steps: Array<Scalars['String']>;
   tags: Array<Scalars['String']>;
   times: Array<RecipeTimeInput>;
@@ -91,6 +92,7 @@ export type User = {
 
 export type SaveRecipeMutationVariables = Exact<{
   recipeId: Scalars['String'];
+  saved: Scalars['Boolean'];
 }>;
 
 
@@ -101,7 +103,7 @@ export type NewRecipeMutationVariables = Exact<{
 }>;
 
 
-export type NewRecipeMutation = { __typename?: 'Mutation', newRecipe: boolean };
+export type NewRecipeMutation = { __typename?: 'Mutation', newRecipe: string };
 
 export type AllRecipesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -127,8 +129,8 @@ export type GetRecipeQuery = { __typename?: 'Query', recipe?: { __typename?: 'Re
 
 
 export const SaveRecipeDocument = `
-    mutation SaveRecipe($recipeId: String!) {
-  saveRecipe(recipeId: $recipeId)
+    mutation SaveRecipe($recipeId: String!, $saved: Boolean!) {
+  saveRecipe(recipeId: $recipeId, saved: $saved)
 }
     `;
 export const useSaveRecipeMutation = <

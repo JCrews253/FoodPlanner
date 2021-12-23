@@ -23,7 +23,7 @@ const AddRecipe = () => {
   const history = useHistory();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState<string | null>(null);
+  const [images, setImages] = useState<string[]>([]);
   const [steps, setSteps] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [cookTime, setCookTime] = useState<RecipeTimeInput>({
@@ -37,7 +37,7 @@ const AddRecipe = () => {
   const [tags, setTags] = useState<string[]>([]);
   const { isLoading, mutate: newRecipeMutation } = useNewRecipeMutation(
     GraphqlClient(),
-    { onSuccess: () => history.push("/") }
+    { onSuccess: (data) => history.push(`/recipe/${data.newRecipe}`) }
   );
 
   return (
@@ -73,8 +73,8 @@ const AddRecipe = () => {
             </Grid>
             <Grid item xs={12}>
               <AddImage
-                image={image}
-                setImage={(newImage) => setImage(newImage)}
+                images={images}
+                setImages={(newImages) => setImages(newImages)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -155,7 +155,7 @@ const AddRecipe = () => {
                   steps: steps.split(/\r?\n/),
                   ingredients: ingredients.split(/\r?\n/),
                   times: [prepTime, cookTime],
-                  photo: [image ?? ""],
+                  photos: images,
                   tags: tags,
                 },
               });

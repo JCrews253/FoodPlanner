@@ -35,6 +35,7 @@ const MyRecipes = () => {
         data?.myRecipes.map((r) => {
           return (
             <RecipeCard
+              key={r.recipeId}
               id={r.recipeId}
               name={r.name}
               photo={

@@ -23,17 +23,16 @@ namespace FoodPlanner.API
       return contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
     }
 
-    public async Task<bool> NewRecipe([Service] IRecipeService recipeService, [Service] IHttpContextAccessor contextAccessor, RecipeInput recipe)
+    public async Task<string> NewRecipe([Service] IRecipeService recipeService, [Service] IHttpContextAccessor contextAccessor, RecipeInput recipe)
     {
       Recipe newRecipe = ConvertToType<Recipe>(recipe.GetInputObject());
-      await recipeService.AddRecipeAsync(newRecipe, GetUserId(contextAccessor));
-      return true;
+      return await recipeService.AddRecipeAsync(newRecipe, GetUserId(contextAccessor));
     }
 
     [Authorize]
-    public async Task<bool> SaveRecipe([Service] IUserService userService, [Service] IHttpContextAccessor contextAccessor, string recipeId)
+    public async Task<bool> SaveRecipe([Service] IUserService userService, [Service] IHttpContextAccessor contextAccessor, string recipeId, bool saved)
     {
-      await userService.ModifySavedRecipesAsync(GetUserId(contextAccessor), recipeId);
+      await userService.ModifySavedRecipesAsync(GetUserId(contextAccessor), recipeId, saved);
       return true;
     }
   }

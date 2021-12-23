@@ -1,23 +1,32 @@
 import { Box, Button, styled } from "@mui/material";
-import React from "react";
 
 interface AddImageProps {
-  image: string | null;
-  setImage: (image: string | null) => void;
+  images: string[];
+  setImages: (image: string[]) => void;
 }
 
-const AddImage = ({ image, setImage }: AddImageProps) => {
+const toBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
+const AddImage = ({ images, setImages }: AddImageProps) => {
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    var files = event.currentTarget.files;
-    if (files && files.length > 0) {
-      var file = files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        setImage(reader.result as string);
-      };
-      reader.onerror = () => console.error("photo upload error");
-    }
+    (async () => {
+      var files = event.currentTarget.files;
+      const fileUploadPromises = [];
+      if (files) {
+        for (let i = 0; i < files.length; i++) {
+          fileUploadPromises.push(toBase64(files[i]));
+        }
+      }
+      const fileUploads = await Promise.all(fileUploadPromises);
+      setImages(fileUploads);
+    })();
   };
 
   const Input = styled("input")({
@@ -26,7 +35,7 @@ const AddImage = ({ image, setImage }: AddImageProps) => {
 
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
-      {image ? (
+      {images.length > 0 ? (
         <Box sx={{ position: "relative", width: "fit-content" }}>
           <Box
             sx={{
@@ -42,11 +51,11 @@ const AddImage = ({ image, setImage }: AddImageProps) => {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onClick={() => setImage(null)}
+            onClick={() => setImages([])}
           >
             X
           </Box>
-          <img src={image} alt="" style={{ maxHeight: "250px" }} />
+          <img src={images[0]} alt="" style={{ maxHeight: "250px" }} />
         </Box>
       ) : (
         <label htmlFor="contained-button-file">
@@ -55,6 +64,7 @@ const AddImage = ({ image, setImage }: AddImageProps) => {
             id="contained-button-file"
             type="file"
             onChange={handleUpload}
+            multiple
           />
           <Button variant="contained" component="span" fullWidth>
             Add Image

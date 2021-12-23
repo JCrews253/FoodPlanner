@@ -6,9 +6,9 @@ namespace GraphQLCodeGen {
   public class GraqhqlTypes {
     
     #region Mutation
-    public record Mutation(bool NewRecipe, bool? SaveRecipe) {
+    public record Mutation(string NewRecipe, bool? SaveRecipe) {
       #region members
-      public bool NewRecipe { get; init; } = NewRecipe;
+      public string NewRecipe { get; init; } = NewRecipe;
     
       public bool? SaveRecipe { get; init; } = SaveRecipe;
       #endregion
@@ -66,7 +66,7 @@ namespace GraphQLCodeGen {
       public string name { get; set; }
     
       [Required]
-      public List<string> photo { get; set; }
+      public List<string> photos { get; set; }
     
       [Required]
       public List<string> steps { get; set; }

@@ -12,8 +12,8 @@ type Query {
 }
 
 type Mutation {
-  newRecipe(recipe: RecipeInput): Boolean!
-  saveRecipe(recipeId: String!): Boolean
+  newRecipe(recipe: RecipeInput!): String!
+  saveRecipe(recipeId: String!, saved: Boolean!): Boolean
 }
 
 type Recipe {
@@ -41,7 +41,7 @@ type User {
 
 input RecipeInput {
   name: String!
-  photo: [String!]!
+  photos: [String!]!
   description: String!
   ingredients: [String!]!
   steps: [String!]!

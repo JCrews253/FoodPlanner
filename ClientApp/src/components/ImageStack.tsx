@@ -21,7 +21,8 @@ const ImageStack = ({ images }: ImageStackProps) => {
       <Box
         sx={{
           position: "relative",
-          width: "320px",
+          width: "100%",
+          maxWidth: "320px",
           height: "220px",
           cursor: "pointer",
         }}
@@ -49,6 +50,8 @@ const ImageStack = ({ images }: ImageStackProps) => {
                 }}
               />
             );
+          } else {
+            return null;
           }
         })}
       </Box>

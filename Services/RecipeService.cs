@@ -15,7 +15,7 @@ namespace FoodPlanner.Services
     Task<List<Recipe>> GetAllRecipesAsync();
     Task<Recipe> GetRecipeByIdAsync(string id);
     Task<List<Recipe>> GetUserSavedRecipesAsync(string userId);
-    Task AddRecipeAsync(Recipe recipe, string userId);
+    Task<string> AddRecipeAsync(Recipe recipe, string userId);
   }
 
   public class RecipeService : IRecipeService
@@ -51,17 +51,18 @@ namespace FoodPlanner.Services
       return recipes.ToList();
     }
 
-    public async Task AddRecipeAsync(Recipe recipe, string userId)
+    public async Task<string> AddRecipeAsync(Recipe recipe, string userId)
     {
       List<string> photoUrls = new List<string>();
       if(recipe.Photos != null)
       {
         var azureBlobService = _provider.GetRequiredService<IAzureBlobService>();
-        recipe.Photos.ForEach(async photo =>
+        var tasks = recipe.Photos.Select(async photo =>
         {
           var url = await azureBlobService.UploadPhoto(photo);
           photoUrls.Add(url);
         });
+        await Task.WhenAll(tasks);
       }
 
       var newRecipe = new Recipe( 
@@ -76,7 +77,9 @@ namespace FoodPlanner.Services
         Creator: userId,
         ParentId: null
       );
-      await _recipes.InsertOneAsync(newRecipe with { RecipeId = Guid.NewGuid().ToString() });
+      var recipeId = Guid.NewGuid().ToString();
+      await _recipes.InsertOneAsync(newRecipe with { RecipeId = recipeId });
+      return recipeId;
     }
   }
 }
