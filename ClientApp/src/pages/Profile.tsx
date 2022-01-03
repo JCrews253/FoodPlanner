@@ -1,8 +1,8 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Button, Paper, Typography } from "@mui/material";
 
 const Profile = () => {
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
   return (
     <>
       <Paper
@@ -32,9 +32,24 @@ const Profile = () => {
             >
               {user?.name}
             </Typography>
+            <Button
+              variant="contained"
+              onClick={() => logout({ returnTo: window.location.origin })}
+            >
+              Sign Out
+            </Button>
           </>
         ) : (
-          <></>
+          <>
+            <Button
+              variant="contained"
+              onClick={() =>
+                loginWithRedirect({ returnTo: window.location.origin })
+              }
+            >
+              Log In
+            </Button>
+          </>
         )}
       </Paper>
     </>

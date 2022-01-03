@@ -44,7 +44,7 @@ const Drawer = ({ open, onClose, onOpen }: DrawerProps) => {
             Icon={<FastfoodIcon />}
             onClick={onClose}
           />
-          <DrawerMenuItem
+          {/* <DrawerMenuItem
             title="Calendar"
             linkUrl="/calendar"
             Icon={<CalendarIcon />}
@@ -55,7 +55,7 @@ const Drawer = ({ open, onClose, onOpen }: DrawerProps) => {
             linkUrl="/shoppinglist"
             Icon={<ShoppingCartIcon />}
             onClick={onClose}
-          />
+          /> */}
         </List>
       </Box>
     </SwipeableDrawer>

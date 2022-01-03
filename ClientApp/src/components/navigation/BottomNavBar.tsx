@@ -67,37 +67,35 @@ const BottomNavBar = () => {
             icon={<HomeIcon />}
             component={Link}
             to="/home"
-          />{" "}
-          <BottomNavigationAction
+          />
+          {/* <BottomNavigationAction
             label="Search"
             icon={<SearchIcon />}
             component={Link}
             to="/search"
-          />
+          /> */}
           <BottomNavigationAction
             label="Saved"
             icon={<SavedIcon />}
             component={Link}
             to="/myrecipes"
           />
-          <BottomNavigationAction
+          {/* <BottomNavigationAction
             label="Calendar"
             icon={<CalendarIcon />}
             component={Link}
             to="/calendar"
-          />
+          /> */}
           <BottomNavigationAction
             label="Proile"
             icon={<ProfileIcon />}
             onClick={() => {
-              if (isAuthenticated) {
-                setTheme(theme === "light" ? "dark" : "light");
-              } else {
+              if (!isAuthenticated) {
                 loginWithRedirect();
               }
             }}
-            // component={Link}
-            // to="/profile"
+            component={Link}
+            to="/profile"
           />
         </BottomNavigation>
       </Paper>
